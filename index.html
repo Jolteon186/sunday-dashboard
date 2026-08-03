@@ -410,12 +410,25 @@
 
 <div style="border:1px solid rgba(0,0,0,.08);border-radius:18px;background:#fff;padding:14px 16px;grid-column:1 / span 2">
 <div style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a;letter-spacing:.1em">07 · ANYTHING YOU WANT TO ADD</div>
-<div style="font:600 15px/1.3 'Space Grotesk',sans-serif;margin:8px 0 11px">Pick from what you love, or write your own.</div>
-<div style="display:flex;flex-wrap:wrap;gap:5px">
-<sc-for list="{{ extraOptions }}" as="x" hint-placeholder-count="7">
-<div onClick="{{ x.onPick }}" style="{{ x.style }}">{{ x.label }}</div>
+<div style="font:600 15px/1.3 'Space Grotesk',sans-serif;margin:8px 0 4px">Pick from the fixed list, then choose the day and time.</div>
+<sc-for list="{{ extraRows }}" as="x" hint-placeholder-count="4">
+<div style="padding:11px 0;border-bottom:1px solid rgba(0,0,0,.06)">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px"><span style="font:600 13px/1.2 'Space Grotesk',sans-serif">{{ x.label }}</span><span style="font:400 10px/1 'JetBrains Mono',monospace;color:#61708c;white-space:nowrap">{{ x.meta }}</span></div>
+<div style="display:flex;align-items:center;gap:5px;margin-top:8px;flex-wrap:wrap">
+<div onClick="{{ x.onToggle }}" style="{{ x.toggleStyle }}">{{ x.toggleLabel }}</div>
+<sc-if value="{{ x.chosen }}">
+<span style="font:400 9px/1 'JetBrains Mono',monospace;color:#8a8a8a;margin-left:3px">ON</span>
+<sc-for list="{{ x.days }}" as="d" hint-placeholder-count="7">
+<div onClick="{{ d.onPick }}" style="{{ d.style }}">{{ d.label }}</div>
 </sc-for>
+<input type="time" value="{{ x.hour }}" onInput="{{ x.onHourInput }}" style="border:1px solid rgba(0,0,0,.16);border-radius:999px;padding:5px 8px;font:400 9px/1 'JetBrains Mono',monospace;color:#4a4a4a;background:#fff">
+</sc-if>
 </div>
+</div>
+</sc-for>
+<sc-if value="{{ noFixedForExtras }}">
+<div style="padding:11px 0;font:400 11.5px/1.4 'Space Grotesk',sans-serif;color:#8a8a8a">Your fixed list is empty — add items in the Paris Playbook tab first.</div>
+</sc-if>
 </div>
 </div>
 
@@ -518,15 +531,14 @@
 <div>
 <div style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:#8a8a8a;padding-bottom:8px;border-bottom:1px solid rgba(0,0,0,.16)">THE FIXED LIST · THINGS WE ALWAYS ENJOY</div>
 <div style="margin-top:4px">
-<div style="display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="font:400 10px/1 'JetBrains Mono',monospace;color:#b5b5b5;width:20px">01</span><div style="flex:1"><div style="font:500 13px/1.2 'Space Grotesk',sans-serif">Ping pong</div><div style="font:400 10px/1.3 'Space Grotesk',sans-serif;color:#8a8a8a;margin-top:2px">Free tables · Jardin du Luxembourg, Batignolles</div></div><span style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">FREE</span></div>
-<div style="display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="font:400 10px/1 'JetBrains Mono',monospace;color:#b5b5b5;width:20px">02</span><div style="flex:1"><div style="font:500 13px/1.2 'Space Grotesk',sans-serif">Cinema · new releases</div><div style="font:400 10px/1.3 'Space Grotesk',sans-serif;color:#8a8a8a;margin-top:2px">Refreshed every Wednesday — this week's list below</div></div><span style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">€12</span></div>
-<div style="display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="font:400 10px/1 'JetBrains Mono',monospace;color:#b5b5b5;width:20px">03</span><div style="flex:1"><div style="font:500 13px/1.2 'Space Grotesk',sans-serif">Pétanque</div><div style="font:400 10px/1.3 'Space Grotesk',sans-serif;color:#8a8a8a;margin-top:2px">Arènes de Lutèce · Bois de Boulogne · bring wine</div></div><span style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">FREE</span></div>
-<div style="display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="font:400 10px/1 'JetBrains Mono',monospace;color:#b5b5b5;width:20px">04</span><div style="flex:1"><div style="font:500 13px/1.2 'Space Grotesk',sans-serif">A museum, one room only</div><div style="font:400 10px/1.3 'Space Grotesk',sans-serif;color:#8a8a8a;margin-top:2px">Petit Palais &amp; Bourdelle are free · 45 minutes, no guilt</div></div><span style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">€0–13</span></div>
-<div style="display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="font:400 10px/1 'JetBrains Mono',monospace;color:#b5b5b5;width:20px">05</span><div style="flex:1"><div style="font:500 13px/1.2 'Space Grotesk',sans-serif">VR / interactive place</div><div style="font:400 10px/1.3 'Space Grotesk',sans-serif;color:#8a8a8a;margin-top:2px">Tell me which one you liked and I will keep the good ones</div></div><span style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">€25</span></div>
-<div style="display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="font:400 10px/1 'JetBrains Mono',monospace;color:#b5b5b5;width:20px">06</span><div style="flex:1"><div style="font:500 13px/1.2 'Space Grotesk',sans-serif">Picnic</div><div style="font:400 10px/1.3 'Space Grotesk',sans-serif;color:#8a8a8a;margin-top:2px">Bois de Boulogne · Buttes-Chaumont · Île aux Cygnes</div></div><span style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">€15</span></div>
-<div style="display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="font:400 10px/1 'JetBrains Mono',monospace;color:#b5b5b5;width:20px">07</span><div style="flex:1"><div style="font:500 13px/1.2 'Space Grotesk',sans-serif">Drawing &amp; painting afternoon</div><div style="font:400 10px/1.3 'Space Grotesk',sans-serif;color:#8a8a8a;margin-top:2px">At home or in a garden · earned as an unlock</div></div><span style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">FREE</span></div>
-<div style="display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="font:400 10px/1 'JetBrains Mono',monospace;color:#b5b5b5;width:20px">08</span><div style="flex:1"><div style="font:500 13px/1.2 'Space Grotesk',sans-serif">Padel</div><div style="font:400 10px/1.3 'Space Grotesk',sans-serif;color:#8a8a8a;margin-top:2px">Club 17e · book Sunday for the week</div></div><span style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">€22</span></div>
-<div style="display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px dashed rgba(0,0,0,.25);color:#a5a5a5"><span style="font:400 10px/1 'JetBrains Mono',monospace;width:20px">09</span><div style="flex:1;font:400 13px/1.2 'Space Grotesk',sans-serif">Add something you love…</div><span style="font:400 9.5px/1 'JetBrains Mono',monospace">+ ADD</span></div>
+<sc-for list="{{ fixedListRows }}" as="a" hint-placeholder-count="8">
+<div style="display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="font:400 10px/1 'JetBrains Mono',monospace;color:#b5b5b5;width:20px">{{ a.num }}</span><div style="flex:1"><div style="font:500 13px/1.2 'Space Grotesk',sans-serif">{{ a.label }}</div><div style="font:400 10px/1.3 'Space Grotesk',sans-serif;color:#8a8a8a;margin-top:2px">{{ a.meta }}</div></div><span style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">{{ a.indoorLabel }}</span></div>
+</sc-for>
+<div style="display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px dashed rgba(0,0,0,.25);color:#a5a5a5">
+<input value="{{ newFixedLabel }}" onInput="{{ onFixedLabelInput }}" placeholder="Add something you love…" style="flex:1;border:none;outline:none;background:transparent;font:400 13px/1.2 'Space Grotesk',sans-serif;color:#1a1a1a">
+<input value="{{ newFixedLocation }}" onInput="{{ onFixedLocationInput }}" placeholder="Location (optional)" style="width:140px;border:none;outline:none;background:transparent;font:400 10px/1 'Space Grotesk',sans-serif;color:#8a8a8a;text-align:right">
+<div onClick="{{ addFixedItem }}" style="cursor:pointer;font:400 9.5px/1 'JetBrains Mono',monospace">+ ADD</div>
+</div>
 </div>
 
 <div style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:#8a8a8a;padding-bottom:8px;border-bottom:1px solid rgba(0,0,0,.16);margin-top:26px">IN CINEMAS THIS WEEK</div>
@@ -539,18 +551,20 @@
 </div>
 
 <div>
-<div style="display:flex;align-items:baseline;justify-content:space-between;border-bottom:1px solid rgba(0,0,0,.16);padding-bottom:8px"><span style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:#8a8a8a">NEW THIS WEEK · 10 FOUND, MOST WANTED FIRST</span><span style="font:400 10px/1 'JetBrains Mono',monospace;color:#8a8a8a">≤ €200</span></div>
+<div style="display:flex;align-items:baseline;justify-content:space-between;border-bottom:1px solid rgba(0,0,0,.16);padding-bottom:8px">
+<span style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:#8a8a8a">NEW THIS WEEK · {{ findsCount }}</span>
+<div style="display:flex;align-items:center;gap:8px">
+<span style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">{{ updateStatus }}</span>
+<div onClick="{{ requestParisUpdate }}" style="{{ updateButtonStyle }}">UPDATE</div>
+</div>
+</div>
 <div style="margin-top:4px">
-<div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="font:600 15px/1 'JetBrains Mono',monospace;color:#16203a;width:26px">01</span><div style="flex:1"><div style="font:600 14px/1.2 'Space Grotesk',sans-serif">Rolex Paris Masters · tennis</div><div style="font:400 10.5px/1.4 'Space Grotesk',sans-serif;color:#6b6b6b;margin-top:3px">31 Oct–8 Nov · Paris La Défense Arena · early rounds are the cheap, good ones</div></div><span style="border:1px solid rgba(22,32,58,.45);color:#16203a;border-radius:999px;padding:5px 9px;font:600 9.5px/1 'JetBrains Mono',monospace;align-self:flex-start">TOP 7</span></div>
-<div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="font:600 15px/1 'JetBrains Mono',monospace;color:#16203a;width:26px">02</span><div style="flex:1"><div style="font:600 14px/1.2 'Space Grotesk',sans-serif">Grand Palais d'été · nave concerts</div><div style="font:400 10.5px/1.4 'Space Grotesk',sans-serif;color:#6b6b6b;margin-top:3px">Sat 15 Aug, 20:00 · dance, DJ sets under the glass roof · discount for 3+ events</div></div><span style="border:1px solid rgba(22,32,58,.45);color:#16203a;border-radius:999px;padding:5px 9px;font:600 9.5px/1 'JetBrains Mono',monospace;align-self:flex-start">TOP 7</span></div>
-<div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="font:600 15px/1 'JetBrains Mono',monospace;color:#16203a;width:26px">03</span><div style="flex:1"><div style="font:600 14px/1.2 'Space Grotesk',sans-serif">Rock en Seine · Saint-Cloud</div><div style="font:400 10.5px/1.4 'Space Grotesk',sans-serif;color:#6b6b6b;margin-top:3px">26–30 Aug · day tickets go before the weekend</div></div><span style="border:1px solid rgba(22,32,58,.45);color:#16203a;border-radius:999px;padding:5px 9px;font:600 9.5px/1 'JetBrains Mono',monospace;align-self:flex-start">TOP 7</span></div>
-<div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="font:600 15px/1 'JetBrains Mono',monospace;color:#16203a;width:26px">04</span><div style="flex:1"><div style="font:600 14px/1.2 'Space Grotesk',sans-serif">Cézanne et nous · Grand Palais &amp; Orsay</div><div style="font:400 10.5px/1.4 'Space Grotesk',sans-serif;color:#6b6b6b;margin-top:3px">From 23 Sep · book a weekday evening slot, it will be packed</div></div><span style="border:1px solid rgba(22,32,58,.45);color:#16203a;border-radius:999px;padding:5px 9px;font:600 9.5px/1 'JetBrains Mono',monospace;align-self:flex-start">TOP 7</span></div>
-<div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="font:600 15px/1 'JetBrains Mono',monospace;color:#16203a;width:26px">05</span><div style="flex:1"><div style="font:600 14px/1.2 'Space Grotesk',sans-serif">Open-air cinema · Parc de la Villette</div><div style="font:400 10.5px/1.4 'Space Grotesk',sans-serif;color:#6b6b6b;margin-top:3px">Free, until early September · deckchair rental only</div></div><span style="border:1px solid rgba(22,32,58,.45);color:#16203a;border-radius:999px;padding:5px 9px;font:600 9.5px/1 'JetBrains Mono',monospace;align-self:flex-start">TOP 7</span></div>
-<div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="font:600 15px/1 'JetBrains Mono',monospace;color:#16203a;width:26px">06</span><div style="flex:1"><div style="font:600 14px/1.2 'Space Grotesk',sans-serif">Été du canal · Quai de la Seine</div><div style="font:400 10.5px/1.4 'Space Grotesk',sans-serif;color:#6b6b6b;margin-top:3px">Until 9 Aug — last weekend · balls, concerts, cheap food on the water</div></div><span style="border:1px solid rgba(22,32,58,.45);color:#16203a;border-radius:999px;padding:5px 9px;font:600 9.5px/1 'JetBrains Mono',monospace;align-self:flex-start">TOP 7</span></div>
-<div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid rgba(0,0,0,.16)"><span style="font:600 15px/1 'JetBrains Mono',monospace;color:#16203a;width:26px">07</span><div style="flex:1"><div style="font:600 14px/1.2 'Space Grotesk',sans-serif">Classique au Vert · Parc Floral</div><div style="font:400 10.5px/1.4 'Space Grotesk',sans-serif;color:#6b6b6b;margin-top:3px">Sundays to 6 Sep · classical in the open air, near free</div></div><span style="border:1px solid rgba(22,32,58,.45);color:#16203a;border-radius:999px;padding:5px 9px;font:600 9.5px/1 'JetBrains Mono',monospace;align-self:flex-start">TOP 7</span></div>
-<div style="display:flex;gap:12px;padding:11px 0;border-bottom:1px solid rgba(0,0,0,.08);opacity:.72"><span style="font:500 13px/1 'JetBrains Mono',monospace;color:#8a8a8a;width:26px">08</span><div style="flex:1"><div style="font:500 13px/1.2 'Space Grotesk',sans-serif">Fête des Vendanges de Montmartre</div><div style="font:400 10px/1.3 'Space Grotesk',sans-serif;color:#8a8a8a;margin-top:2px">7–11 Oct · free · parades and tastings</div></div></div>
-<div style="display:flex;gap:12px;padding:11px 0;border-bottom:1px solid rgba(0,0,0,.08);opacity:.72"><span style="font:500 13px/1 'JetBrains Mono',monospace;color:#8a8a8a;width:26px">09</span><div style="flex:1"><div style="font:500 13px/1.2 'Space Grotesk',sans-serif">Brussels 1900 · Petit Palais</div><div style="font:400 10px/1.3 'Space Grotesk',sans-serif;color:#8a8a8a;margin-top:2px">From 6 Oct to Feb · no rush, but worth an evening</div></div></div>
-<div style="display:flex;gap:12px;padding:11px 0;border-bottom:1px solid rgba(0,0,0,.08);opacity:.72"><span style="font:500 13px/1 'JetBrains Mono',monospace;color:#8a8a8a;width:26px">10</span><div style="flex:1"><div style="font:500 13px/1.2 'Space Grotesk',sans-serif">Art Basel Paris · Grand Palais</div><div style="font:400 10px/1.3 'Space Grotesk',sans-serif;color:#8a8a8a;margin-top:2px">23–25 Oct · 195 galleries · one afternoon is plenty</div></div></div>
+<sc-for list="{{ findRows }}" as="f" hint-placeholder-count="6">
+<div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="font:600 15px/1 'JetBrains Mono',monospace;color:#16203a;width:26px">{{ f.num }}</span><div style="flex:1"><div style="font:600 14px/1.2 'Space Grotesk',sans-serif">{{ f.title }}</div><div style="font:400 10.5px/1.4 'Space Grotesk',sans-serif;color:#6b6b6b;margin-top:3px">{{ f.desc }}</div></div></div>
+</sc-for>
+<sc-if value="{{ noFinds }}">
+<div style="padding:14px 0;font:400 12px/1.5 'Space Grotesk',sans-serif;color:#8a8a8a">Nothing found yet. Click UPDATE, then ask Claude in a chat to check for pending Paris update requests.</div>
+</sc-if>
 </div>
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:26px">
@@ -677,7 +691,7 @@ const FRIEND_OPTS = [
 ];
 const MINI_ON = "cursor:pointer;padding:5px 8px;border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;background:linear-gradient(180deg,#3f5273,#16203a);color:#fff";
 const MINI_OFF = "cursor:pointer;padding:5px 8px;border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:400;border:1px solid rgba(0,0,0,.14);color:#6b6b6b;background:#fff";
-const EXTRA_OPTS = ['PING PONG', 'CINEMA', 'PICNIC', 'PÉTANQUE', 'MUSEUM', 'VR PLACE', 'DRAWING', '+ TYPE YOUR OWN'];
+const PARIS_INTERESTS = ['Padel', 'Tennis', 'Street art', 'Museums', 'Fashion', 'Important Paris events that everyone wants to see', 'Concerts — pop and piano', 'Monet', 'World wars', 'Music', 'Carbon or sustainability forums, expos, or meetings'];
 
 const EVENTS = [
   { id: 'rolex', name: 'Rolex Paris Masters', window: '31 OCT', venue: 'La Défense Arena · early rounds are the good value', opts: ['TUE 3 NOV', 'WED 4 NOV', 'THU 5 NOV'] },
@@ -729,13 +743,15 @@ class Component extends DCLogic {
     tab: 'week', xp: 0, answers: {}, tickets: {}, dates: {}, reviewOpen: false, awarded: false, burst: false, haul: 0,
     series: DEFAULT_SERIES, pendingW: DEFAULT_SERIES[DEFAULT_SERIES.length - 1], logged: false,
     reward: null,
-    plan: { carbon: [], padel: null, pao: null, ticketBuys: {}, friends: {}, psy: null, extras: [] },
+    plan: { carbon: [], padel: null, pao: null, ticketBuys: {}, friends: {}, psy: null, extras: {} },
     planDone: false, planBurst: false,
 
     routine: DEFAULT_ROUTINE, tasks: [], friendsList: [], ritual: {}, xpEvents: [],
     newTaskText: '', newFriendText: '', loaded: false,
     agendaEvents: [],
-    newEventTitle: '', newEventDate: isoDate(new Date()), newEventTime: '09:00', newEventAllDay: false
+    newEventTitle: '', newEventDate: isoDate(new Date()), newEventTime: '09:00', newEventAllDay: false,
+    parisFixed: [], parisFinds: [], parisRequest: null,
+    newFixedLabel: '', newFixedLocation: ''
   };
 
   componentDidMount() {
@@ -752,6 +768,8 @@ class Component extends DCLogic {
       .on('postgres_changes', { event: '*', schema: 'public', table: 'agenda_events' }, payload => this.handleRealtimeList('agendaEvents', payload))
       .on('postgres_changes', { event: '*', schema: 'public', table: 'friends' }, payload => this.handleRealtimeList('friendsList', payload))
       .on('postgres_changes', { event: '*', schema: 'public', table: 'morning_ritual_logs' }, payload => this.handleRitualRealtime(payload))
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'paris_activities' }, payload => this.handleRealtimeList('parisFixed', payload))
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'paris_new_finds' }, payload => this.handleRealtimeList('parisFinds', payload))
       .subscribe();
   }
 
@@ -786,14 +804,17 @@ class Component extends DCLogic {
     const weekOf = isoDate(monday);
     const since26 = isoDate(new Date(monday.getTime() - 26 * 7 * 86400000));
 
-    const [weightRes, routineRes, taskRes, friendRes, ritualRes, xpRes, agendaRes] = await Promise.all([
+    const [weightRes, routineRes, taskRes, friendRes, ritualRes, xpRes, agendaRes, parisFixedRes, parisFindsRes, parisReqRes] = await Promise.all([
       sb.from('weight_logs').select('*').order('week_of', { ascending: true }).limit(10),
       sb.from('routine_days').select('*').order('day_of_week', { ascending: true }),
       sb.from('carbon_actions').select('*').eq('week_of', weekOf).order('created_at', { ascending: true }),
       sb.from('friends').select('*').eq('archived', false),
       sb.from('morning_ritual_logs').select('*').gte('log_date', since26),
       sb.from('xp_events').select('amount, created_at'),
-      sb.from('agenda_events').select('*').order('starts_at', { ascending: true })
+      sb.from('agenda_events').select('*').order('starts_at', { ascending: true }),
+      sb.from('paris_activities').select('*').eq('archived', false).order('created_at', { ascending: true }),
+      sb.from('paris_new_finds').select('*').order('rank', { ascending: true }),
+      sb.from('paris_update_requests').select('*').order('requested_at', { ascending: false }).limit(1)
     ]);
 
     let routine = (routineRes.data && routineRes.data.length) ? routineRes.data : null;
@@ -822,6 +843,9 @@ class Component extends DCLogic {
       ritual,
       xpEvents,
       agendaEvents: agendaRes.data || [],
+      parisFixed: parisFixedRes.data || [],
+      parisFinds: parisFindsRes.data || [],
+      parisRequest: (parisReqRes.data && parisReqRes.data[0]) || null,
       loaded: true
     });
   }
@@ -888,6 +912,55 @@ class Component extends DCLogic {
       if (r.data && r.data[0]) {
         this.setState(st => (st.agendaEvents.some(e => e.id === r.data[0].id) ? null : { agendaEvents: st.agendaEvents.concat(r.data) }));
       }
+    });
+  }
+
+  addFixedItem() {
+    const label = (this.state.newFixedLabel || '').trim();
+    if (!label) return;
+    const location = (this.state.newFixedLocation || '').trim() || null;
+    this.setState({ newFixedLabel: '', newFixedLocation: '' });
+    sb.from('paris_activities').insert({ label, location, kind: 'fija' }).select().then(r => {
+      if (r.data && r.data[0]) {
+        this.setState(st => (st.parisFixed.some(a => a.id === r.data[0].id) ? null : { parisFixed: st.parisFixed.concat(r.data) }));
+      }
+    });
+  }
+
+  requestParisUpdate() {
+    if (this.state.parisRequest && this.state.parisRequest.status === 'pending') return;
+    sb.from('paris_update_requests').insert({ status: 'pending', interests: PARIS_INTERESTS, horizon_days: 180 }).select().then(r => {
+      if (r.data && r.data[0]) this.setState({ parisRequest: r.data[0] });
+    });
+  }
+
+  toggleExtra(id) {
+    this.setState(s => {
+      const p = { ...s.plan }, m = { ...p.extras };
+      if (m[id]) delete m[id];
+      else m[id] = { day: null, hour: '19:00' };
+      p.extras = m;
+      return { plan: p, xp: s.xp + 15 };
+    });
+  }
+
+  setExtraDay(id, day) {
+    this.setState(s => {
+      if (!s.plan.extras[id]) return null;
+      const p = { ...s.plan }, m = { ...p.extras };
+      m[id] = { ...m[id], day: m[id].day === day ? null : day };
+      p.extras = m;
+      return { plan: p };
+    });
+  }
+
+  setExtraHour(id, hour) {
+    this.setState(s => {
+      if (!s.plan.extras[id]) return null;
+      const p = { ...s.plan }, m = { ...p.extras };
+      m[id] = { ...m[id], hour };
+      p.extras = m;
+      return { plan: p };
     });
   }
 
@@ -1018,10 +1091,14 @@ class Component extends DCLogic {
       if ((used[i] || 0) >= 2) continue;
       put(i, floating[fi]); fi++;
     }
-    const slots = [[5, 3, 3], [6, 9, 3], [5, 8, 3], [6, 4, 2], [4, 9, 2], [3, 9, 2]];
-    p.extras.forEach((x, k) => {
-      const sl = slots[k % 6];
-      rows[sl[0]].push([sl[1], sl[2], x === '+ TYPE YOUR OWN' ? 'YOUR ACTIVITY' : x, 'fun']);
+    Object.keys(p.extras).forEach(id => {
+      const info = p.extras[id];
+      if (info.day === null || info.day === undefined || !info.hour) return;
+      const act = (this.state.parisFixed || []).find(a => String(a.id) === String(id));
+      if (!act) return;
+      const hourNum = parseInt(info.hour.split(':')[0], 10) || 19;
+      const row = Math.max(1, Math.min(16, hourNum - 7));
+      rows[info.day].push([row, 2, act.label.toUpperCase(), 'fun']);
     });
     return rows;
   }
@@ -1066,7 +1143,7 @@ class Component extends DCLogic {
       };
     });
 
-    const answeredCount = [p.carbon.length > 0, p.padel !== null, p.pao !== null, Object.keys(p.ticketBuys).length > 0, Object.keys(p.friends).length > 0, p.psy !== null, p.extras.length > 0].filter(Boolean).length;
+    const answeredCount = [p.carbon.length > 0, p.padel !== null, p.pao !== null, Object.keys(p.ticketBuys).length > 0, Object.keys(p.friends).length > 0, p.psy !== null, Object.keys(p.extras).length > 0].filter(Boolean).length;
     const placed = this.planRows().reduce((n, r) => n + r.length, 0) - 21;
 
     // --- Week-tab computed props, backed by Supabase-loaded state ---
@@ -1279,7 +1356,20 @@ class Component extends DCLogic {
       }),
       psyDays: [{ label: 'NOT THIS WEEK', style: p.psy === 'no' ? DAY_ON : DAY_OFF, onPick: () => this.pick('psy', 'no') }]
         .concat(DAYS.slice(0, 5).map((d, i) => ({ label: d, style: p.psy === i ? DAY_ON : DAY_OFF, onPick: () => this.pick('psy', i) }))),
-      extraOptions: EXTRA_OPTS.map(x => ({ label: x, style: p.extras.indexOf(x) > -1 ? CHIP_ON : CHIP_OFF, onPick: () => this.pick('extras', x) })),
+      extraRows: (s.parisFixed || []).map(act => {
+        const info = p.extras[act.id];
+        const on = !!info;
+        return {
+          label: act.label, meta: act.location || '',
+          chosen: on,
+          toggleStyle: on ? CHIP_ON : CHIP_OFF, toggleLabel: on ? 'ADDED ✓' : 'ADD',
+          onToggle: () => this.toggleExtra(act.id),
+          hour: on ? (info.hour || '19:00') : '19:00',
+          onHourInput: e => this.setExtraHour(act.id, e.target.value),
+          days: DAYS.map((d, i) => ({ label: d, style: on && info.day === i ? MINI_ON : MINI_OFF, onPick: () => this.setExtraDay(act.id, i) }))
+        };
+      }),
+      noFixedForExtras: (s.parisFixed || []).length === 0,
       planAnswered: answeredCount, planXpLabel: '+' + (answeredCount * 15 + (s.planDone ? 250 : 0)) + ' XP THIS SESSION',
       planPlacedNote: placed + ' THINGS READY TO PLACE · GYM FITS ITSELF AROUND YOU',
       planBurst: s.planBurst,
@@ -1296,6 +1386,30 @@ class Component extends DCLogic {
         setTimeout(() => this.setState({ tab: 'week' }), 1600);
         setTimeout(() => this.setState({ planBurst: false }), 2400);
       },
+
+      fixedListRows: (s.parisFixed || []).map((a, i) => ({
+        num: String(i + 1).padStart(2, '0'),
+        label: a.label,
+        meta: [a.location, a.notes].filter(Boolean).join(' · '),
+        indoorLabel: a.indoor ? 'INDOOR' : ''
+      })),
+      newFixedLabel: s.newFixedLabel, newFixedLocation: s.newFixedLocation,
+      onFixedLabelInput: e => this.set('newFixedLabel', e.target.value),
+      onFixedLocationInput: e => this.set('newFixedLocation', e.target.value),
+      addFixedItem: () => this.addFixedItem(),
+
+      findRows: (s.parisFinds || []).map((f, i) => ({
+        num: String(i + 1).padStart(2, '0'),
+        title: f.title,
+        desc: [f.window_label, f.description].filter(Boolean).join(' · ')
+      })),
+      findsCount: (s.parisFinds || []).length + ' FOUND',
+      noFinds: (s.parisFinds || []).length === 0,
+      updateStatus: s.parisRequest ? (s.parisRequest.status === 'pending' ? 'REQUESTED · WAITING ON CLAUDE' : 'LAST UPDATED ' + new Date(s.parisRequest.requested_at).toLocaleDateString()) : '',
+      updateButtonStyle: (s.parisRequest && s.parisRequest.status === 'pending')
+        ? "padding:6px 12px;border-radius:999px;font:600 9.5px/1 'JetBrains Mono',monospace;letter-spacing:.06em;border:1px solid rgba(22,32,58,.2);background:#e9edf4;color:#9fadc2"
+        : "cursor:pointer;padding:6px 12px;border-radius:999px;font:600 9.5px/1 'JetBrains Mono',monospace;letter-spacing:.06em;border:1px solid #16203a;background:linear-gradient(160deg,#3f5273,#16203a);color:#fff",
+      requestParisUpdate: () => this.requestParisUpdate(),
 
       events, reviewItems: REVIEW.map(r => ({
         q: r.q, meta: r.meta, xpLabel: '+' + r.xp,
