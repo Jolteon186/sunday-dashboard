@@ -163,6 +163,14 @@
 <div style="{{ h.style }}"><span style="font-weight:600;font-size:11px">{{ h.label }}</span><span style="font-weight:400;font-size:10px;color:#a5a5a5">{{ h.date }}</span></div>
 </sc-for>
 </div>
+<sc-if value="{{ hasAllDay }}">
+<div style="display:grid;grid-template-columns:54px repeat(7,1fr);gap:2px;margin-bottom:5px">
+<span style="font:400 8px/1 'JetBrains Mono',monospace;color:#a5a5a5;display:flex;align-items:center">ALL DAY</span>
+<sc-for list="{{ allDayRow }}" as="ad" hint-placeholder-count="7">
+<div style="{{ ad.style }}">{{ ad.label }}</div>
+</sc-for>
+</div>
+</sc-if>
 <div style="display:grid;grid-template-columns:54px repeat(7,1fr);grid-template-rows:repeat(16,24px);gap:2px;background-image:repeating-linear-gradient(to bottom,rgba(0,0,0,.055) 0 1px,transparent 1px 26px)">
 <span style="grid-column:1;grid-row:1;font:400 8.5px/1 'JetBrains Mono',monospace;color:#a5a5a5;display:flex;align-items:flex-start;padding-top:1px">08:00</span>
 <span style="grid-column:1;grid-row:2;font:400 8.5px/1 'JetBrains Mono',monospace;color:#a5a5a5;display:flex;align-items:flex-start;padding-top:1px">09:00</span>
@@ -183,6 +191,15 @@
 <sc-for list="{{ calBlocks }}" as="b" hint-placeholder-count="30">
 <div style="{{ b.style }}">{{ b.label }}</div>
 </sc-for>
+</div>
+<div style="display:flex;align-items:center;gap:6px;margin-top:9px;flex-wrap:wrap">
+<input value="{{ newEventTitle }}" onInput="{{ onEventTitleInput }}" placeholder="Event title…" style="flex:1;min-width:120px;border:1px dashed rgba(0,0,0,.18);border-radius:10px;padding:7px 10px;outline:none;background:transparent;font:400 11.5px/1.2 'Space Grotesk',sans-serif;color:#1a1a1a">
+<input type="date" value="{{ newEventDate }}" onInput="{{ onEventDateInput }}" style="border:1px solid rgba(0,0,0,.16);border-radius:10px;padding:6px 8px;font:400 10.5px/1 'JetBrains Mono',monospace;color:#4a4a4a;background:#fff">
+<sc-if value="{{ !newEventAllDay }}">
+<input type="time" value="{{ newEventTime }}" onInput="{{ onEventTimeInput }}" style="border:1px solid rgba(0,0,0,.16);border-radius:10px;padding:6px 8px;font:400 10.5px/1 'JetBrains Mono',monospace;color:#4a4a4a;background:#fff">
+</sc-if>
+<div onClick="{{ toggleEventAllDay }}" style="{{ allDayChipStyle }}">ALL DAY</div>
+<div onClick="{{ addEvent }}" style="cursor:pointer;padding:7px 12px;font:600 10px/1 'JetBrains Mono',monospace;letter-spacing:.06em;border:1px solid #16203a;background:linear-gradient(160deg,#3f5273,#16203a);color:#fff;border-radius:999px">+ ADD EVENT</div>
 </div>
 <div style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:#8a8a8a;padding-bottom:8px;border-bottom:1px solid rgba(0,0,0,.16);margin-top:26px">CARBON PLUS · YOUR ENTRIES</div>
 <div style="margin-top:12px;display:flex;flex-direction:column;gap:7px">
@@ -282,50 +299,21 @@
 </div>
 <div style="border-top:1px solid rgba(0,0,0,.08);padding:20px 30px 26px">
 <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px">
-<span style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:#8a8a8a">AUGUST 2026 · THE MONTH AHEAD</span>
-<span style="font:400 10px/1 'JetBrains Mono',monospace;color:#8a8a8a">ANTICIPATION WINDOW · 4 QUESTIONS PENDING</span>
+<span style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:#8a8a8a">{{ monthLabel }}</span>
+<span style="font:400 10px/1 'JetBrains Mono',monospace;color:#8a8a8a">{{ monthEventCount }}</span>
 </div>
 <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:rgba(0,0,0,.07);border:1px solid rgba(0,0,0,.06);border-radius:18px;overflow:hidden">
 <div style="background:#f4f2ee;padding:7px 9px;font:500 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">MON</div><div style="background:#f4f2ee;padding:7px 9px;font:500 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">TUE</div><div style="background:#f4f2ee;padding:7px 9px;font:500 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">WED</div><div style="background:#f4f2ee;padding:7px 9px;font:500 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">THU</div><div style="background:#f4f2ee;padding:7px 9px;font:500 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">FRI</div><div style="background:#f4f2ee;padding:7px 9px;font:500 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">SAT</div><div style="background:#f4f2ee;padding:7px 9px;font:500 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">SUN</div>
-
-<div style="background:#fbfaf8;min-height:74px"></div><div style="background:#fbfaf8;min-height:74px"></div><div style="background:#fbfaf8;min-height:74px"></div><div style="background:#fbfaf8;min-height:74px"></div><div style="background:#fbfaf8;min-height:74px"></div>
-<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">01</div></div>
-<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">02</div></div>
-
-<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">03</div></div>
-<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">04</div></div>
-<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">05</div></div>
-<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">06</div></div>
-<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">07</div></div>
-<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">08</div></div>
-<div style="background:#f4f2ee;min-height:74px;padding:6px 8px"><div style="font:600 11px/1 'JetBrains Mono',monospace">09</div><div style="font:400 9px/1.3 'JetBrains Mono',monospace;color:#1a1a1a;margin-top:4px">CHECK-IN<br>TODAY</div></div>
-
-<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:600 11px/1 'JetBrains Mono',monospace">10</div><div style="font:400 9px/1.3 'JetBrains Mono',monospace;color:#6b6b6b;margin-top:4px">GYM PUSH</div></div>
-<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:600 11px/1 'JetBrains Mono',monospace">11</div><div style="font:400 9px/1.3 'JetBrains Mono',monospace;color:#6b6b6b;margin-top:4px">GYM PULL</div></div>
-<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:600 11px/1 'JetBrains Mono',monospace">12</div><div style="font:400 9px/1.3 'JetBrains Mono',monospace;color:#6b6b6b;margin-top:4px">{{ padelShort }}<br>ABRAHAM</div></div>
-<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:600 11px/1 'JetBrains Mono',monospace">13</div><div style="font:400 9px/1.3 'JetBrains Mono',monospace;color:#6b6b6b;margin-top:4px">GYM ARMS<br>DD BLOCK</div></div>
-<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:600 11px/1 'JetBrains Mono',monospace">14</div><div style="font:400 9px/1.3 'JetBrains Mono',monospace;color:#6b6b6b;margin-top:4px">GYM LEGS</div></div>
-<div style="background:linear-gradient(180deg,rgba(63,82,115,.1),transparent);min-height:74px;padding:6px 8px;border-left:2px solid #3f5273"><div style="font:600 11px/1 'JetBrains Mono',monospace;color:#16203a">15</div><div style="font:500 9px/1.3 'JetBrains Mono',monospace;color:#16203a;margin-top:4px">DATE WITH PAO<br>MARAUDE · FLATS</div></div>
-<div style="background:#f4f2ee;min-height:74px;padding:6px 8px"><div style="font:600 11px/1 'JetBrains Mono',monospace">16</div><div style="font:400 9px/1.3 'JetBrains Mono',monospace;color:#6b6b6b;margin-top:4px">PICNIC<br>WEIGH-IN</div></div>
-
-<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">17</div></div>
-<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">18</div><div style="font:400 9px/1.3 'JetBrains Mono',monospace;color:#8a8a8a;margin-top:4px">HONEYMOON<br>SHORTLIST</div></div>
-<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">19</div></div>
-<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">20</div></div>
-<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">21</div><div style="font:400 9px/1.3 'JetBrains Mono',monospace;color:#8a8a8a;margin-top:4px">DATE NIGHT</div></div>
-<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">22</div><div style="font:400 9px/1.3 'JetBrains Mono',monospace;color:#8a8a8a;margin-top:4px">FLAT VISITS</div></div>
-<div style="background:#f4f2ee;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">23</div><div style="font:400 9px/1.3 'JetBrains Mono',monospace;color:#8a8a8a;margin-top:4px">CHECK-IN</div></div>
-
-<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">24</div></div>
-<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">25</div><div style="font:400 9px/1.3 'JetBrains Mono',monospace;color:#8a8a8a;margin-top:4px">JAPAN · SEE<br>FLIGHT PRICE</div></div>
-<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">26</div><div style="font:400 9px/1.3 'JetBrains Mono',monospace;color:#8a8a8a;margin-top:4px">ROCK EN<br>SEINE →</div></div>
-<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">27</div></div>
-<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">28</div><div style="font:400 9px/1.3 'JetBrains Mono',monospace;color:#8a8a8a;margin-top:4px">DATE NIGHT</div></div>
-<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">29</div><div style="font:400 9px/1.3 'JetBrains Mono',monospace;color:#8a8a8a;margin-top:4px">ROCK EN<br>SEINE</div></div>
-<div style="background:#f4f2ee;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">30</div><div style="font:400 9px/1.3 'JetBrains Mono',monospace;color:#8a8a8a;margin-top:4px">CHECK-IN</div></div>
-
-<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">31</div></div>
-<div style="background:#fbfaf8;min-height:74px"></div><div style="background:#fbfaf8;min-height:74px"></div><div style="background:#fbfaf8;min-height:74px"></div><div style="background:#fbfaf8;min-height:74px"></div><div style="background:#fbfaf8;min-height:74px"></div><div style="background:#fbfaf8;min-height:74px"></div>
+<sc-for list="{{ monthCells }}" as="c" hint-placeholder-count="35">
+<div style="{{ c.style }}">
+<sc-if value="{{ c.day }}">
+<div style="{{ c.dayStyle }}">{{ c.day }}</div>
+<sc-if value="{{ c.label }}">
+<div style="{{ c.labelStyle }}">{{ c.label }}</div>
+</sc-if>
+</sc-if>
+</div>
+</sc-for>
 </div>
 </div>
 </div>
@@ -656,7 +644,8 @@ const KIND = {
   care: "background:#e9edf4;color:#253550;border:1px solid #9fadc2",
   task: "background:#fff;border:1px solid rgba(0,0,0,.14);color:#1a1a1a;white-space:nowrap;text-overflow:ellipsis;align-items:center",
   fun: "background:#fff;border:1px dashed rgba(0,0,0,.32);color:#4a4a4a",
-  flat: "background:#f0efeb;border:1px solid rgba(0,0,0,.2);color:#1a1a1a"
+  flat: "background:#f0efeb;border:1px solid rgba(0,0,0,.2);color:#1a1a1a",
+  agenda: "background:#fff;border:1px solid rgba(63,82,115,.5);color:#16203a;white-space:nowrap;text-overflow:ellipsis;align-items:center"
 };
 const mk = (day, row, span, label, kind) => ({ label, style: 'grid-column:' + (day + 2) + ';grid-row:' + row + ' / span ' + span + ';' + BASE + KIND[kind] });
 
@@ -744,11 +733,52 @@ class Component extends DCLogic {
     planDone: false, planBurst: false,
 
     routine: DEFAULT_ROUTINE, tasks: [], friendsList: [], ritual: {}, xpEvents: [],
-    newTaskText: '', newFriendText: '', loaded: false
+    newTaskText: '', newFriendText: '', loaded: false,
+    agendaEvents: [],
+    newEventTitle: '', newEventDate: isoDate(new Date()), newEventTime: '09:00', newEventAllDay: false
   };
 
   componentDidMount() {
     this.loadAll();
+    this.setupRealtime();
+  }
+
+  componentWillUnmount() {
+    if (this._rtChannel) sb.removeChannel(this._rtChannel);
+  }
+
+  setupRealtime() {
+    this._rtChannel = sb.channel('lux-realtime')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'agenda_events' }, payload => this.handleRealtimeList('agendaEvents', payload))
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'friends' }, payload => this.handleRealtimeList('friendsList', payload))
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'morning_ritual_logs' }, payload => this.handleRitualRealtime(payload))
+      .subscribe();
+  }
+
+  handleRealtimeList(stateKey, payload) {
+    this.setState(st => {
+      let list = st[stateKey].slice();
+      if (payload.eventType === 'INSERT') {
+        if (!list.some(r => r.id === payload.new.id)) list.push(payload.new);
+      } else if (payload.eventType === 'UPDATE') {
+        list = list.map(r => r.id === payload.new.id ? payload.new : r);
+      } else if (payload.eventType === 'DELETE') {
+        list = list.filter(r => r.id !== payload.old.id);
+      }
+      return { [stateKey]: list };
+    });
+  }
+
+  handleRitualRealtime(payload) {
+    this.setState(st => {
+      const ritual = { ...st.ritual };
+      if (payload.eventType === 'DELETE') {
+        delete ritual[payload.old.log_date];
+      } else {
+        ritual[payload.new.log_date] = payload.new.done;
+      }
+      return { ritual };
+    });
   }
 
   async loadAll() {
@@ -756,13 +786,14 @@ class Component extends DCLogic {
     const weekOf = isoDate(monday);
     const since26 = isoDate(new Date(monday.getTime() - 26 * 7 * 86400000));
 
-    const [weightRes, routineRes, taskRes, friendRes, ritualRes, xpRes] = await Promise.all([
+    const [weightRes, routineRes, taskRes, friendRes, ritualRes, xpRes, agendaRes] = await Promise.all([
       sb.from('weight_logs').select('*').order('week_of', { ascending: true }).limit(10),
       sb.from('routine_days').select('*').order('day_of_week', { ascending: true }),
       sb.from('carbon_actions').select('*').eq('week_of', weekOf).order('created_at', { ascending: true }),
       sb.from('friends').select('*').eq('archived', false),
       sb.from('morning_ritual_logs').select('*').gte('log_date', since26),
-      sb.from('xp_events').select('amount, created_at')
+      sb.from('xp_events').select('amount, created_at'),
+      sb.from('agenda_events').select('*').order('starts_at', { ascending: true })
     ]);
 
     let routine = (routineRes.data && routineRes.data.length) ? routineRes.data : null;
@@ -790,6 +821,7 @@ class Component extends DCLogic {
       friendsList: friendRes.data || [],
       ritual,
       xpEvents,
+      agendaEvents: agendaRes.data || [],
       loaded: true
     });
   }
@@ -827,7 +859,9 @@ class Component extends DCLogic {
     if (!name) return;
     this.setState({ newFriendText: '' });
     sb.from('friends').insert({ name, cadence_days: 30, last_contact_at: isoDate(new Date()) }).select().then(r => {
-      if (r.data && r.data[0]) this.setState(st => ({ friendsList: st.friendsList.concat(r.data) }));
+      if (r.data && r.data[0]) {
+        this.setState(st => (st.friendsList.some(f => f.id === r.data[0].id) ? null : { friendsList: st.friendsList.concat(r.data) }));
+      }
     });
   }
 
@@ -836,6 +870,25 @@ class Component extends DCLogic {
     this.setState(st => ({ ritual: { ...st.ritual, [dateStr]: !wasDone } }));
     sb.from('morning_ritual_logs').upsert({ log_date: dateStr, done: !wasDone }, { onConflict: 'log_date' }).then();
     if (!wasDone) this.bumpXp(10, 'ritual_bonus', dateStr);
+  }
+
+  toggleEventAllDay() {
+    this.setState(st => ({ newEventAllDay: !st.newEventAllDay }));
+  }
+
+  addEvent() {
+    const s = this.state;
+    const title = (s.newEventTitle || '').trim();
+    if (!title || !s.newEventDate) return;
+    const startsAt = s.newEventAllDay
+      ? new Date(s.newEventDate + 'T00:00:00').toISOString()
+      : new Date(s.newEventDate + 'T' + (s.newEventTime || '09:00') + ':00').toISOString();
+    this.setState({ newEventTitle: '' });
+    sb.from('agenda_events').insert({ title, starts_at: startsAt, all_day: !!s.newEventAllDay }).select().then(r => {
+      if (r.data && r.data[0]) {
+        this.setState(st => (st.agendaEvents.some(e => e.id === r.data[0].id) ? null : { agendaEvents: st.agendaEvents.concat(r.data) }));
+      }
+    });
   }
 
   ritualStreak() {
@@ -875,6 +928,19 @@ class Component extends DCLogic {
       const n = used[day] || 0; used[day] = n + 1;
       const label = t.label.length > 18 ? t.label.slice(0, 18).toUpperCase() + '…' : t.label.toUpperCase();
       rows[day].push([n === 0 ? 14 : 15, 1, label, 'task']);
+    });
+    const curMonday = mondayOf(new Date());
+    (s.agendaEvents || []).filter(ev => !ev.all_day).forEach(ev => {
+      const d = new Date(ev.starts_at);
+      if (mondayOf(d).getTime() !== curMonday.getTime()) return;
+      const dow = (d.getDay() + 6) % 7;
+      const row = Math.max(1, Math.min(16, d.getHours() - 7));
+      let span = 1;
+      if (ev.ends_at) {
+        const endD = new Date(ev.ends_at);
+        span = Math.max(1, Math.min(Math.ceil((endD - d) / 3600000), 17 - row));
+      }
+      rows[dow].push([row, span, ev.title.toUpperCase(), 'agenda']);
     });
     return rows;
   }
@@ -1062,6 +1128,51 @@ class Component extends DCLogic {
       style: 'border-radius:4px 4px 0 0;flex:1;height:' + Math.max(2, Math.round(lvl / maxLvl * 100)) + '%;background:' + (i === weeks.length - 1 ? 'linear-gradient(180deg,#3f5273,#16203a)' : '#c6d0de')
     }));
 
+    const allDayByDay = WEEKDAY_NAMES.map(() => []);
+    (s.agendaEvents || []).filter(ev => ev.all_day).forEach(ev => {
+      const d = new Date(ev.starts_at);
+      if (mondayOf(d).getTime() !== monday.getTime()) return;
+      const dow = (d.getDay() + 6) % 7;
+      allDayByDay[dow].push(ev.title);
+    });
+    const hasAllDay = allDayByDay.some(a => a.length > 0);
+    const allDayRow = allDayByDay.map((titles, i) => ({
+      label: titles.join(' · '),
+      style: 'grid-column:' + (i + 2) + ';min-height:20px;display:flex;align-items:center;justify-content:center;text-align:center;font:600 8px/1.2 \'JetBrains Mono\',monospace;background:#e9edf4;color:#16203a;border-radius:6px;padding:3px 4px;overflow:hidden'
+    }));
+
+    const today = new Date();
+    const monthEventsByDate = {};
+    (s.agendaEvents || []).forEach(ev => {
+      const key = isoDate(new Date(ev.starts_at));
+      (monthEventsByDate[key] = monthEventsByDate[key] || []).push(ev.title);
+    });
+    const MONTH_NAMES = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
+    const year = today.getFullYear(), monthIdx = today.getMonth();
+    const daysInMonth = new Date(year, monthIdx + 1, 0).getDate();
+    const firstWeekday = (new Date(year, monthIdx, 1).getDay() + 6) % 7;
+    const todayKey = isoDate(today);
+    const monthCells = [];
+    for (let i = 0; i < firstWeekday; i++) monthCells.push({ style: 'background:#fbfaf8;min-height:74px', day: '', dayStyle: '', label: '', labelStyle: '' });
+    let totalMonthEvents = 0;
+    for (let d = 1; d <= daysInMonth; d++) {
+      const key = isoDate(new Date(year, monthIdx, d));
+      const isToday = key === todayKey;
+      const evs = monthEventsByDate[key] || [];
+      totalMonthEvents += evs.length;
+      const label = evs.slice(0, 2).map(t => t.length > 16 ? t.slice(0, 16) + '…' : t).join(' · ');
+      monthCells.push({
+        style: 'background:' + (isToday ? '#f4f2ee' : '#fff') + ';min-height:74px;padding:6px 8px',
+        day: d + '',
+        dayStyle: 'font:' + (isToday || evs.length ? '600' : '500') + ' 11px/1 \'JetBrains Mono\',monospace;color:' + (isToday ? '#16203a' : (evs.length ? '#1a1a1a' : '#8a8a8a')),
+        label,
+        labelStyle: 'font:400 9px/1.3 \'JetBrains Mono\',monospace;color:' + (isToday ? '#1a1a1a' : '#6b6b6b') + ';margin-top:4px'
+      });
+    }
+    while (monthCells.length % 7 !== 0) monthCells.push({ style: 'background:#fbfaf8;min-height:74px', day: '', dayStyle: '', label: '', labelStyle: '' });
+    const monthLabel = MONTH_NAMES[monthIdx] + ' ' + year + ' · THE MONTH AHEAD';
+    const monthEventCount = totalMonthEvents + (totalMonthEvents === 1 ? ' EVENT THIS MONTH' : ' EVENTS THIS MONTH');
+
     return {
       level, nextLevel: Math.min(100, level + 1), xp: s.xp, xpLabel: s.xp.toLocaleString('en-US'),
       xpPct: ((s.xp % 440) / 4.4).toFixed(1) + '%',
@@ -1071,12 +1182,24 @@ class Component extends DCLogic {
       goWeek: () => this.set('tab', 'week'), goPlan: () => this.set('tab', 'plan'),
       goProjects: () => this.set('tab', 'projects'), goParis: () => this.set('tab', 'paris'),
       padelShort: 'PADEL',
-      calTitle: s.planDone ? 'NEXT WEEK · 17–23 AUGUST · LOCKED IN' : 'THIS WEEK · HOUR BY HOUR',
-      calDays: DAYS.map((d, i) => ({
-        label: d, date: (s.planDone ? 17 + i : 10 + i) + '',
-        style: 'grid-column:' + (i + 2) + ';display:flex;align-items:baseline;gap:5px;padding-bottom:6px;border-bottom:1px solid rgba(0,0,0,.16);font-family:\'JetBrains Mono\',monospace'
-      })),
+      calTitle: s.planDone ? 'NEXT WEEK · LOCKED IN' : 'THIS WEEK · HOUR BY HOUR',
+      calDays: DAYS.map((d, i) => {
+        const base = s.planDone ? monday.getTime() + 7 * 86400000 : monday.getTime();
+        return {
+          label: d, date: new Date(base + i * 86400000).getDate() + '',
+          style: 'grid-column:' + (i + 2) + ';display:flex;align-items:baseline;gap:5px;padding-bottom:6px;border-bottom:1px solid rgba(0,0,0,.16);font-family:\'JetBrains Mono\',monospace'
+        };
+      }),
       calBlocks: [].concat.apply([], (s.planDone ? this.planRows() : this.weekBlocks()).map((day, i) => day.map(b => mk(i, b[0], b[1], b[2], b[3])))),
+      hasAllDay, allDayRow,
+      monthLabel, monthEventCount, monthCells,
+      newEventTitle: s.newEventTitle, newEventDate: s.newEventDate, newEventTime: s.newEventTime,
+      onEventTitleInput: e => this.set('newEventTitle', e.target.value),
+      onEventDateInput: e => this.set('newEventDate', e.target.value),
+      onEventTimeInput: e => this.set('newEventTime', e.target.value),
+      toggleEventAllDay: () => this.toggleEventAllDay(),
+      allDayChipStyle: s.newEventAllDay ? MINI_ON : MINI_OFF,
+      addEvent: () => this.addEvent(),
 
       current: cur.toFixed(1), pending: s.pendingW.toFixed(1),
       toGoal: (80 - cur).toFixed(1) + ' KG', eta: 'ETA ' + Math.max(1, Math.round((80 - cur) / 0.4)) + ' WEEKS',
