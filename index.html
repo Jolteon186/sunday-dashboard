@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+  window.sb = supabase.createClient(
+    'https://gfjxkbudzxdvypfrkcob.supabase.co',
+    'sb_publishable_rUK1xYvVELOYPG7Ntx4wTg_rE8jHYVL'
+  );
+</script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"><style>*{box-sizing:border-box}body{margin:0;background:#eeece8;font-family:'Space Grotesk',system-ui,sans-serif;color:#1a1a1a}a{color:#1a1a1a}a:hover{color:#16203a}@keyframes pop{0%{transform:scale(.9);opacity:0}60%{transform:scale(1.04)}100%{transform:scale(1);opacity:1}}@keyframes shoot{0%{transform:translateY(0) scale(1);opacity:1}100%{transform:translateY(-64px) scale(.2);opacity:0}}@keyframes ring{0%{transform:scale(.4);opacity:.55}100%{transform:scale(2.4);opacity:0}}@keyframes rise{0%{transform:translateY(10px);opacity:0}100%{transform:translateY(-26px);opacity:0}18%{transform:translateY(0);opacity:1}}@keyframes shimmer{0%{background-position:0% 50%}100%{background-position:200% 50%}}@keyframes blast{0%{transform:scale(.5);opacity:0}40%{transform:scale(1.08);opacity:1}100%{transform:scale(1);opacity:1}}@keyframes flare{0%{transform:scale(.2);opacity:.7}100%{transform:scale(3.2);opacity:0}}</style></helmet>
+
+<div style="min-height:100vh;padding:26px 30px 40px;max-width:1560px;margin:0 auto">
+
+<div style="background:#fbfaf8;border:1px solid rgba(0,0,0,.07);border-radius:26px;box-shadow:0 2px 18px rgba(0,0,0,.05);min-width:1320px;overflow:hidden">
+
+<div style="padding:24px 30px 20px;border-bottom:1px solid rgba(0,0,0,.1);display:flex;align-items:flex-end;justify-content:space-between;gap:30px">
+<div>
+<div style="font:400 10px/1 'JetBrains Mono',monospace;letter-spacing:.22em;color:#8a8a8a;margin-bottom:10px">SUNDAY EDITION · NO. 33 · 09 AUG 2026</div>
+<div style="display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap">
+<div style="font:600 42px/.95 'Space Grotesk',sans-serif;letter-spacing:-.035em">The week of<br>10–16 August</div>
+<div onClick="{{ openReview }}" style="cursor:pointer;background:linear-gradient(100deg,#e9edf4,#9fadc2,#3f5273,#16203a);background-size:200% 100%;animation:shimmer 6s linear infinite alternate;color:#fff;padding:12px 18px;border-radius:999px;display:flex;align-items:center;gap:9px;box-shadow:0 6px 18px rgba(22,32,58,.22)" style-hover="box-shadow:0 1px 0 #101828;transform:translateY(1px)">
+<span style="font:600 12px/1 'JetBrains Mono',monospace;letter-spacing:.1em">COUNT MY XP</span>
+<span style="font:400 10px/1 'JetBrains Mono',monospace;opacity:.8">LAST WEEK · 6 TO CONFIRM</span>
+</div>
+<div onClick="{{ goPlan }}" style="cursor:pointer;border:1px solid #16203a;background:#fff;color:#16203a;padding:12px 18px;border-radius:999px;display:flex;align-items:center;gap:9px;box-shadow:0 2px 10px rgba(22,32,58,.1)" style-hover="box-shadow:0 1px 0 #16203a;transform:translateY(1px)">
+<span style="font:600 12px/1 'JetBrains Mono',monospace;letter-spacing:.1em">ORGANIZE NEXT WEEK</span>
+<span style="font:400 10px/1 'JetBrains Mono',monospace;color:#6b7d99">17–23 AUG · 7 QUESTIONS</span>
+</div>
+</div>
+</div>
+<div style="display:flex;gap:26px;align-items:flex-end">
+<div style="text-align:right;flex:none;min-width:96px">
+<div style="font:400 9.5px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:#8a8a8a;white-space:nowrap">LEVEL</div>
+<div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:49px;line-height:1.02;letter-spacing:-.04em;font-variation-settings:'opsz' 72;margin-top:4px;background:linear-gradient(180deg,#3f5273,#16203a);-webkit-background-clip:text;background-clip:text;color:transparent">{{ level }}</div>
+<div style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a;margin-top:4px;white-space:nowrap">CEILING 100</div>
+</div>
+<div style="width:220px">
+<div style="display:flex;justify-content:space-between;font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a;margin-bottom:6px"><span>{{ xpLabel }} XP</span><span>NEXT LVL {{ nextLevel }}</span></div>
+<div style="height:9px;background:#e9edf4;border-radius:999px;position:relative;overflow:hidden">
+<div style="position:absolute;inset:0 auto 0 0;width:{{ xpPct }};background:linear-gradient(90deg,#c6d0de,#3f5273,#16203a);transition:width 1.1s cubic-bezier(.2,.9,.2,1)"></div>
+</div>
+<div style="display:flex;justify-content:space-between;font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a;margin-top:7px"><span>€100 PRIZES · 2 WON</span><span>NEXT AT LVL 60</span></div>
+<div style="display:flex;gap:3px;margin-top:5px">
+<span style="border-radius:4px 4px 0 0;flex:1;height:16px;background:linear-gradient(180deg,#3f5273,#16203a);display:flex;align-items:center;justify-content:center;font:600 8px/1 'JetBrains Mono',monospace;color:#fff">20</span>
+<span style="border-radius:4px 4px 0 0;flex:1;height:16px;background:linear-gradient(180deg,#3f5273,#16203a);display:flex;align-items:center;justify-content:center;font:600 8px/1 'JetBrains Mono',monospace;color:#fff">40</span>
+<span style="border-radius:4px 4px 0 0;flex:1;height:16px;border-radius:999px;background:#e9edf4;display:flex;align-items:center;justify-content:center;font:600 8px/1 'JetBrains Mono',monospace;color:#9fadc2">60</span>
+<span style="border-radius:4px 4px 0 0;flex:1;height:16px;border-radius:999px;background:#e9edf4;display:flex;align-items:center;justify-content:center;font:600 8px/1 'JetBrains Mono',monospace;color:#9fadc2">80</span>
+<span style="border-radius:4px 4px 0 0;flex:1;height:16px;border-radius:999px;background:repeating-linear-gradient(45deg,#c6d0de 0 1px,#e9edf4 1px 4px);display:flex;align-items:center;justify-content:center;font:600 8px/1 'JetBrains Mono',monospace;color:#253550">100</span>
+</div>
+</div>
+</div>
+</div>
+
+<div style="display:flex;align-items:center;gap:0;padding:0 22px;border-bottom:1px solid rgba(0,0,0,.07);background:#f4f2ee">
+<div onClick="{{ goWeek }}" style="{{ tabWeek }}">THE WEEK</div>
+<div onClick="{{ goPlan }}" style="{{ tabPlan }}">NEXT WEEK PLAN</div>
+<div onClick="{{ goProjects }}" style="{{ tabProjects }}">BIG PROJECTS</div>
+<div onClick="{{ goParis }}" style="{{ tabParis }}">PARIS PLAYBOOK</div>
+<div style="flex:1"></div>
+<div style="padding:11px 6px;font:400 10px/1 'JetBrains Mono',monospace;color:#a5a5a5;display:flex;align-items:center">CHECK-IN 6/9 · 3 QUESTIONS LEFT</div>
+</div>
+
+<sc-if value="{{ isWeek }}" hint-placeholder-val="{{ true }}">
+<div>
+<div style="display:grid;grid-template-columns:392px 1fr;column-gap:26px;padding:22px 30px 10px;align-items:start">
+<div style="padding-right:26px;position:relative;align-self:start">
+<div style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:#8a8a8a;padding-bottom:8px;border-bottom:1px solid rgba(0,0,0,.16)">THE BODY</div>
+<div style="display:flex;align-items:flex-end;gap:8px;margin:15px 0 0"><span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:66px;line-height:.82;letter-spacing:-.05em;font-variation-settings:'opsz' 96">{{ current }}</span><span style="font:400 14px/1 'Space Grotesk',sans-serif;color:#6b6b6b">kg</span><span style="font:400 10px/1.3 'JetBrains Mono',monospace;color:#8a8a8a;margin-left:auto;text-align:right;flex:none;white-space:nowrap">{{ toGoal }} TO GOAL<br>{{ eta }}</span></div>
+
+<div style="position:relative;margin-top:18px;padding-right:26px">
+<div style="position:relative;height:180px;border-bottom:1px solid rgba(0,0,0,.16)">
+<svg viewBox="0 0 480 180" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible">
+<line x1="0" y1="4" x2="480" y2="4" stroke="#253550" stroke-width="1" stroke-dasharray="4 3" vector-effect="non-scaling-stroke"></line>
+<line x1="0" y1="21.8" x2="480" y2="21.8" stroke="#eae8e4" stroke-width="1" vector-effect="non-scaling-stroke"></line>
+<line x1="0" y1="39.6" x2="480" y2="39.6" stroke="#eae8e4" stroke-width="1" vector-effect="non-scaling-stroke"></line>
+<line x1="0" y1="57.4" x2="480" y2="57.4" stroke="#eae8e4" stroke-width="1" vector-effect="non-scaling-stroke"></line>
+<line x1="0" y1="75.2" x2="480" y2="75.2" stroke="#eae8e4" stroke-width="1" vector-effect="non-scaling-stroke"></line>
+<line x1="0" y1="93" x2="480" y2="93" stroke="#eae8e4" stroke-width="1" vector-effect="non-scaling-stroke"></line>
+<line x1="0" y1="110.8" x2="480" y2="110.8" stroke="#9fadc2" stroke-width="1" vector-effect="non-scaling-stroke"></line>
+<line x1="0" y1="128.6" x2="480" y2="128.6" stroke="#f0eeea" stroke-width="1" vector-effect="non-scaling-stroke"></line>
+<line x1="0" y1="146.4" x2="480" y2="146.4" stroke="#f0eeea" stroke-width="1" vector-effect="non-scaling-stroke"></line>
+<line x1="0" y1="164.2" x2="480" y2="164.2" stroke="#f0eeea" stroke-width="1" vector-effect="non-scaling-stroke"></line>
+<sc-for list="{{ bars }}" as="b" hint-placeholder-count="10">
+<rect x="{{ b.x }}" y="{{ b.y }}" width="13" height="{{ b.h }}" fill="{{ b.fill }}"></rect>
+</sc-for>
+<path d="{{ area }}" fill="rgba(63,82,115,.08)"></path>
+<path d="{{ path }}" fill="none" stroke="#16203a" stroke-width="2" stroke-linecap="round" vector-effect="non-scaling-stroke"></path>
+<circle cx="{{ dotX }}" cy="{{ dotY }}" r="4" fill="#16203a"></circle>
+</svg>
+<sc-if value="{{ rewardOn }}">
+<div style="position:absolute;inset:0;pointer-events:none;display:flex;flex-direction:column;align-items:center;justify-content:center">
+<div style="position:absolute;left:50%;top:50%;width:130px;height:130px;margin:-65px 0 0 -65px;border:2px solid #3f5273;border-radius:50%;animation:flare 1.3s ease-out both"></div>
+<div style="position:absolute;left:50%;top:50%;width:130px;height:130px;margin:-65px 0 0 -65px;border:1px solid #9fadc2;border-radius:50%;animation:flare 1.5s ease-out .18s both"></div>
+<div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-variation-settings:'opsz' 72;font-size:{{ rewardSize }};line-height:.9;letter-spacing:-.04em;background:linear-gradient(180deg,#3f5273,#16203a);-webkit-background-clip:text;background-clip:text;color:transparent;animation:blast .5s cubic-bezier(.2,1.2,.3,1) both">{{ rewardXp }}</div>
+<div style="font:600 10px/1 'JetBrains Mono',monospace;letter-spacing:.16em;color:#253550;margin-top:9px;animation:blast .5s cubic-bezier(.2,1.2,.3,1) .1s both">{{ rewardNote }}</div>
+<div style="position:absolute;left:0;right:0;bottom:0;height:60px">
+<div style="position:absolute;left:16%;bottom:0;animation:shoot 1.1s ease-out both"><span style="display:block;width:5px;height:5px;background:#16203a"></span></div>
+<div style="position:absolute;left:30%;bottom:0;animation:shoot 1.25s ease-out .1s both"><span style="display:block;width:4px;height:4px;background:#3f5273"></span></div>
+<div style="position:absolute;left:44%;bottom:0;animation:shoot 1.05s ease-out .2s both"><span style="display:block;width:6px;height:6px;background:#9fadc2"></span></div>
+<div style="position:absolute;left:58%;bottom:0;animation:shoot 1.3s ease-out .05s both"><span style="display:block;width:4px;height:4px;background:#16203a"></span></div>
+<div style="position:absolute;left:72%;bottom:0;animation:shoot 1.15s ease-out .16s both"><span style="display:block;width:5px;height:5px;background:#3f5273"></span></div>
+<div style="position:absolute;left:86%;bottom:0;animation:shoot 1.2s ease-out .24s both"><span style="display:block;width:4px;height:4px;background:#c6d0de"></span></div>
+</div>
+</div>
+</sc-if>
+<div style="position:absolute;right:-26px;top:0;bottom:0;width:24px">
+<span style="position:absolute;top:2.2%;right:0;transform:translateY(-50%);font:600 9.5px/1 'JetBrains Mono',monospace;color:#253550">80</span>
+<span style="position:absolute;top:12.1%;right:0;transform:translateY(-50%);font:400 9.5px/1 'JetBrains Mono',monospace;color:#9a9a9a">79</span>
+<span style="position:absolute;top:22%;right:0;transform:translateY(-50%);font:400 9.5px/1 'JetBrains Mono',monospace;color:#9a9a9a">78</span>
+<span style="position:absolute;top:31.9%;right:0;transform:translateY(-50%);font:400 9.5px/1 'JetBrains Mono',monospace;color:#9a9a9a">77</span>
+<span style="position:absolute;top:41.8%;right:0;transform:translateY(-50%);font:400 9.5px/1 'JetBrains Mono',monospace;color:#9a9a9a">76</span>
+<span style="position:absolute;top:51.7%;right:0;transform:translateY(-50%);font:400 9.5px/1 'JetBrains Mono',monospace;color:#9a9a9a">75</span>
+<span style="position:absolute;top:61.6%;right:0;transform:translateY(-50%);font:600 9.5px/1 'JetBrains Mono',monospace;color:#3f5273">74</span>
+<span style="position:absolute;top:100%;right:0;transform:translateY(-50%);font:400 9.5px/1 'JetBrains Mono',monospace;color:#9a9a9a">70</span>
+</div>
+</div>
+<div style="display:flex;justify-content:space-between;font:400 9px/1 'JetBrains Mono',monospace;color:#8a8a8a;margin-top:6px"><span>10 WEEKS AGO</span><span>{{ barsNote }}</span></div>
+</div>
+
+<div style="display:flex;gap:6px;margin-top:14px;align-items:stretch">
+<div onClick="{{ minus }}" style="cursor:pointer;width:34px;border:1px solid rgba(0,0,0,.1);border-radius:12px;display:flex;align-items:center;justify-content:center;font:400 15px/1 'JetBrains Mono',monospace;color:#4a4a4a">−</div>
+<div style="flex:1;border:1px solid rgba(0,0,0,.1);border-radius:12px;display:flex;align-items:center;justify-content:center;gap:6px"><span style="font:600 17px/1 'Space Grotesk',sans-serif">{{ pending }}</span><span style="font:400 10px/1 'JetBrains Mono',monospace;color:#8a8a8a">KG THIS SUNDAY</span></div>
+<div onClick="{{ plus }}" style="cursor:pointer;width:34px;border:1px solid rgba(0,0,0,.1);border-radius:12px;display:flex;align-items:center;justify-content:center;font:400 15px/1 'JetBrains Mono',monospace;color:#4a4a4a">+</div>
+<div onClick="{{ logWeight }}" style="{{ logStyle }}">{{ logLabel }}</div>
+</div>
+<div style="font:400 10px/1.4 'Space Grotesk',sans-serif;color:#61708c;margin-top:7px">{{ logNote }}</div>
+
+<div style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:#8a8a8a;padding-bottom:8px;border-bottom:1px solid rgba(0,0,0,.16);margin-top:18px">THE ROUTINE · WEEK 33 · 4 WEEKDAYS</div>
+<div style="margin-top:10px;padding:8px 11px;border:1px solid rgba(0,0,0,.09);border-radius:14px;background:#f7f6f3">
+<div style="font:400 9px/1 'JetBrains Mono',monospace;letter-spacing:.12em;color:#a5a5a5">THIS WEEK'S EDGE</div>
+<div style="font:400 10.5px/1.45 'Space Grotesk',sans-serif;color:#4a4a4a;margin-top:5px">Two pressing days before one heavy overhead day, so shoulders get the freshest session. Add a rep or 2 kg to every top set. Rebuilt each Sunday from what you logged.</div>
+</div>
+<div style="margin-top:2px">
+<sc-for list="{{ routineRows }}" as="r" hint-placeholder-count="4">
+<div style="padding:9px 0;border-bottom:1px solid rgba(0,0,0,.06)">
+<div style="display:flex;align-items:baseline;gap:8px"><span style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;color:#a5a5a5;width:30px;flex:none">{{ r.day }}</span><span style="font:600 12.5px/1.2 'Space Grotesk',sans-serif;flex:1">{{ r.title }}</span><span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#a5a5a5;white-space:nowrap">{{ r.duration }}</span></div>
+<div style="font:400 11px/1.55 'Space Grotesk',sans-serif;color:#5a5a5a;margin:5px 0 0 38px">{{ r.exercises }}</div>
+<sc-if value="{{ r.cue }}">
+<div style="font-family:'JetBrains Mono',monospace;font-size:9px;line-height:1.4;color:#a5a5a5;letter-spacing:.04em;margin:4px 0 0 38px">{{ r.cue }}</div>
+</sc-if>
+</div>
+</sc-for>
+</div>
+<div style="font:400 10px/1.45 'Space Grotesk',sans-serif;color:#8a8a8a;margin-top:8px">Surplus ≈ +350 kcal/day, 150 g protein. Weekends stay free.</div>
+
+</div>
+<div style="min-width:0">
+
+<div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:13px">
+<span style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:#8a8a8a">{{ calTitle }}</span>
+<span style="font:400 10px/1 'JetBrains Mono',monospace;color:#8a8a8a">WORK 09–18 · FRIDAY TO 17 · GYM 18–19 · DINNER 19:30 · SLEEP 23:00</span>
+</div>
+<div style="display:grid;grid-template-columns:54px repeat(7,1fr);gap:2px;margin-bottom:5px">
+<span></span>
+<sc-for list="{{ calDays }}" as="h" hint-placeholder-count="7">
+<div style="{{ h.style }}"><span style="font-weight:600;font-size:11px">{{ h.label }}</span><span style="font-weight:400;font-size:10px;color:#a5a5a5">{{ h.date }}</span></div>
+</sc-for>
+</div>
+<div style="display:grid;grid-template-columns:54px repeat(7,1fr);grid-template-rows:repeat(16,24px);gap:2px;background-image:repeating-linear-gradient(to bottom,rgba(0,0,0,.055) 0 1px,transparent 1px 26px)">
+<span style="grid-column:1;grid-row:1;font:400 8.5px/1 'JetBrains Mono',monospace;color:#a5a5a5;display:flex;align-items:flex-start;padding-top:1px">08:00</span>
+<span style="grid-column:1;grid-row:2;font:400 8.5px/1 'JetBrains Mono',monospace;color:#a5a5a5;display:flex;align-items:flex-start;padding-top:1px">09:00</span>
+<span style="grid-column:1;grid-row:3;font:400 8.5px/1 'JetBrains Mono',monospace;color:#a5a5a5;display:flex;align-items:flex-start;padding-top:1px">10:00</span>
+<span style="grid-column:1;grid-row:4;font:400 8.5px/1 'JetBrains Mono',monospace;color:#a5a5a5;display:flex;align-items:flex-start;padding-top:1px">11:00</span>
+<span style="grid-column:1;grid-row:5;font:400 8.5px/1 'JetBrains Mono',monospace;color:#a5a5a5;display:flex;align-items:flex-start;padding-top:1px">12:00</span>
+<span style="grid-column:1;grid-row:6;font:400 8.5px/1 'JetBrains Mono',monospace;color:#a5a5a5;display:flex;align-items:flex-start;padding-top:1px">13:00</span>
+<span style="grid-column:1;grid-row:7;font:400 8.5px/1 'JetBrains Mono',monospace;color:#a5a5a5;display:flex;align-items:flex-start;padding-top:1px">14:00</span>
+<span style="grid-column:1;grid-row:8;font:400 8.5px/1 'JetBrains Mono',monospace;color:#a5a5a5;display:flex;align-items:flex-start;padding-top:1px">15:00</span>
+<span style="grid-column:1;grid-row:9;font:400 8.5px/1 'JetBrains Mono',monospace;color:#a5a5a5;display:flex;align-items:flex-start;padding-top:1px">16:00</span>
+<span style="grid-column:1;grid-row:10;font:400 8.5px/1 'JetBrains Mono',monospace;color:#a5a5a5;display:flex;align-items:flex-start;padding-top:1px">17:00</span>
+<span style="grid-column:1;grid-row:11;font:400 8.5px/1 'JetBrains Mono',monospace;color:#a5a5a5;display:flex;align-items:flex-start;padding-top:1px">18:00</span>
+<span style="grid-column:1;grid-row:12;font:400 8.5px/1 'JetBrains Mono',monospace;color:#a5a5a5;display:flex;align-items:flex-start;padding-top:1px">19:00</span>
+<span style="grid-column:1;grid-row:13;font:400 8.5px/1 'JetBrains Mono',monospace;color:#a5a5a5;display:flex;align-items:flex-start;padding-top:1px">20:00</span>
+<span style="grid-column:1;grid-row:14;font:400 8.5px/1 'JetBrains Mono',monospace;color:#a5a5a5;display:flex;align-items:flex-start;padding-top:1px">21:00</span>
+<span style="grid-column:1;grid-row:15;font:400 8.5px/1 'JetBrains Mono',monospace;color:#a5a5a5;display:flex;align-items:flex-start;padding-top:1px">22:00</span>
+<span style="grid-column:1;grid-row:16;font:400 8.5px/1 'JetBrains Mono',monospace;color:#a5a5a5;display:flex;align-items:flex-start;padding-top:1px">23:00</span>
+<sc-for list="{{ calBlocks }}" as="b" hint-placeholder-count="30">
+<div style="{{ b.style }}">{{ b.label }}</div>
+</sc-for>
+</div>
+<div style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:#8a8a8a;padding-bottom:8px;border-bottom:1px solid rgba(0,0,0,.16);margin-top:26px">CARBON PLUS · YOUR ENTRIES</div>
+<div style="margin-top:12px;display:flex;flex-direction:column;gap:7px">
+<sc-for list="{{ taskRows }}" as="t" hint-placeholder-count="3">
+<div onClick="{{ t.onToggle }}" style="cursor:pointer;display:flex;align-items:center;gap:10px;border:1px solid rgba(0,0,0,.1);border-radius:12px;padding:9px 11px"><span style="{{ t.boxStyle }}"></span><span style="{{ t.labelStyle }}">{{ t.label }}</span><span style="font:400 10px/1 'JetBrains Mono',monospace;color:#8a8a8a">{{ t.meta }}</span></div>
+</sc-for>
+<div style="display:flex;align-items:center;gap:10px;border:1px dashed rgba(0,0,0,.18);border-radius:12px;padding:9px 11px;color:#b5b5b5">
+<span style="width:14px;height:14px;border:1px dashed rgba(0,0,0,.18);border-radius:5px;flex:none"></span>
+<input value="{{ newTaskText }}" onInput="{{ onTaskInput }}" placeholder="Type an action…" style="flex:1;border:none;outline:none;background:transparent;font:400 12.5px/1.2 'Space Grotesk',sans-serif;color:#1a1a1a">
+<span onClick="{{ addTask }}" style="cursor:pointer;font:400 10px/1 'JetBrains Mono',monospace">+ ADD</span>
+</div>
+</div>
+<div style="display:flex;align-items:center;gap:10px;margin-top:9px;border-top:1px solid rgba(0,0,0,.1);padding-top:9px">
+<span style="font:400 10px/1.4 'JetBrains Mono',monospace;color:#8a8a8a;flex:1">{{ taskSummary }}</span>
+</div></div>
+
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;column-gap:26px;padding:14px 30px 26px">
+<div style="border-right:1px solid rgba(0,0,0,.07);padding-right:26px">
+
+
+<div style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:#8a8a8a;padding-bottom:8px;border-bottom:1px solid rgba(0,0,0,.16);margin-top:26px">THE COLD LIST · OVER A MONTH SINCE YOU SPOKE</div>
+<div style="margin-top:12px">
+<sc-for list="{{ friendRows2 }}" as="f" hint-placeholder-count="5">
+<div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="width:24px;height:24px;border-radius:50%;background:#1a1a1a;opacity:{{ f.opacity }};flex:none"></span><span style="flex:1;font:500 13px/1 'Space Grotesk',sans-serif">{{ f.name }}</span><span style="font:400 10px/1 'JetBrains Mono',monospace;color:#8a8a8a;width:78px">{{ f.cadenceLabel }}</span><span style="font:500 10.5px/1 'JetBrains Mono',monospace;width:76px;text-align:right">{{ f.daysLabel }}</span><div onClick="{{ f.onCalled }}" style="cursor:pointer;border:1px solid rgba(22,32,58,.5);color:#16203a;border-radius:999px;padding:4px 8px;font:600 9.5px/1 'JetBrains Mono',monospace">CALLED TODAY</div></div>
+</sc-for>
+<sc-if value="{{ noFriendsYet }}">
+<div style="padding:9px 0;font:400 11.5px/1.4 'Space Grotesk',sans-serif;color:#8a8a8a">No one on the list yet — add someone below.</div>
+</sc-if>
+<div style="display:flex;align-items:center;gap:10px;padding:9px 0 0">
+<input value="{{ newFriendText }}" onInput="{{ onFriendInput }}" placeholder="Add a name…" style="flex:1;border:1px dashed rgba(0,0,0,.18);border-radius:12px;padding:8px 11px;outline:none;background:transparent;font:400 12.5px/1.2 'Space Grotesk',sans-serif;color:#1a1a1a">
+<span onClick="{{ addFriend }}" style="cursor:pointer;font:400 10px/1 'JetBrains Mono',monospace;color:#8a8a8a">+ ADD</span>
+</div>
+</div>
+<div style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:#8a8a8a;padding-bottom:8px;border-bottom:1px solid rgba(0,0,0,.16);margin-top:26px">MORNING RITUAL</div>
+<div style="display:flex;align-items:center;gap:5px;margin-top:13px">
+<sc-for list="{{ ritualDays }}" as="rd" hint-placeholder-count="7">
+<span onClick="{{ rd.onToggle }}" style="{{ rd.style }}">{{ rd.label }}</span>
+</sc-for>
+</div>
+<div style="display:flex;align-items:baseline;justify-content:space-between;margin-top:10px;border:1px solid rgba(22,32,58,.14);border-radius:16px;background:#f5f7fb;padding:9px 11px">
+<div><div style="font:500 12px/1.2 'Space Grotesk',sans-serif;color:#16203a">{{ ritualTarget }}</div><div style="font:400 10px/1.3 'Space Grotesk',sans-serif;color:#61708c;margin-top:3px">{{ ritualNote }}</div></div>
+</div>
+
+</div>
+
+<div>
+<div style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:#8a8a8a;padding-bottom:8px;border-bottom:1px solid rgba(0,0,0,.16)">CONSISTENCY · YOUR LEVEL OVER 26 WEEKS</div>
+<div style="position:relative;height:96px;margin-top:16px;border-bottom:1px solid rgba(0,0,0,.16)">
+<div style="position:absolute;left:0;right:0;top:0;border-top:1px dashed rgba(22,32,58,.4)"></div>
+<div style="position:absolute;right:0;top:-14px;font:400 9px/1 'JetBrains Mono',monospace;color:#253550;background:#fbfaf8;padding:0 3px">100 · LOCKED UNTIL 80 KG</div>
+<div style="position:absolute;inset:0;display:flex;align-items:flex-end;gap:2px">
+<sc-for list="{{ consistencyBars }}" as="cb" hint-placeholder-count="26">
+<span style="{{ cb.style }}"></span>
+</sc-for>
+</div>
+</div>
+<div style="display:flex;justify-content:space-between;font:400 9px/1 'JetBrains Mono',monospace;color:#8a8a8a;margin-top:5px"><span>{{ consistencyStart }}</span><span>NOW · LVL {{ level }}</span></div>
+<div style="font:400 10.5px/1.5 'Space Grotesk',sans-serif;color:#6b6b6b;margin-top:10px">Level tracks consistency, not effort. Miss a Sunday and it slides; string weeks together and it climbs fast. <span style="color:#16203a">Level 100 needs six clean months in a row and 80 kg on the scale</span> — it is not buyable any other way.</div>
+
+<div style="margin-top:14px;display:flex;flex-direction:column;gap:6px">
+<div style="display:flex;align-items:center;gap:9px"><span style="width:96px;font:400 10px/1 'JetBrains Mono',monospace;color:#8a8a8a">WEIGHT</span><span style="border-radius:4px 4px 0 0;flex:1;height:10px;background:#e9edf4;border-radius:999px;overflow:hidden;position:relative"><span style="position:absolute;inset:0 auto 0 0;width:92%;background:linear-gradient(90deg,#3f5273,#16203a)"></span></span><span style="font:500 10px/1 'JetBrains Mono',monospace;color:#16203a;width:64px;text-align:right">12 WK 🔥</span></div>
+<div style="display:flex;align-items:center;gap:9px"><span style="width:96px;font:400 10px/1 'JetBrains Mono',monospace;color:#8a8a8a">DATE WITH PAO</span><span style="border-radius:4px 4px 0 0;flex:1;height:10px;background:#e9edf4;border-radius:999px;overflow:hidden;position:relative"><span style="position:absolute;inset:0 auto 0 0;width:78%;background:linear-gradient(90deg,#47597c,#253550)"></span></span><span style="font:500 10px/1 'JetBrains Mono',monospace;color:#253550;width:64px;text-align:right">7 WK 🔥</span></div>
+<div style="display:flex;align-items:center;gap:9px"><span style="width:96px;font:400 10px/1 'JetBrains Mono',monospace;color:#8a8a8a">FRIEND CALLS</span><span style="border-radius:4px 4px 0 0;flex:1;height:10px;background:#e9edf4;border-radius:999px;overflow:hidden;position:relative"><span style="position:absolute;inset:0 auto 0 0;width:44%;background:linear-gradient(90deg,#8b9cb6,#56688a)"></span></span><span style="font:500 10px/1 'JetBrains Mono',monospace;color:#56688a;width:64px;text-align:right">2 WK</span></div>
+<div style="display:flex;align-items:center;gap:9px"><span style="width:96px;font:400 10px/1 'JetBrains Mono',monospace;color:#8a8a8a">CHECK-IN FILLED</span><span style="border-radius:4px 4px 0 0;flex:1;height:10px;background:#e9edf4;border-radius:999px;overflow:hidden;position:relative"><span style="position:absolute;inset:0 auto 0 0;width:100%;background:linear-gradient(90deg,#3f5273,#16203a)"></span></span><span style="font:500 10px/1 'JetBrains Mono',monospace;color:#16203a;width:64px;text-align:right">14 WK 🔥</span></div>
+<div style="display:flex;align-items:center;gap:9px"><span style="width:96px;font:400 10px/1 'JetBrains Mono',monospace;color:#8a8a8a">MORNING RITUAL</span><span style="border-radius:4px 4px 0 0;flex:1;height:10px;background:#e9edf4;border-radius:999px;overflow:hidden;position:relative"><span style="position:absolute;inset:0 auto 0 0;width:66%;background:linear-gradient(90deg,#9fadc2,#34496b)"></span></span><span style="font:500 10px/1 'JetBrains Mono',monospace;color:#34496b;width:64px;text-align:right">7 WK 🔥</span></div>
+</div>
+
+<div style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:#8a8a8a;padding-bottom:8px;border-bottom:1px solid rgba(0,0,0,.16);margin-top:26px">PARIS · NEXT 180 DAYS · ≤ €200</div>
+<sc-for list="{{ events }}" as="ev" hint-placeholder-count="5">
+<div style="padding:11px 0;border-bottom:1px solid rgba(0,0,0,.06)">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px"><span style="font:500 13px/1.2 'Space Grotesk',sans-serif">{{ ev.name }}</span><span style="font:400 10.5px/1 'JetBrains Mono',monospace;white-space:nowrap">{{ ev.window }}</span></div>
+<div style="font:400 10.5px/1.4 'Space Grotesk',sans-serif;color:#6b6b6b;margin-top:3px">{{ ev.venue }}</div>
+<div style="display:flex;align-items:center;gap:7px;margin-top:8px">
+<span style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">TICKETS?</span>
+<div onClick="{{ ev.onYes }}" style="{{ ev.yesStyle }}">YES</div>
+<div onClick="{{ ev.onNo }}" style="{{ ev.noStyle }}">NOT YET</div>
+<span style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#61708c;margin-left:auto">{{ ev.status }}</span>
+</div>
+<sc-if value="{{ ev.showDate }}">
+<div style="margin-top:8px;border:1px solid rgba(22,32,58,.25);background:#f5f7fb;padding:9px 10px;animation:pop .28s ease both">
+<div style="font:500 10px/1 'JetBrains Mono',monospace;color:#253550;margin-bottom:7px">WHICH DATE ARE YOU GOING?</div>
+<div style="display:flex;gap:5px;flex-wrap:wrap">
+<div onClick="{{ ev.pick1 }}" style="{{ ev.pick1Style }}">{{ ev.opt1 }}</div>
+<div onClick="{{ ev.pick2 }}" style="{{ ev.pick2Style }}">{{ ev.opt2 }}</div>
+<div onClick="{{ ev.pick3 }}" style="{{ ev.pick3Style }}">{{ ev.opt3 }}</div>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ ev.placed }}">
+<div style="margin-top:8px;display:flex;align-items:center;gap:8px;font:500 10px/1 'JetBrains Mono',monospace;color:#16203a;animation:pop .3s ease both"><span style="width:6px;height:6px;background:#16203a;border-radius:50%"></span>{{ ev.placedLabel }}</div>
+</sc-if>
+</div>
+</sc-for>
+<div style="font:400 10px/1 'JetBrains Mono',monospace;color:#b5b5b5;margin-top:10px">14 MORE IN THE PARIS PLAYBOOK · REFRESHED THIS MORNING</div>
+</div>
+</div>
+<div style="border-top:1px solid rgba(0,0,0,.08);padding:20px 30px 26px">
+<div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px">
+<span style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:#8a8a8a">AUGUST 2026 · THE MONTH AHEAD</span>
+<span style="font:400 10px/1 'JetBrains Mono',monospace;color:#8a8a8a">ANTICIPATION WINDOW · 4 QUESTIONS PENDING</span>
+</div>
+<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:rgba(0,0,0,.07);border:1px solid rgba(0,0,0,.06);border-radius:18px;overflow:hidden">
+<div style="background:#f4f2ee;padding:7px 9px;font:500 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">MON</div><div style="background:#f4f2ee;padding:7px 9px;font:500 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">TUE</div><div style="background:#f4f2ee;padding:7px 9px;font:500 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">WED</div><div style="background:#f4f2ee;padding:7px 9px;font:500 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">THU</div><div style="background:#f4f2ee;padding:7px 9px;font:500 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">FRI</div><div style="background:#f4f2ee;padding:7px 9px;font:500 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">SAT</div><div style="background:#f4f2ee;padding:7px 9px;font:500 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">SUN</div>
+
+<div style="background:#fbfaf8;min-height:74px"></div><div style="background:#fbfaf8;min-height:74px"></div><div style="background:#fbfaf8;min-height:74px"></div><div style="background:#fbfaf8;min-height:74px"></div><div style="background:#fbfaf8;min-height:74px"></div>
+<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">01</div></div>
+<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">02</div></div>
+
+<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">03</div></div>
+<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">04</div></div>
+<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">05</div></div>
+<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">06</div></div>
+<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">07</div></div>
+<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">08</div></div>
+<div style="background:#f4f2ee;min-height:74px;padding:6px 8px"><div style="font:600 11px/1 'JetBrains Mono',monospace">09</div><div style="font:400 9px/1.3 'JetBrains Mono',monospace;color:#1a1a1a;margin-top:4px">CHECK-IN<br>TODAY</div></div>
+
+<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:600 11px/1 'JetBrains Mono',monospace">10</div><div style="font:400 9px/1.3 'JetBrains Mono',monospace;color:#6b6b6b;margin-top:4px">GYM PUSH</div></div>
+<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:600 11px/1 'JetBrains Mono',monospace">11</div><div style="font:400 9px/1.3 'JetBrains Mono',monospace;color:#6b6b6b;margin-top:4px">GYM PULL</div></div>
+<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:600 11px/1 'JetBrains Mono',monospace">12</div><div style="font:400 9px/1.3 'JetBrains Mono',monospace;color:#6b6b6b;margin-top:4px">{{ padelShort }}<br>ABRAHAM</div></div>
+<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:600 11px/1 'JetBrains Mono',monospace">13</div><div style="font:400 9px/1.3 'JetBrains Mono',monospace;color:#6b6b6b;margin-top:4px">GYM ARMS<br>DD BLOCK</div></div>
+<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:600 11px/1 'JetBrains Mono',monospace">14</div><div style="font:400 9px/1.3 'JetBrains Mono',monospace;color:#6b6b6b;margin-top:4px">GYM LEGS</div></div>
+<div style="background:linear-gradient(180deg,rgba(63,82,115,.1),transparent);min-height:74px;padding:6px 8px;border-left:2px solid #3f5273"><div style="font:600 11px/1 'JetBrains Mono',monospace;color:#16203a">15</div><div style="font:500 9px/1.3 'JetBrains Mono',monospace;color:#16203a;margin-top:4px">DATE WITH PAO<br>MARAUDE · FLATS</div></div>
+<div style="background:#f4f2ee;min-height:74px;padding:6px 8px"><div style="font:600 11px/1 'JetBrains Mono',monospace">16</div><div style="font:400 9px/1.3 'JetBrains Mono',monospace;color:#6b6b6b;margin-top:4px">PICNIC<br>WEIGH-IN</div></div>
+
+<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">17</div></div>
+<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">18</div><div style="font:400 9px/1.3 'JetBrains Mono',monospace;color:#8a8a8a;margin-top:4px">HONEYMOON<br>SHORTLIST</div></div>
+<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">19</div></div>
+<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">20</div></div>
+<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">21</div><div style="font:400 9px/1.3 'JetBrains Mono',monospace;color:#8a8a8a;margin-top:4px">DATE NIGHT</div></div>
+<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">22</div><div style="font:400 9px/1.3 'JetBrains Mono',monospace;color:#8a8a8a;margin-top:4px">FLAT VISITS</div></div>
+<div style="background:#f4f2ee;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">23</div><div style="font:400 9px/1.3 'JetBrains Mono',monospace;color:#8a8a8a;margin-top:4px">CHECK-IN</div></div>
+
+<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">24</div></div>
+<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">25</div><div style="font:400 9px/1.3 'JetBrains Mono',monospace;color:#8a8a8a;margin-top:4px">JAPAN · SEE<br>FLIGHT PRICE</div></div>
+<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">26</div><div style="font:400 9px/1.3 'JetBrains Mono',monospace;color:#8a8a8a;margin-top:4px">ROCK EN<br>SEINE →</div></div>
+<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">27</div></div>
+<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">28</div><div style="font:400 9px/1.3 'JetBrains Mono',monospace;color:#8a8a8a;margin-top:4px">DATE NIGHT</div></div>
+<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">29</div><div style="font:400 9px/1.3 'JetBrains Mono',monospace;color:#8a8a8a;margin-top:4px">ROCK EN<br>SEINE</div></div>
+<div style="background:#f4f2ee;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">30</div><div style="font:400 9px/1.3 'JetBrains Mono',monospace;color:#8a8a8a;margin-top:4px">CHECK-IN</div></div>
+
+<div style="background:#fff;min-height:74px;padding:6px 8px"><div style="font:500 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">31</div></div>
+<div style="background:#fbfaf8;min-height:74px"></div><div style="background:#fbfaf8;min-height:74px"></div><div style="background:#fbfaf8;min-height:74px"></div><div style="background:#fbfaf8;min-height:74px"></div><div style="background:#fbfaf8;min-height:74px"></div><div style="background:#fbfaf8;min-height:74px"></div>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isPlan }}">
+<div style="padding:22px 30px 28px">
+<div style="display:flex;align-items:flex-end;justify-content:space-between;border-bottom:1px solid rgba(0,0,0,.16);padding-bottom:12px">
+<div><div style="font:400 10px/1 'JetBrains Mono',monospace;letter-spacing:.16em;color:#8a8a8a;margin-bottom:8px">PLANNING 17–23 AUGUST</div><div style="font:600 26px/1 'Space Grotesk',sans-serif;letter-spacing:-.02em">Organize next week</div></div>
+<div style="text-align:right"><div style="font:400 10px/1 'JetBrains Mono',monospace;color:#8a8a8a">{{ planAnswered }} OF 7 ANSWERED · EACH ONE PAYS +15 XP</div><div style="font:600 22px/1 'Space Grotesk',sans-serif;color:#16203a;margin-top:5px">{{ planXpLabel }}</div></div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px">
+
+<div style="border:1px solid rgba(0,0,0,.08);border-radius:18px;background:#fff;padding:14px 16px">
+<div style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a;letter-spacing:.1em">01 · CARBON PLUS</div>
+<div style="font:600 15px/1.3 'Space Grotesk',sans-serif;margin:8px 0 11px">What are your actions this week?</div>
+<div style="display:flex;flex-wrap:wrap;gap:5px">
+<sc-for list="{{ carbonOptions }}" as="c" hint-placeholder-count="4">
+<div onClick="{{ c.onPick }}" style="{{ c.style }}">{{ c.label }}</div>
+</sc-for>
+</div>
+</div>
+
+<div style="border:1px solid rgba(0,0,0,.08);border-radius:18px;background:#fff;padding:14px 16px">
+<div style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a;letter-spacing:.1em">02 · PADEL</div>
+<div style="font:600 15px/1.3 'Space Grotesk',sans-serif;margin:8px 0 11px">Which night is padel?</div>
+<div style="display:flex;gap:5px">
+<sc-for list="{{ padelDays }}" as="p" hint-placeholder-count="5">
+<div onClick="{{ p.onPick }}" style="{{ p.style }}">{{ p.label }}</div>
+</sc-for>
+</div>
+</div>
+
+<div style="border:1px solid rgba(0,0,0,.08);border-radius:18px;background:#fff;padding:14px 16px">
+<div style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a;letter-spacing:.1em">03 · PAO</div>
+<div style="font:600 15px/1.3 'Space Grotesk',sans-serif;margin:8px 0 11px">Which night is the date with Pao?</div>
+<div style="display:flex;gap:5px">
+<sc-for list="{{ paoDays }}" as="p" hint-placeholder-count="7">
+<div onClick="{{ p.onPick }}" style="{{ p.style }}">{{ p.label }}</div>
+</sc-for>
+</div>
+<div style="font:400 10px/1.4 'Space Grotesk',sans-serif;color:#61708c;margin-top:9px">{{ paoNote }}</div>
+</div>
+
+<div style="border:1px solid rgba(0,0,0,.08);border-radius:18px;background:#fff;padding:14px 16px">
+<div style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a;letter-spacing:.1em">04 · TICKETS</div>
+<div style="font:600 15px/1.3 'Space Grotesk',sans-serif;margin:8px 0 4px">Which events do you want to book, and when will you do it?</div>
+<sc-for list="{{ ticketRows }}" as="t" hint-placeholder-count="4">
+<div style="padding:11px 0;border-bottom:1px solid rgba(0,0,0,.06)">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px"><span style="font:600 13px/1.2 'Space Grotesk',sans-serif">{{ t.name }}</span><span style="font:400 10px/1 'JetBrains Mono',monospace;color:#61708c;white-space:nowrap">{{ t.when }}</span></div>
+<div style="font:400 10.5px/1.4 'Space Grotesk',sans-serif;color:#6b6b6b;margin-top:3px">{{ t.desc }}</div>
+<div style="display:flex;align-items:center;gap:5px;margin-top:8px;flex-wrap:wrap">
+<div onClick="{{ t.onToggle }}" style="{{ t.toggleStyle }}">{{ t.toggleLabel }}</div>
+<sc-if value="{{ t.chosen }}">
+<span style="font:400 9px/1 'JetBrains Mono',monospace;color:#8a8a8a;margin-left:3px">BOOK ON</span>
+<sc-for list="{{ t.days }}" as="d" hint-placeholder-count="7">
+<div onClick="{{ d.onPick }}" style="{{ d.style }}">{{ d.label }}</div>
+</sc-for>
+</sc-if>
+</div>
+</div>
+</sc-for>
+</div>
+
+<div style="border:1px solid rgba(0,0,0,.08);border-radius:18px;background:#fff;padding:14px 16px">
+<div style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a;letter-spacing:.1em">05 · FRIENDS · COLDEST FIRST</div>
+<div style="font:600 15px/1.3 'Space Grotesk',sans-serif;margin:8px 0 4px">Who are you calling, and which night?</div>
+<sc-for list="{{ friendRows }}" as="fr" hint-placeholder-count="3">
+<div style="padding:11px 0;border-bottom:1px solid rgba(0,0,0,.06)">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px"><span style="font:600 13px/1.2 'Space Grotesk',sans-serif">{{ fr.name }}</span><span style="font:400 10px/1 'JetBrains Mono',monospace;color:#61708c;white-space:nowrap">{{ fr.meta }}</span></div>
+<div style="display:flex;align-items:center;gap:5px;margin-top:8px;flex-wrap:wrap">
+<div onClick="{{ fr.onToggle }}" style="{{ fr.toggleStyle }}">{{ fr.toggleLabel }}</div>
+<sc-if value="{{ fr.chosen }}">
+<span style="font:400 9px/1 'JetBrains Mono',monospace;color:#8a8a8a;margin-left:3px">CALL ON</span>
+<sc-for list="{{ fr.days }}" as="d" hint-placeholder-count="7">
+<div onClick="{{ d.onPick }}" style="{{ d.style }}">{{ d.label }}</div>
+</sc-for>
+</sc-if>
+</div>
+</div>
+</sc-for>
+</div>
+
+<div style="border:1px solid rgba(0,0,0,.08);border-radius:18px;background:#fff;padding:14px 16px">
+<div style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a;letter-spacing:.1em">06 · PSYCHOLOGIST</div>
+<div style="font:600 15px/1.3 'Space Grotesk',sans-serif;margin:8px 0 11px">Going this week? Which day?</div>
+<div style="display:flex;gap:5px">
+<sc-for list="{{ psyDays }}" as="p" hint-placeholder-count="6">
+<div onClick="{{ p.onPick }}" style="{{ p.style }}">{{ p.label }}</div>
+</sc-for>
+</div>
+</div>
+
+<div style="border:1px solid rgba(0,0,0,.08);border-radius:18px;background:#fff;padding:14px 16px;grid-column:1 / span 2">
+<div style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a;letter-spacing:.1em">07 · ANYTHING YOU WANT TO ADD</div>
+<div style="font:600 15px/1.3 'Space Grotesk',sans-serif;margin:8px 0 11px">Pick from what you love, or write your own.</div>
+<div style="display:flex;flex-wrap:wrap;gap:5px">
+<sc-for list="{{ extraOptions }}" as="x" hint-placeholder-count="7">
+<div onClick="{{ x.onPick }}" style="{{ x.style }}">{{ x.label }}</div>
+</sc-for>
+</div>
+</div>
+</div>
+
+<div style="margin-top:22px;border-top:1px solid rgba(0,0,0,.16);padding-top:16px">
+<div style="display:flex;align-items:center;gap:16px;margin-top:20px;border:1px solid rgba(22,32,58,.14);border-radius:16px;background:#f5f7fb;padding:16px 18px;position:relative;overflow:hidden">
+<div onClick="{{ finishPlan }}" style="{{ finishStyle }}">{{ finishLabel }}</div>
+<div style="flex:1;font:400 11.5px/1.5 'Space Grotesk',sans-serif;color:#61708c">{{ finishNote }}</div>
+<sc-if value="{{ planBurst }}">
+<div style="position:absolute;left:0;right:0;bottom:0;top:0;pointer-events:none">
+<div style="position:absolute;left:18%;bottom:10px;width:60px;height:60px;margin-left:-30px;border:2px solid #3f5273;border-radius:50%;animation:ring .9s ease-out both"></div>
+<div style="position:absolute;left:12%;bottom:12px;animation:shoot .8s ease-out both"><span style="display:block;width:5px;height:5px;background:#16203a"></span></div>
+<div style="position:absolute;left:24%;bottom:12px;animation:shoot .95s ease-out .06s both"><span style="display:block;width:4px;height:4px;background:#3f5273"></span></div>
+<div style="position:absolute;left:36%;bottom:12px;animation:shoot .85s ease-out .13s both"><span style="display:block;width:6px;height:6px;background:#9fadc2"></span></div>
+<div style="position:absolute;left:48%;bottom:12px;animation:shoot 1s ease-out .03s both"><span style="display:block;width:4px;height:4px;background:#16203a"></span></div>
+<div style="position:absolute;left:60%;bottom:12px;animation:shoot .82s ease-out .17s both"><span style="display:block;width:5px;height:5px;background:#3f5273"></span></div>
+<div style="position:absolute;left:72%;bottom:12px;animation:shoot .92s ease-out .09s both"><span style="display:block;width:4px;height:4px;background:#c6d0de"></span></div>
+<div style="position:absolute;left:42%;bottom:16px;font:600 13px/1 'JetBrains Mono',monospace;color:#16203a;animation:rise 1.4s ease-out both">WEEK PLANNED · +250 XP</div>
+</div>
+</sc-if>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isProjects }}">
+<div style="padding:24px 30px 30px">
+<div style="display:flex;align-items:flex-end;justify-content:space-between;border-bottom:1px solid rgba(0,0,0,.16);padding-bottom:12px">
+<div style="font:600 26px/1 'Space Grotesk',sans-serif;letter-spacing:-.02em">Big things, cut into small pieces</div>
+<div style="font:400 10px/1.4 'JetBrains Mono',monospace;color:#8a8a8a;text-align:right">NOTHING HERE SHOULD FEEL LIKE AN EVENT<br>ONE ACTION PER WEEK IS ENOUGH</div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:22px">
+
+<div style="border:1px solid rgba(0,0,0,.08);border-radius:18px;background:#fff;padding:18px 20px">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font:600 19px/1.1 'Space Grotesk',sans-serif">Honeymoon</span><span style="font:400 10px/1 'JetBrains Mono',monospace;color:#8a8a8a">TARGET SPRING 2027 · 34 WEEKS</span></div>
+<div style="display:flex;align-items:baseline;gap:10px;margin-top:12px"><span style="font:600 26px/1 'Space Grotesk',sans-serif">€3,100</span><span style="font:400 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">SAVED OF €8,000</span><span style="margin-left:auto;border:1px solid rgba(0,0,0,.14);border-radius:999px;padding:5px 9px;font:400 10px/1 'JetBrains Mono',monospace;color:#6b6b6b">+ LOG SAVING</span></div>
+<div style="height:7px;background:rgba(0,0,0,.07);border-radius:999px;overflow:hidden;margin-top:9px;position:relative"><span style="position:absolute;inset:0 auto 0 0;width:39%;background:#1a1a1a"></span></div>
+<div style="margin-top:16px">
+<div style="display:flex;gap:10px;padding:9px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="width:14px;height:14px;background:#1a1a1a;border-radius:5px;flex:none;margin-top:1px"></span><div style="flex:1"><div style="font:500 12.5px/1.2 'Space Grotesk',sans-serif">Agree the shortlist of 3 destinations with Pao</div><div style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a;margin-top:3px">DONE 26 JUL</div></div></div>
+<div style="display:flex;gap:10px;padding:9px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="width:14px;height:14px;border:1.5px solid #3f5273;border-radius:5px;flex:none;margin-top:1px"></span><div style="flex:1"><div style="font:500 12.5px/1.2 'Space Grotesk',sans-serif">Pick the month — decides the whole budget</div><div style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#16203a;margin-top:3px">THIS WEEK · 20 MIN · +60 XP</div></div></div>
+<div style="display:flex;gap:10px;padding:9px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="width:14px;height:14px;border:1px solid rgba(0,0,0,.22);border-radius:5px;flex:none;margin-top:1px"></span><div style="flex:1"><div style="font:500 12.5px/1.2 'Space Grotesk',sans-serif">Set a flight price alert on the top 2</div><div style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a;margin-top:3px">WEEK OF 17 AUG · 15 MIN</div></div></div>
+<div style="display:flex;gap:10px;padding:9px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="width:14px;height:14px;border:1px solid rgba(0,0,0,.22);border-radius:5px;flex:none;margin-top:1px"></span><div style="flex:1"><div style="font:500 12.5px/1.2 'Space Grotesk',sans-serif">Book the first two nights only</div><div style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a;margin-top:3px">SEPT · UNBLOCKS EVERYTHING ELSE</div></div></div>
+<div style="display:flex;gap:10px;padding:9px 0"><span style="width:14px;height:14px;border:1px solid rgba(0,0,0,.22);border-radius:5px;flex:none;margin-top:1px"></span><div style="flex:1"><div style="font:500 12.5px/1.2 'Space Grotesk',sans-serif">Passports + visas check</div><div style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a;margin-top:3px">OCT · 30 MIN</div></div></div>
+</div>
+</div>
+
+<div style="border:1px solid rgba(0,0,0,.08);border-radius:18px;background:#fff;padding:18px 20px">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font:600 19px/1.1 'Space Grotesk',sans-serif">Japan with the family</span><span style="font:400 10px/1 'JetBrains Mono',monospace;color:#8a8a8a">TARGET APR 2027 · CHERRY BLOSSOM</span></div>
+<div style="display:flex;align-items:baseline;gap:10px;margin-top:12px"><span style="font:600 26px/1 'Space Grotesk',sans-serif">€1,200</span><span style="font:400 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">SAVED OF €9,000</span><span style="margin-left:auto;border:1px solid rgba(0,0,0,.14);border-radius:999px;padding:5px 9px;font:400 10px/1 'JetBrains Mono',monospace;color:#6b6b6b">+ LOG SAVING</span></div>
+<div style="height:7px;background:rgba(0,0,0,.07);border-radius:999px;overflow:hidden;margin-top:9px;position:relative"><span style="position:absolute;inset:0 auto 0 0;width:13%;background:#5c5c5c"></span></div>
+<div style="margin-top:16px">
+<div style="display:flex;gap:10px;padding:9px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="width:14px;height:14px;border:1.5px solid #3f5273;border-radius:5px;flex:none;margin-top:1px"></span><div style="flex:1"><div style="font:500 12.5px/1.2 'Space Grotesk',sans-serif">Ask everyone for their two possible weeks</div><div style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#16203a;margin-top:3px">THIS WEEK · ONE MESSAGE · +60 XP</div></div></div>
+<div style="display:flex;gap:10px;padding:9px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="width:14px;height:14px;border:1px solid rgba(0,0,0,.22);border-radius:5px;flex:none;margin-top:1px"></span><div style="flex:1"><div style="font:500 12.5px/1.2 'Space Grotesk',sans-serif">Lock the dates — blossom week sells out 10 months out</div><div style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a;margin-top:3px">BY 15 SEP · HARD DEADLINE</div></div></div>
+<div style="display:flex;gap:10px;padding:9px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="width:14px;height:14px;border:1px solid rgba(0,0,0,.22);border-radius:5px;flex:none;margin-top:1px"></span><div style="flex:1"><div style="font:500 12.5px/1.2 'Space Grotesk',sans-serif">Flights — watch, then buy in one sitting</div><div style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a;margin-top:3px">OCT · ALERT ALREADY SET 25 AUG</div></div></div>
+<div style="display:flex;gap:10px;padding:9px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="width:14px;height:14px;border:1px solid rgba(0,0,0,.22);border-radius:5px;flex:none;margin-top:1px"></span><div style="flex:1"><div style="font:500 12.5px/1.2 'Space Grotesk',sans-serif">JR pass + one ryokan night</div><div style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a;margin-top:3px">NOV</div></div></div>
+<div style="display:flex;gap:10px;padding:9px 0"><span style="width:14px;height:14px;border:1px solid rgba(0,0,0,.22);border-radius:5px;flex:none;margin-top:1px"></span><div style="flex:1"><div style="font:500 12.5px/1.2 'Space Grotesk',sans-serif">Route: Tokyo → Kanazawa → Kyoto, 3 nights each</div><div style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a;margin-top:3px">DEC · ONE EVENING WITH A MAP</div></div></div>
+</div>
+</div>
+
+<div style="border:1px solid rgba(0,0,0,.08);border-radius:18px;background:#fff;padding:18px 20px">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font:600 19px/1.1 'Space Grotesk',sans-serif">Apartment hunt · 17e</span><span style="font:400 10px/1 'JetBrains Mono',monospace;color:#8a8a8a">ACTIVE · 6 WEEKS IN</span></div>
+<div style="display:flex;align-items:baseline;gap:10px;margin-top:12px"><span style="font:600 26px/1 'Space Grotesk',sans-serif">€4,400</span><span style="font:400 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">DEPOSIT OF €6,000</span><span style="margin-left:auto;border:1px solid rgba(0,0,0,.14);border-radius:999px;padding:5px 9px;font:400 10px/1 'JetBrains Mono',monospace;color:#6b6b6b">+ LOG SAVING</span></div>
+<div style="height:7px;background:rgba(0,0,0,.07);border-radius:999px;overflow:hidden;margin-top:9px;position:relative"><span style="position:absolute;inset:0 auto 0 0;width:73%;background:#1a1a1a"></span></div>
+<div style="margin-top:16px">
+<div style="display:flex;gap:10px;padding:9px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="width:14px;height:14px;border:1.5px solid #3f5273;border-radius:5px;flex:none;margin-top:1px"></span><div style="flex:1"><div style="font:500 12.5px/1.2 'Space Grotesk',sans-serif">Three visits, Saturday 17:00</div><div style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#16203a;margin-top:3px">SAT 15 AUG · ALREADY IN THE WEEK</div></div></div>
+<div style="display:flex;gap:10px;padding:9px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="width:14px;height:14px;border:1px solid rgba(0,0,0,.22);border-radius:5px;flex:none;margin-top:1px"></span><div style="flex:1"><div style="font:500 12.5px/1.2 'Space Grotesk',sans-serif">Dossier pack ready as a single PDF</div><div style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a;margin-top:3px">THIS WEEK · WINS YOU THE FLAT</div></div></div>
+<div style="display:flex;gap:10px;padding:9px 0"><span style="width:14px;height:14px;border:1px solid rgba(0,0,0,.22);border-radius:5px;flex:none;margin-top:1px"></span><div style="flex:1"><div style="font:500 12.5px/1.2 'Space Grotesk',sans-serif">Decide the ceiling rent and stop looking above it</div><div style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a;margin-top:3px">SUNDAY QUESTION</div></div></div>
+</div>
+</div>
+
+<div style="border:1px solid rgba(0,0,0,.08);border-radius:18px;background:#fff;padding:18px 20px">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font:600 19px/1.1 'Space Grotesk',sans-serif">Mexico trip</span><span style="font:400 10px/1 'JetBrains Mono',monospace;color:#8a8a8a">TARGET DEC 2026 · 19 WEEKS</span></div>
+<div style="display:flex;align-items:baseline;gap:10px;margin-top:12px"><span style="font:600 26px/1 'Space Grotesk',sans-serif">€900</span><span style="font:400 11px/1 'JetBrains Mono',monospace;color:#8a8a8a">SAVED OF €2,200</span><span style="margin-left:auto;border:1px solid rgba(0,0,0,.14);border-radius:999px;padding:5px 9px;font:400 10px/1 'JetBrains Mono',monospace;color:#6b6b6b">+ LOG SAVING</span></div>
+<div style="height:7px;background:rgba(0,0,0,.07);border-radius:999px;overflow:hidden;margin-top:9px;position:relative"><span style="position:absolute;inset:0 auto 0 0;width:41%;background:#8f8f8f"></span></div>
+<div style="margin-top:16px">
+<div style="display:flex;gap:10px;padding:9px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="width:14px;height:14px;border:1.5px solid #3f5273;border-radius:5px;flex:none;margin-top:1px"></span><div style="flex:1"><div style="font:500 12.5px/1.2 'Space Grotesk',sans-serif">Fix the dates around Carbon Plus commitments</div><div style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#16203a;margin-top:3px">THIS WEEK · +60 XP</div></div></div>
+<div style="display:flex;gap:10px;padding:9px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="width:14px;height:14px;border:1px solid rgba(0,0,0,.22);border-radius:5px;flex:none;margin-top:1px"></span><div style="flex:1"><div style="font:500 12.5px/1.2 'Space Grotesk',sans-serif">Buy flights — December climbs from mid-September</div><div style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a;margin-top:3px">BY 10 SEP</div></div></div>
+<div style="display:flex;gap:10px;padding:9px 0"><span style="width:14px;height:14px;border:1px solid rgba(0,0,0,.22);border-radius:5px;flex:none;margin-top:1px"></span><div style="flex:1"><div style="font:500 12.5px/1.2 'Space Grotesk',sans-serif">Tell the people you want to see, before they book up</div><div style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a;margin-top:3px">OCT · SAME MESSAGE TO SIX PEOPLE</div></div></div>
+</div>
+</div>
+
+</div>
+
+<div style="margin-top:24px;border:1px dashed rgba(0,0,0,.2);border-radius:18px;padding:16px 18px;display:flex;align-items:center;gap:16px">
+<div style="flex:1;font:400 12px/1.5 'Space Grotesk',sans-serif;color:#6b6b6b">Add a project and I will break it into the smallest first action, then one action a week until it lands. <span style="color:#1a1a1a">Every completed action pays XP the following Sunday.</span></div>
+<span style="border:1px solid #1a1a1a;padding:9px 14px;font:500 11px/1 'JetBrains Mono',monospace;letter-spacing:.06em">+ NEW PROJECT</span>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isParis }}">
+<div style="padding:24px 30px 30px">
+<div style="display:flex;align-items:flex-end;justify-content:space-between;border-bottom:1px solid rgba(0,0,0,.16);padding-bottom:12px">
+<div style="font:600 26px/1 'Space Grotesk',sans-serif;letter-spacing:-.02em">Paris playbook</div>
+<div style="font:400 10px/1.4 'JetBrains Mono',monospace;color:#8a8a8a;text-align:right">SEARCHED THIS MORNING · 180-DAY HORIZON<br>THE FIXED LIST IS YOURS TO GROW</div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1.35fr;gap:30px;margin-top:22px">
+
+<div>
+<div style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:#8a8a8a;padding-bottom:8px;border-bottom:1px solid rgba(0,0,0,.16)">THE FIXED LIST · THINGS WE ALWAYS ENJOY</div>
+<div style="margin-top:4px">
+<div style="display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="font:400 10px/1 'JetBrains Mono',monospace;color:#b5b5b5;width:20px">01</span><div style="flex:1"><div style="font:500 13px/1.2 'Space Grotesk',sans-serif">Ping pong</div><div style="font:400 10px/1.3 'Space Grotesk',sans-serif;color:#8a8a8a;margin-top:2px">Free tables · Jardin du Luxembourg, Batignolles</div></div><span style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">FREE</span></div>
+<div style="display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="font:400 10px/1 'JetBrains Mono',monospace;color:#b5b5b5;width:20px">02</span><div style="flex:1"><div style="font:500 13px/1.2 'Space Grotesk',sans-serif">Cinema · new releases</div><div style="font:400 10px/1.3 'Space Grotesk',sans-serif;color:#8a8a8a;margin-top:2px">Refreshed every Wednesday — this week's list below</div></div><span style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">€12</span></div>
+<div style="display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="font:400 10px/1 'JetBrains Mono',monospace;color:#b5b5b5;width:20px">03</span><div style="flex:1"><div style="font:500 13px/1.2 'Space Grotesk',sans-serif">Pétanque</div><div style="font:400 10px/1.3 'Space Grotesk',sans-serif;color:#8a8a8a;margin-top:2px">Arènes de Lutèce · Bois de Boulogne · bring wine</div></div><span style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">FREE</span></div>
+<div style="display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="font:400 10px/1 'JetBrains Mono',monospace;color:#b5b5b5;width:20px">04</span><div style="flex:1"><div style="font:500 13px/1.2 'Space Grotesk',sans-serif">A museum, one room only</div><div style="font:400 10px/1.3 'Space Grotesk',sans-serif;color:#8a8a8a;margin-top:2px">Petit Palais &amp; Bourdelle are free · 45 minutes, no guilt</div></div><span style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">€0–13</span></div>
+<div style="display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="font:400 10px/1 'JetBrains Mono',monospace;color:#b5b5b5;width:20px">05</span><div style="flex:1"><div style="font:500 13px/1.2 'Space Grotesk',sans-serif">VR / interactive place</div><div style="font:400 10px/1.3 'Space Grotesk',sans-serif;color:#8a8a8a;margin-top:2px">Tell me which one you liked and I will keep the good ones</div></div><span style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">€25</span></div>
+<div style="display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="font:400 10px/1 'JetBrains Mono',monospace;color:#b5b5b5;width:20px">06</span><div style="flex:1"><div style="font:500 13px/1.2 'Space Grotesk',sans-serif">Picnic</div><div style="font:400 10px/1.3 'Space Grotesk',sans-serif;color:#8a8a8a;margin-top:2px">Bois de Boulogne · Buttes-Chaumont · Île aux Cygnes</div></div><span style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">€15</span></div>
+<div style="display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="font:400 10px/1 'JetBrains Mono',monospace;color:#b5b5b5;width:20px">07</span><div style="flex:1"><div style="font:500 13px/1.2 'Space Grotesk',sans-serif">Drawing &amp; painting afternoon</div><div style="font:400 10px/1.3 'Space Grotesk',sans-serif;color:#8a8a8a;margin-top:2px">At home or in a garden · earned as an unlock</div></div><span style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">FREE</span></div>
+<div style="display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="font:400 10px/1 'JetBrains Mono',monospace;color:#b5b5b5;width:20px">08</span><div style="flex:1"><div style="font:500 13px/1.2 'Space Grotesk',sans-serif">Padel</div><div style="font:400 10px/1.3 'Space Grotesk',sans-serif;color:#8a8a8a;margin-top:2px">Club 17e · book Sunday for the week</div></div><span style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">€22</span></div>
+<div style="display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px dashed rgba(0,0,0,.25);color:#a5a5a5"><span style="font:400 10px/1 'JetBrains Mono',monospace;width:20px">09</span><div style="flex:1;font:400 13px/1.2 'Space Grotesk',sans-serif">Add something you love…</div><span style="font:400 9.5px/1 'JetBrains Mono',monospace">+ ADD</span></div>
+</div>
+
+<div style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:#8a8a8a;padding-bottom:8px;border-bottom:1px solid rgba(0,0,0,.16);margin-top:26px">IN CINEMAS THIS WEEK</div>
+<div style="margin-top:4px">
+<div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(0,0,0,.07);font:400 12px/1.3 'Space Grotesk',sans-serif"><span>New release · wide</span><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#8a8a8a">WED 12 AUG</span></div>
+<div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(0,0,0,.07);font:400 12px/1.3 'Space Grotesk',sans-serif"><span>New release · arthouse, VO</span><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#8a8a8a">WED 12 AUG</span></div>
+<div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(0,0,0,.07);font:400 12px/1.3 'Space Grotesk',sans-serif"><span>Le Champo · classic re-run</span><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#8a8a8a">ALL WEEK</span></div>
+<div style="font:400 10px/1.4 'JetBrains Mono',monospace;color:#b5b5b5;padding-top:9px">TITLES FILLED IN BY WEDNESDAY'S SEARCH · PLACEHOLDER ROWS</div>
+</div>
+</div>
+
+<div>
+<div style="display:flex;align-items:baseline;justify-content:space-between;border-bottom:1px solid rgba(0,0,0,.16);padding-bottom:8px"><span style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:#8a8a8a">NEW THIS WEEK · 10 FOUND, MOST WANTED FIRST</span><span style="font:400 10px/1 'JetBrains Mono',monospace;color:#8a8a8a">≤ €200</span></div>
+<div style="margin-top:4px">
+<div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="font:600 15px/1 'JetBrains Mono',monospace;color:#16203a;width:26px">01</span><div style="flex:1"><div style="font:600 14px/1.2 'Space Grotesk',sans-serif">Rolex Paris Masters · tennis</div><div style="font:400 10.5px/1.4 'Space Grotesk',sans-serif;color:#6b6b6b;margin-top:3px">31 Oct–8 Nov · Paris La Défense Arena · early rounds are the cheap, good ones</div></div><span style="border:1px solid rgba(22,32,58,.45);color:#16203a;border-radius:999px;padding:5px 9px;font:600 9.5px/1 'JetBrains Mono',monospace;align-self:flex-start">TOP 7</span></div>
+<div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="font:600 15px/1 'JetBrains Mono',monospace;color:#16203a;width:26px">02</span><div style="flex:1"><div style="font:600 14px/1.2 'Space Grotesk',sans-serif">Grand Palais d'été · nave concerts</div><div style="font:400 10.5px/1.4 'Space Grotesk',sans-serif;color:#6b6b6b;margin-top:3px">Sat 15 Aug, 20:00 · dance, DJ sets under the glass roof · discount for 3+ events</div></div><span style="border:1px solid rgba(22,32,58,.45);color:#16203a;border-radius:999px;padding:5px 9px;font:600 9.5px/1 'JetBrains Mono',monospace;align-self:flex-start">TOP 7</span></div>
+<div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="font:600 15px/1 'JetBrains Mono',monospace;color:#16203a;width:26px">03</span><div style="flex:1"><div style="font:600 14px/1.2 'Space Grotesk',sans-serif">Rock en Seine · Saint-Cloud</div><div style="font:400 10.5px/1.4 'Space Grotesk',sans-serif;color:#6b6b6b;margin-top:3px">26–30 Aug · day tickets go before the weekend</div></div><span style="border:1px solid rgba(22,32,58,.45);color:#16203a;border-radius:999px;padding:5px 9px;font:600 9.5px/1 'JetBrains Mono',monospace;align-self:flex-start">TOP 7</span></div>
+<div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="font:600 15px/1 'JetBrains Mono',monospace;color:#16203a;width:26px">04</span><div style="flex:1"><div style="font:600 14px/1.2 'Space Grotesk',sans-serif">Cézanne et nous · Grand Palais &amp; Orsay</div><div style="font:400 10.5px/1.4 'Space Grotesk',sans-serif;color:#6b6b6b;margin-top:3px">From 23 Sep · book a weekday evening slot, it will be packed</div></div><span style="border:1px solid rgba(22,32,58,.45);color:#16203a;border-radius:999px;padding:5px 9px;font:600 9.5px/1 'JetBrains Mono',monospace;align-self:flex-start">TOP 7</span></div>
+<div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="font:600 15px/1 'JetBrains Mono',monospace;color:#16203a;width:26px">05</span><div style="flex:1"><div style="font:600 14px/1.2 'Space Grotesk',sans-serif">Open-air cinema · Parc de la Villette</div><div style="font:400 10.5px/1.4 'Space Grotesk',sans-serif;color:#6b6b6b;margin-top:3px">Free, until early September · deckchair rental only</div></div><span style="border:1px solid rgba(22,32,58,.45);color:#16203a;border-radius:999px;padding:5px 9px;font:600 9.5px/1 'JetBrains Mono',monospace;align-self:flex-start">TOP 7</span></div>
+<div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="font:600 15px/1 'JetBrains Mono',monospace;color:#16203a;width:26px">06</span><div style="flex:1"><div style="font:600 14px/1.2 'Space Grotesk',sans-serif">Été du canal · Quai de la Seine</div><div style="font:400 10.5px/1.4 'Space Grotesk',sans-serif;color:#6b6b6b;margin-top:3px">Until 9 Aug — last weekend · balls, concerts, cheap food on the water</div></div><span style="border:1px solid rgba(22,32,58,.45);color:#16203a;border-radius:999px;padding:5px 9px;font:600 9.5px/1 'JetBrains Mono',monospace;align-self:flex-start">TOP 7</span></div>
+<div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid rgba(0,0,0,.16)"><span style="font:600 15px/1 'JetBrains Mono',monospace;color:#16203a;width:26px">07</span><div style="flex:1"><div style="font:600 14px/1.2 'Space Grotesk',sans-serif">Classique au Vert · Parc Floral</div><div style="font:400 10.5px/1.4 'Space Grotesk',sans-serif;color:#6b6b6b;margin-top:3px">Sundays to 6 Sep · classical in the open air, near free</div></div><span style="border:1px solid rgba(22,32,58,.45);color:#16203a;border-radius:999px;padding:5px 9px;font:600 9.5px/1 'JetBrains Mono',monospace;align-self:flex-start">TOP 7</span></div>
+<div style="display:flex;gap:12px;padding:11px 0;border-bottom:1px solid rgba(0,0,0,.08);opacity:.72"><span style="font:500 13px/1 'JetBrains Mono',monospace;color:#8a8a8a;width:26px">08</span><div style="flex:1"><div style="font:500 13px/1.2 'Space Grotesk',sans-serif">Fête des Vendanges de Montmartre</div><div style="font:400 10px/1.3 'Space Grotesk',sans-serif;color:#8a8a8a;margin-top:2px">7–11 Oct · free · parades and tastings</div></div></div>
+<div style="display:flex;gap:12px;padding:11px 0;border-bottom:1px solid rgba(0,0,0,.08);opacity:.72"><span style="font:500 13px/1 'JetBrains Mono',monospace;color:#8a8a8a;width:26px">09</span><div style="flex:1"><div style="font:500 13px/1.2 'Space Grotesk',sans-serif">Brussels 1900 · Petit Palais</div><div style="font:400 10px/1.3 'Space Grotesk',sans-serif;color:#8a8a8a;margin-top:2px">From 6 Oct to Feb · no rush, but worth an evening</div></div></div>
+<div style="display:flex;gap:12px;padding:11px 0;border-bottom:1px solid rgba(0,0,0,.08);opacity:.72"><span style="font:500 13px/1 'JetBrains Mono',monospace;color:#8a8a8a;width:26px">10</span><div style="flex:1"><div style="font:500 13px/1.2 'Space Grotesk',sans-serif">Art Basel Paris · Grand Palais</div><div style="font:400 10px/1.3 'Space Grotesk',sans-serif;color:#8a8a8a;margin-top:2px">23–25 Oct · 195 galleries · one afternoon is plenty</div></div></div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:26px">
+<div>
+<div style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:#16203a;padding-bottom:8px;border-bottom:1px solid #16203a">TOP 7 · THIS WEEKEND</div>
+<div style="font:400 12px/1.9 'Space Grotesk',sans-serif;margin-top:9px">1 · Grand Palais d'été, Sat 20:00<br>2 · Maraude, Sat 14:00<br>3 · Picnic + pétanque, Sun 16:00<br>4 · Open-air cinema, La Villette<br>5 · Été du canal, last weekend<br>6 · Ping pong, Batignolles<br>7 · Petit Palais, free room</div>
+</div>
+<div>
+<div style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:#8a8a8a;padding-bottom:8px;border-bottom:1px solid rgba(0,0,0,.2)">TOP 7 · NEXT WEEKEND</div>
+<div style="font:400 12px/1.9 'Space Grotesk',sans-serif;color:#6b6b6b;margin-top:9px">1 · Classique au Vert, Sun<br>2 · Cinema, new Wednesday release<br>3 · Ping pong + apéro<br>4 · Rock en Seine, decide by Fri<br>5 · Bourdelle museum, free<br>6 · Flat visits, second round<br>7 · Drawing afternoon (unlocked)</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</sc-if>
+
+</div>
+</div>
+
+<sc-if value="{{ reviewOpen }}">
+<div style="position:fixed;inset:0;background:rgba(22,32,58,.5);backdrop-filter:blur(3px);display:flex;align-items:flex-start;justify-content:center;padding:40px 20px;overflow:auto;z-index:60">
+<div style="width:660px;max-width:100%;background:#fbfaf8;border:1px solid rgba(22,32,58,.18);border-radius:24px;box-shadow:0 24px 60px rgba(22,32,58,.28);overflow:hidden;animation:pop .3s ease both">
+
+<div style="padding:20px 24px 16px;border-bottom:1px solid rgba(0,0,0,.16);display:flex;align-items:flex-start;justify-content:space-between;gap:20px">
+<div>
+<div style="font:400 10px/1 'JetBrains Mono',monospace;letter-spacing:.16em;color:#8a8a8a;margin-bottom:8px">COUNTING LAST WEEK · 03–09 AUG</div>
+<div style="font:600 24px/1.1 'Space Grotesk',sans-serif;letter-spacing:-.02em">What actually happened?</div>
+</div>
+<div onClick="{{ closeReview }}" style="cursor:pointer;font:400 11px/1 'JetBrains Mono',monospace;color:#8a8a8a;border:1px solid rgba(0,0,0,.14);border-radius:999px;padding:6px 9px">CLOSE</div>
+</div>
+
+<div style="padding:6px 24px 0">
+<sc-for list="{{ reviewItems }}" as="it" hint-placeholder-count="6">
+<div style="display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid rgba(0,0,0,.05)">
+<div style="flex:1">
+<div style="font:500 13.5px/1.3 'Space Grotesk',sans-serif">{{ it.q }}</div>
+<div style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a;margin-top:4px">{{ it.meta }}</div>
+</div>
+<span style="font:600 11px/1 'JetBrains Mono',monospace;color:#16203a;width:64px;text-align:right">{{ it.xpLabel }}</span>
+<div onClick="{{ it.onYes }}" style="{{ it.yesStyle }}">YES</div>
+<div onClick="{{ it.onNo }}" style="{{ it.noStyle }}">NO</div>
+</div>
+</sc-for>
+</div>
+
+<div style="padding:18px 24px 22px">
+<div style="position:relative;border:1px solid rgba(22,32,58,.25);background:#f5f7fb;padding:16px 18px;overflow:hidden">
+<div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:11px">
+<div><div style="font:400 10px/1 'JetBrains Mono',monospace;color:#253550">THIS WEEK'S HAUL</div><div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:37px;line-height:1;letter-spacing:-.035em;font-variation-settings:'opsz' 60;background:linear-gradient(90deg,#3f5273,#16203a);-webkit-background-clip:text;background-clip:text;color:transparent;margin-top:5px">{{ haulLabel }}</div></div>
+<div style="text-align:right"><div style="font:400 10px/1 'JetBrains Mono',monospace;color:#8a8a8a">LEVEL</div><div style="font:600 26px/1 'Space Grotesk',sans-serif;color:#16203a;margin-top:5px">{{ level }}</div></div>
+</div>
+<div style="height:13px;background:#e9edf4;border-radius:999px;position:relative;overflow:hidden">
+<div style="position:absolute;inset:0 auto 0 0;width:{{ xpPct }};background:linear-gradient(90deg,#c6d0de,#3f5273,#16203a);transition:width 1.2s cubic-bezier(.16,.9,.2,1)"></div>
+</div>
+<sc-if value="{{ burst }}">
+<div style="position:absolute;left:0;right:0;bottom:22px;pointer-events:none">
+<div style="position:absolute;left:16%;bottom:0;width:52px;height:52px;border:2px solid #3f5273;border-radius:50%;transform-origin:center;animation:ring .8s ease-out both;margin-left:-26px"></div>
+<div style="position:absolute;left:16%;bottom:0;animation:shoot .75s ease-out both"><span style="display:block;width:5px;height:5px;background:#16203a"></span></div>
+<div style="position:absolute;left:26%;bottom:0;animation:shoot .9s ease-out .05s both"><span style="display:block;width:4px;height:4px;background:#3f5273"></span></div>
+<div style="position:absolute;left:38%;bottom:0;animation:shoot .82s ease-out .12s both"><span style="display:block;width:6px;height:6px;background:#9fadc2"></span></div>
+<div style="position:absolute;left:49%;bottom:0;animation:shoot .95s ease-out .02s both"><span style="display:block;width:4px;height:4px;background:#16203a"></span></div>
+<div style="position:absolute;left:61%;bottom:0;animation:shoot .78s ease-out .18s both"><span style="display:block;width:5px;height:5px;background:#3f5273"></span></div>
+<div style="position:absolute;left:72%;bottom:0;animation:shoot .88s ease-out .08s both"><span style="display:block;width:4px;height:4px;background:#c6d0de"></span></div>
+<div style="position:absolute;left:84%;bottom:0;animation:shoot .92s ease-out .14s both"><span style="display:block;width:5px;height:5px;background:#253550"></span></div>
+<div style="position:absolute;left:34%;bottom:6px;font:600 12px/1 'JetBrains Mono',monospace;color:#16203a;animation:rise 1.3s ease-out both">WEIGHT STREAK ×12</div>
+<div style="position:absolute;left:58%;bottom:6px;font:600 12px/1 'JetBrains Mono',monospace;color:#3f5273;animation:rise 1.5s ease-out .25s both">RITUAL ×7</div>
+</div>
+</sc-if>
+<div style="display:flex;align-items:center;gap:12px;margin-top:14px">
+<div onClick="{{ award }}" style="{{ awardStyle }}">{{ awardLabel }}</div>
+<div style="font:400 10.5px/1.4 'Space Grotesk',sans-serif;color:#61708c;flex:1">{{ awardNote }}</div>
+</div>
+</div>
+<div style="font:400 10px/1.6 'JetBrains Mono',monospace;color:#8a8a8a;margin-top:14px">WEIGHT 500+ · DATE WITH PAO 300 · FRIEND CALL 150 · CHECK-IN 15/ANSWER · EVENT CONFIRMED 80 · TICKET OR PROJECT ACTION 60 · RITUAL 4×/WK 200 BONUS</div>
+</div>
+</div>
+</div>
+</sc-if>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:&quot;100%&quot;}}">
+
+const BASE = "display:flex;align-items:flex-start;padding:3px 5px;font-family:'JetBrains Mono',monospace;font-size:8.5px;font-weight:500;line-height:1.2;overflow:hidden;border-radius:8px;animation:pop .32s ease both;";
+const KIND = {
+  work: "background:repeating-linear-gradient(45deg,#e4e2de 0 1px,#f4f3f1 1px 5px);color:#a5a5a5;justify-content:center",
+  meal: "background:#eceae6;color:#a5a5a5;justify-content:center;font-size:7.5px;align-items:center;white-space:nowrap",
+  gym: "background:#1a1a1a;color:#fff",
+  sport: "background:#4a4a4a;color:#fff",
+  pao: "background:linear-gradient(100deg,#3f5273,#16203a);color:#fff",
+  care: "background:#e9edf4;color:#253550;border:1px solid #9fadc2",
+  task: "background:#fff;border:1px solid rgba(0,0,0,.14);color:#1a1a1a;white-space:nowrap;text-overflow:ellipsis;align-items:center",
+  fun: "background:#fff;border:1px dashed rgba(0,0,0,.32);color:#4a4a4a",
+  flat: "background:#f0efeb;border:1px solid rgba(0,0,0,.2);color:#1a1a1a"
+};
+const mk = (day, row, span, label, kind) => ({ label, style: 'grid-column:' + (day + 2) + ';grid-row:' + row + ' / span ' + span + ';' + BASE + KIND[kind] });
+
+const CHIP_ON = "cursor:pointer;padding:8px 11px;font:600 10.5px/1 'JetBrains Mono',monospace;border:1px solid transparent;background:linear-gradient(180deg,#3f5273,#16203a);color:#fff;border-radius:999px";
+const CHIP_OFF = "cursor:pointer;padding:8px 11px;font:400 10.5px/1 'JetBrains Mono',monospace;border:1px solid rgba(0,0,0,.16);color:#4a4a4a;background:#fff;border-radius:999px";
+const DAY_ON = "cursor:pointer;flex:1;text-align:center;padding:9px 0;font:600 10.5px/1 'JetBrains Mono',monospace;border:1px solid transparent;background:linear-gradient(180deg,#3f5273,#16203a);color:#fff;border-radius:999px";
+const DAY_OFF = "cursor:pointer;flex:1;text-align:center;padding:9px 0;font:400 10.5px/1 'JetBrains Mono',monospace;border:1px solid rgba(0,0,0,.16);color:#4a4a4a;background:#fff;border-radius:999px";
+const BTN_ON = "cursor:pointer;padding:5px 11px;font:600 9.5px/1 'JetBrains Mono',monospace;border:1px solid transparent;background:linear-gradient(180deg,#3f5273,#16203a);color:#fff;border-radius:999px";
+const BTN_OFF = "cursor:pointer;padding:5px 11px;font:400 9.5px/1 'JetBrains Mono',monospace;border:1px solid rgba(0,0,0,.14);color:#6b6b6b;background:#fff;border-radius:999px";
+const PICK_ON = "cursor:pointer;padding:6px 10px;font:600 10px/1 'JetBrains Mono',monospace;border:1px solid transparent;background:linear-gradient(180deg,#3f5273,#16203a);color:#fff;border-radius:999px";
+const PICK_OFF = "cursor:pointer;padding:6px 10px;font:400 10px/1 'JetBrains Mono',monospace;border:1px solid rgba(22,32,58,.22);color:#253550;background:#fff;border-radius:999px";
+const TAB_ON = "cursor:pointer;margin:8px 4px 8px 0;padding:10px 20px;border-radius:999px;font:600 11px/1 'JetBrains Mono',monospace;letter-spacing:.1em;background:linear-gradient(180deg,#3f5273,#16203a);color:#fff";
+const TAB_OFF = "cursor:pointer;margin:8px 4px 8px 0;padding:10px 20px;border-radius:999px;font:400 11px/1 'JetBrains Mono',monospace;letter-spacing:.1em;color:#8a8a8a";
+
+const DAYS = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+const CARBON_OPTS = ['DUE DILIGENCE · PART 2', 'SEND GON THE MODEL', 'PIPELINE REVIEW', 'CALL THE INVESTOR', '+ TYPE YOUR OWN'];
+const TICKET_OPTS = [
+  { id: 'rolex', name: 'Rolex Paris Masters', when: '31 OCT – 8 NOV', desc: 'ATP Masters 1000 at Paris La Défense Arena. Early rounds are the cheap seats and the best tennis per euro.' },
+  { id: 'rock', name: 'Rock en Seine', when: '26 – 30 AUG', desc: 'Five days in the Parc de Saint-Cloud. Day tickets go before the weekend.' },
+  { id: 'gpe', name: "Grand Palais d'été", when: 'SAT 15 AUG, 20:00', desc: 'Dance, concerts and DJ sets in the nave under the glass roof. Discount from three events.' },
+  { id: 'cez', name: 'Cézanne et nous', when: 'FROM 23 SEP', desc: "Grand Palais and Musée d'Orsay retrospective, to 17 January. Weekday evening slots are the quiet ones." }
+];
+const FRIEND_OPTS = [
+  { name: 'Abraham', meta: 'MONTHLY · 88 DAYS · +58 LATE' },
+  { name: 'Homero', meta: 'MONTHLY · 71 DAYS · +41 LATE' },
+  { name: 'Wero', meta: 'MONTHLY · 63 DAYS · +33 LATE' },
+  { name: 'Santi', meta: '2 WEEKS · 47 DAYS · +33 LATE' },
+  { name: 'Bety & Moi', meta: 'MONTHLY · 58 DAYS · +28 LATE' }
+];
+const MINI_ON = "cursor:pointer;padding:5px 8px;border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;background:linear-gradient(180deg,#3f5273,#16203a);color:#fff";
+const MINI_OFF = "cursor:pointer;padding:5px 8px;border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:400;border:1px solid rgba(0,0,0,.14);color:#6b6b6b;background:#fff";
+const EXTRA_OPTS = ['PING PONG', 'CINEMA', 'PICNIC', 'PÉTANQUE', 'MUSEUM', 'VR PLACE', 'DRAWING', '+ TYPE YOUR OWN'];
+
+const EVENTS = [
+  { id: 'rolex', name: 'Rolex Paris Masters', window: '31 OCT', venue: 'La Défense Arena · early rounds are the good value', opts: ['TUE 3 NOV', 'WED 4 NOV', 'THU 5 NOV'] },
+  { id: 'gpe', name: "Grand Palais d'été", window: '15 AUG', venue: 'Nave concerts & DJ sets · discount from 3 events', opts: ['SAT 15 AUG', 'SAT 22 AUG', 'FRI 28 AUG'] },
+  { id: 'rock', name: 'Rock en Seine', window: '26 AUG', venue: 'Parc de Saint-Cloud · day tickets', opts: ['WED 26 AUG', 'SAT 29 AUG', 'SUN 30 AUG'] },
+  { id: 'cez', name: 'Cézanne et nous', window: '23 SEP', venue: "Grand Palais & Musée d'Orsay · to 17 Jan", opts: ['THU 24 SEP', 'THU 1 OCT', 'FRI 9 OCT'] },
+  { id: 'basel', name: 'Art Basel Paris', window: '23 OCT', venue: 'Grand Palais · 195 galleries', opts: ['FRI 23 OCT', 'SAT 24 OCT', 'SUN 25 OCT'] }
+];
+
+const REVIEW = [
+  { id: 'w', q: 'Did you gain the kilo? Scale says 73.0 — up 0.4', meta: 'WEIGHT · 12-WEEK STREAK · HIGHEST VALUE', xp: 520 },
+  { id: 'p', q: 'Did the date with Pao happen on Saturday?', meta: 'PAO · 7-WEEK STREAK', xp: 300 },
+  { id: 'f', q: 'Did you call Kike and Molina?', meta: 'FRIENDS · 2 CALLS', xp: 300 },
+  { id: 'r', q: 'Morning ritual — 4 mornings again?', meta: 'RITUAL · 7 WEEKS RUNNING · CONSISTENCY BONUS', xp: 200 },
+  { id: 'e', q: "Did you confirm the Grand Palais d'été booking?", meta: 'EVENT RESERVED', xp: 80 },
+  { id: 'c', q: 'Carbon Plus — 4 of 6 actions closed?', meta: 'PROJECT ACTIONS', xp: 240 }
+];
+
+const Y = v => 182 - (v - 70) * 17.8;
+const X = i => 14 + i * (452 / 11);
+
+// --- Supabase wiring helpers -------------------------------------------------
+const WEEKDAY_NAMES = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+function mondayOf(d) {
+  const dt = new Date(d);
+  const day = (dt.getDay() + 6) % 7; // 0 = Mon
+  dt.setDate(dt.getDate() - day);
+  dt.setHours(0, 0, 0, 0);
+  return dt;
+}
+function isoDate(d) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return y + '-' + m + '-' + day;
+}
+function daysBetween(a, b) { return Math.max(0, Math.round((b - a) / 86400000)); }
+
+const DEFAULT_SERIES = [70.1, 70.4, 70.8, 71.2, 71.5, 71.9, 72.2, 72.4, 72.7, 73.0];
+const DEFAULT_ROUTINE = [
+  { day_of_week: 0, title: 'Push · chest & shoulders', duration_min: 55, exercises: 'Incline dumbbell press 4×6 · Flat barbell press 4×8 · Seated lateral raise 4×12 · Cable fly 3×12 · Weighted dips 3×10', cue: '+2 KG ON THE INCLINE · DROP SET ON THE LAST RAISE', is_gym: true },
+  { day_of_week: 1, title: 'Pull · back & biceps', duration_min: 50, exercises: 'Weighted pull-up 4×6 · Chest-supported row 4×8 · Wide lat pulldown 3×12 · EZ-bar curl 4×10 · Hammer curl 3×12', cue: '+4 KG ON THE PULL-UP · ONE EXTRA REP ON THE CURL', is_gym: true },
+  { day_of_week: 3, title: 'Arms & shoulders', duration_min: 60, exercises: 'Overhead press 5×5 · Arnold press 3×10 · Lateral raise 3×15 · Skull crusher 4×10 · Preacher curl 4×10', cue: 'THE SESSION THAT MOVES YOUR GOAL · HEAVIEST PRESS OF THE WEEK', is_gym: true },
+  { day_of_week: 4, title: 'Legs & core', duration_min: 45, exercises: 'Back squat 4×6 · Romanian deadlift 3×8 · Bulgarian split squat 3×10 · Hanging leg raise 3×12', cue: 'ENOUGH TO GROW, NOT ENOUGH TO RUIN THE WEEKEND', is_gym: true }
+];
+
+class Component extends DCLogic {
+  state = {
+    tab: 'week', xp: 0, answers: {}, tickets: {}, dates: {}, reviewOpen: false, awarded: false, burst: false, haul: 0,
+    series: DEFAULT_SERIES, pendingW: DEFAULT_SERIES[DEFAULT_SERIES.length - 1], logged: false,
+    reward: null,
+    plan: { carbon: [], padel: null, pao: null, ticketBuys: {}, friends: {}, psy: null, extras: [] },
+    planDone: false, planBurst: false,
+
+    routine: DEFAULT_ROUTINE, tasks: [], friendsList: [], ritual: {}, xpEvents: [],
+    newTaskText: '', newFriendText: '', loaded: false
+  };
+
+  componentDidMount() {
+    this.loadAll();
+  }
+
+  async loadAll() {
+    const monday = mondayOf(new Date());
+    const weekOf = isoDate(monday);
+    const since26 = isoDate(new Date(monday.getTime() - 26 * 7 * 86400000));
+
+    const [weightRes, routineRes, taskRes, friendRes, ritualRes, xpRes] = await Promise.all([
+      sb.from('weight_logs').select('*').order('week_of', { ascending: true }).limit(10),
+      sb.from('routine_days').select('*').order('day_of_week', { ascending: true }),
+      sb.from('carbon_actions').select('*').eq('week_of', weekOf).order('created_at', { ascending: true }),
+      sb.from('friends').select('*').eq('archived', false),
+      sb.from('morning_ritual_logs').select('*').gte('log_date', since26),
+      sb.from('xp_events').select('amount, created_at')
+    ]);
+
+    let routine = (routineRes.data && routineRes.data.length) ? routineRes.data : null;
+    if (!routine) {
+      const ins = await sb.from('routine_days').insert(DEFAULT_ROUTINE.map(r => ({ ...r }))).select();
+      routine = (ins.data && ins.data.length) ? ins.data : DEFAULT_ROUTINE;
+    }
+
+    const series = (weightRes.data && weightRes.data.length) ? weightRes.data.map(r => Number(r.value_kg)) : DEFAULT_SERIES;
+    const lastLoggedWeek = weightRes.data && weightRes.data.length ? weightRes.data[weightRes.data.length - 1].week_of : null;
+
+    const ritual = {};
+    (ritualRes.data || []).forEach(r => { ritual[r.log_date] = r.done; });
+
+    const xpEvents = xpRes.data || [];
+    const totalXp = xpEvents.reduce((n, e) => n + e.amount, 0);
+
+    this.setState({
+      xp: totalXp,
+      series,
+      pendingW: series[series.length - 1],
+      logged: lastLoggedWeek === weekOf,
+      routine,
+      tasks: taskRes.data || [],
+      friendsList: friendRes.data || [],
+      ritual,
+      xpEvents,
+      loaded: true
+    });
+  }
+
+  bumpXp(amount, source, note) {
+    this.setState(st => ({ xp: st.xp + amount, xpEvents: st.xpEvents.concat([{ amount, created_at: new Date().toISOString() }]) }));
+    sb.from('xp_events').insert({ source, amount, note: note || null }).then();
+  }
+
+  toggleTask(id, wasDone) {
+    this.setState(st => ({ tasks: st.tasks.map(t => t.id === id ? { ...t, done: !wasDone } : t) }));
+    sb.from('carbon_actions').update({ done: !wasDone }).eq('id', id).then();
+    if (!wasDone) this.bumpXp(40, 'task_done', 'carbon action');
+  }
+
+  addTask() {
+    const label = (this.state.newTaskText || '').trim();
+    if (!label) return;
+    const weekOf = isoDate(mondayOf(new Date()));
+    this.setState({ newTaskText: '' });
+    sb.from('carbon_actions').insert({ label, week_of: weekOf }).select().then(r => {
+      if (r.data && r.data[0]) this.setState(st => ({ tasks: st.tasks.concat(r.data) }));
+    });
+  }
+
+  markFriendCalled(id, name) {
+    const today = isoDate(new Date());
+    this.setState(st => ({ friendsList: st.friendsList.map(f => f.id === id ? { ...f, last_contact_at: today } : f) }));
+    sb.from('friends').update({ last_contact_at: today }).eq('id', id).then();
+    this.bumpXp(30, 'friend_called', name);
+  }
+
+  addFriend() {
+    const name = (this.state.newFriendText || '').trim();
+    if (!name) return;
+    this.setState({ newFriendText: '' });
+    sb.from('friends').insert({ name, cadence_days: 30, last_contact_at: isoDate(new Date()) }).select().then(r => {
+      if (r.data && r.data[0]) this.setState(st => ({ friendsList: st.friendsList.concat(r.data) }));
+    });
+  }
+
+  toggleRitual(dateStr) {
+    const wasDone = !!this.state.ritual[dateStr];
+    this.setState(st => ({ ritual: { ...st.ritual, [dateStr]: !wasDone } }));
+    sb.from('morning_ritual_logs').upsert({ log_date: dateStr, done: !wasDone }, { onConflict: 'log_date' }).then();
+    if (!wasDone) this.bumpXp(10, 'ritual_bonus', dateStr);
+  }
+
+  ritualStreak() {
+    const s = this.state;
+    const monday = mondayOf(new Date());
+    let streak = 0;
+    for (let w = 1; w < 27; w++) {
+      const wkStart = new Date(monday.getTime() - w * 7 * 86400000);
+      let count = 0;
+      for (let i = 0; i < 5; i++) {
+        if (s.ritual[isoDate(new Date(wkStart.getTime() + i * 86400000))]) count++;
+      }
+      if (count >= 4) streak++; else break;
+    }
+    return streak;
+  }
+
+  weekBlocks() {
+    const s = this.state;
+    const rows = WEEKDAY_NAMES.map(() => []);
+    rows.forEach((r, i) => {
+      r.push([1, 1, 'BREAKFAST', 'meal']);
+      if (i < 4) r.push([2, 9, 'WORK 09–18', 'work']);
+      else if (i === 4) r.push([2, 8, 'WORK 09–17', 'work']);
+      if (i < 5) r.push([12, 1, 'DINNER 19:30', 'meal']);
+      r.push([16, 1, 'SLEEP', 'meal']);
+    });
+    (s.routine || []).forEach(rd => {
+      if (rd.day_of_week >= 0 && rd.day_of_week < 5) {
+        const short = (rd.title.split('·')[0] || rd.title).trim().toUpperCase();
+        rows[rd.day_of_week].push([11, 1, 'GYM · ' + short, 'gym']);
+      }
+    });
+    const used = {};
+    (s.tasks || []).filter(t => !t.done).forEach(t => {
+      const day = (t.day_of_week === null || t.day_of_week === undefined) ? 0 : t.day_of_week;
+      const n = used[day] || 0; used[day] = n + 1;
+      const label = t.label.length > 18 ? t.label.slice(0, 18).toUpperCase() + '…' : t.label.toUpperCase();
+      rows[day].push([n === 0 ? 14 : 15, 1, label, 'task']);
+    });
+    return rows;
+  }
+
+  set(k, v) { this.setState({ [k]: v }); }
+
+  setDay(key, name, day) {
+    this.setState(s => {
+      const p = { ...s.plan }, m = { ...p[key] };
+      if (m[name] === day) delete m[name]; else m[name] = day;
+      p[key] = m;
+      return { plan: p, xp: s.xp + 15 };
+    });
+  }
+
+  toggleItem(key, name) {
+    this.setState(s => {
+      const p = { ...s.plan }, m = { ...p[key] };
+      if (m[name] === undefined) m[name] = null; else delete m[name];
+      p[key] = m;
+      return { plan: p, xp: s.xp + 15 };
+    });
+  }
+
+  pick(key, value) {
+    this.setState(s => {
+      const p = { ...s.plan };
+      if (Array.isArray(p[key])) {
+        p[key] = p[key].indexOf(value) > -1 ? p[key].filter(v => v !== value) : p[key].concat([value]);
+      } else {
+        p[key] = p[key] === value ? null : value;
+      }
+      return { plan: p, xp: s.xp + 15 };
+    });
+  }
+
+  planRows() {
+    const p = this.state.plan;
+    const rows = DAYS.map(() => []);
+    rows.forEach((r, i) => {
+      r.push([1, 1, 'BREAKFAST', 'meal']);
+      if (i < 4) r.push([2, 9, 'WORK 09–18', 'work']);
+      else if (i === 4) r.push([2, 8, 'WORK 09–17', 'work']);
+      else r.push([6, 2, 'LUNCH', 'meal']);
+      r.push([12, 1, 'DINNER 19:30', 'meal']);
+      r.push([16, 1, 'SLEEP', 'meal']);
+    });
+    if (p.padel !== null) rows[p.padel].push([13, 1, 'PADEL · 17e', 'sport']);
+    if (p.pao !== null) rows[p.pao].push([13, 3, 'DATE WITH PAO', 'pao']);
+    if (p.psy !== null && p.psy !== 'no') rows[p.psy].push([13, 1, 'PSYCHOLOGIST', 'care']);
+    const splits = ['PUSH', 'PULL', 'ARMS', 'LEGS'];
+    let g = 0;
+    for (let i = 0; i < 5 && g < 4; i++) if (p.pao !== i) { rows[i].push([11, 1, 'GYM · ' + splits[g], 'gym']); g++; }
+    const used = {};
+    const put = (day, label) => {
+      const n = used[day] || 0;
+      used[day] = n + 1;
+      rows[day].push([n === 0 ? 14 : 15, 1, label, 'task']);
+    };
+    const floating = [];
+    Object.keys(p.friends).forEach(name => {
+      const d = p.friends[name];
+      if (d === null || d === undefined) floating.push('CALL ' + name.toUpperCase());
+      else put(d, 'CALL ' + name.toUpperCase());
+    });
+    Object.keys(p.ticketBuys).forEach(name => {
+      const d = p.ticketBuys[name];
+      const short = name.split(' ').slice(0, 2).join(' ').toUpperCase();
+      if (d === null || d === undefined) floating.push('BOOK · ' + short);
+      else put(d, 'BOOK · ' + short);
+    });
+    p.carbon.forEach(c => floating.push(c === '+ TYPE YOUR OWN' ? 'YOUR ACTION' : c));
+    let fi = 0;
+    for (let i = 0; i < 7 && fi < floating.length; i++) {
+      if ((used[i] || 0) >= 2) continue;
+      put(i, floating[fi]); fi++;
+    }
+    const slots = [[5, 3, 3], [6, 9, 3], [5, 8, 3], [6, 4, 2], [4, 9, 2], [3, 9, 2]];
+    p.extras.forEach((x, k) => {
+      const sl = slots[k % 6];
+      rows[sl[0]].push([sl[1], sl[2], x === '+ TYPE YOUR OWN' ? 'YOUR ACTIVITY' : x, 'fun']);
+    });
+    return rows;
+  }
+
+  renderVals() {
+    const s = this.state, p = s.plan;
+    const level = Math.min(100, Math.floor(s.xp / 440));
+    const cur = s.series[s.series.length - 1];
+    const base = Math.floor(cur);
+
+    const bars = s.series.map((v, i) => ({
+      x: (X(i) - 6.5).toFixed(1), y: Y(v).toFixed(1), h: (180 - Y(v)).toFixed(1),
+      fill: (i === s.series.length - 1 && s.logged) ? '#16203a' : 'rgba(63,82,115,.15)'
+    }));
+    let path = 'M' + X(0).toFixed(1) + ',' + Y(s.series[0]).toFixed(1);
+    for (let i = 1; i < s.series.length; i++) {
+      const x0 = X(i - 1), x1 = X(i), dx = (x1 - x0) / 2;
+      path += ' C' + (x0 + dx).toFixed(1) + ',' + Y(s.series[i - 1]).toFixed(1) + ' ' + (x1 - dx).toFixed(1) + ',' + Y(s.series[i]).toFixed(1) + ' ' + x1.toFixed(1) + ',' + Y(s.series[i]).toFixed(1);
+    }
+    const area = path + ' L' + X(s.series.length - 1).toFixed(1) + ',180 L' + X(0).toFixed(1) + ',180 Z';
+
+    const potential = REVIEW.filter(r => s.answers[r.id] === true).reduce((n, r) => n + r.xp, 0);
+    const pendingCount = REVIEW.reduce((n, r) => n + (s.answers[r.id] === undefined ? 1 : 0), 0);
+
+    const events = EVENTS.map(e => {
+      const has = s.tickets[e.id], picked = s.dates[e.id];
+      return {
+        name: e.name, window: e.window, venue: e.venue,
+        yesStyle: has === true ? BTN_ON : BTN_OFF, noStyle: has === false ? BTN_ON : BTN_OFF,
+        onYes: () => this.setState(st => ({ tickets: { ...st.tickets, [e.id]: true } })),
+        onNo: () => this.setState(st => ({ tickets: { ...st.tickets, [e.id]: false } })),
+        status: has === true ? (picked ? 'ADDED TO CALENDARS' : 'PICK THE DATE') : has === false ? 'REMINDER 3 WEEKS BEFORE · +60 XP ON PURCHASE' : '',
+        showDate: has === true && !picked, placed: has === true && !!picked,
+        placedLabel: picked ? picked + ' · ON THE WEEK AND THE MONTH' : '',
+        opt1: e.opts[0], opt2: e.opts[1], opt3: e.opts[2],
+        pick1Style: picked === e.opts[0] ? PICK_ON : PICK_OFF,
+        pick2Style: picked === e.opts[1] ? PICK_ON : PICK_OFF,
+        pick3Style: picked === e.opts[2] ? PICK_ON : PICK_OFF,
+        pick1: () => this.setState(st => ({ dates: { ...st.dates, [e.id]: e.opts[0] }, xp: st.xp + 80 })),
+        pick2: () => this.setState(st => ({ dates: { ...st.dates, [e.id]: e.opts[1] }, xp: st.xp + 80 })),
+        pick3: () => this.setState(st => ({ dates: { ...st.dates, [e.id]: e.opts[2] }, xp: st.xp + 80 }))
+      };
+    });
+
+    const answeredCount = [p.carbon.length > 0, p.padel !== null, p.pao !== null, Object.keys(p.ticketBuys).length > 0, Object.keys(p.friends).length > 0, p.psy !== null, p.extras.length > 0].filter(Boolean).length;
+    const placed = this.planRows().reduce((n, r) => n + r.length, 0) - 21;
+
+    // --- Week-tab computed props, backed by Supabase-loaded state ---
+    const routineRows = (s.routine || []).slice().sort((a, b) => a.day_of_week - b.day_of_week).map(rd => ({
+      day: WEEKDAY_NAMES[rd.day_of_week] || '',
+      title: rd.title,
+      duration: rd.duration_min + ' MIN',
+      exercises: rd.exercises,
+      cue: rd.cue || ''
+    }));
+
+    const taskRows = (s.tasks || []).map(t => ({
+      label: t.label,
+      meta: t.done ? 'DONE' : '',
+      boxStyle: 'width:14px;height:14px;border-radius:5px;flex:none;' + (t.done ? 'background:#1a1a1a' : 'border:1px solid rgba(0,0,0,.28)'),
+      labelStyle: "flex:1;font:500 12.5px/1.2 'Space Grotesk',sans-serif;" + (t.done ? 'color:#a5a5a5;text-decoration:line-through' : ''),
+      onToggle: () => this.toggleTask(t.id, t.done)
+    }));
+    const doneTasks = s.tasks.filter(t => t.done).length;
+    const taskSummary = s.tasks.length ? (doneTasks + ' of ' + s.tasks.length + ' done this week') : 'Nothing logged yet — add your first action below.';
+
+    const friendRows2 = (s.friendsList || []).map(f => {
+      const days = daysBetween(new Date(f.last_contact_at), new Date());
+      return {
+        id: f.id, name: f.name,
+        cadenceLabel: f.cadence_days >= 60 ? Math.round(f.cadence_days / 30) + ' MONTHS' : f.cadence_days + 'D CADENCE',
+        daysLabel: days + 'd',
+        _days: days,
+        opacity: Math.max(.15, Math.min(1, days / Math.max(f.cadence_days * 3, 30))).toFixed(2),
+        onCalled: () => this.markFriendCalled(f.id, f.name)
+      };
+    }).sort((a, b) => b._days - a._days);
+    const noFriendsYet = friendRows2.length === 0;
+
+    const monday = mondayOf(new Date());
+    const ritualDays = WEEKDAY_NAMES.map((label, i) => {
+      const dateStr = isoDate(new Date(monday.getTime() + i * 86400000));
+      const isWeekday = i < 5;
+      const done = !!s.ritual[dateStr];
+      const style = !isWeekday
+        ? "border-radius:4px 4px 0 0;flex:1;height:30px;background:repeating-linear-gradient(45deg,#efefef 0 1px,#fff 1px 4px);border:1px solid rgba(0,0,0,.1)"
+        : "cursor:pointer;border-radius:4px 4px 0 0;flex:1;height:30px;display:flex;align-items:center;justify-content:center;font:600 10px/1 'JetBrains Mono',monospace;" + (done ? "background:linear-gradient(180deg,#3f5273,#16203a);color:#fff" : "background:#e9edf4;border:1px solid rgba(22,32,58,.18);color:#9fadc2");
+      return { label, style, onToggle: isWeekday ? () => this.toggleRitual(dateStr) : undefined };
+    });
+    const ritualDoneCount = ritualDays.slice(0, 5).filter((_, i) => s.ritual[isoDate(new Date(monday.getTime() + i * 86400000))]).length;
+    const streak = this.ritualStreak();
+    const ritualTarget = ritualDoneCount + ' / 5 this week' + (streak > 0 ? ' · ' + (streak + 1) + 'th week running' : '');
+    const ritualNote = streak > 0 ? 'Consistency bonus, not a one-off. This is the compounding kind.' : 'Build the streak — hit 4 of 5 mornings to start it.';
+
+    const xpEvents = s.xpEvents || [];
+    const weeks = [];
+    for (let w = 25; w >= 0; w--) {
+      const end = new Date(monday.getTime() - w * 7 * 86400000 + 7 * 86400000);
+      const cum = xpEvents.filter(e => new Date(e.created_at) < end).reduce((n, e) => n + e.amount, 0);
+      weeks.push(Math.min(100, Math.floor(cum / 440)));
+    }
+    const maxLvl = Math.max(1, ...weeks);
+    const consistencyBars = weeks.map((lvl, i) => ({
+      style: 'border-radius:4px 4px 0 0;flex:1;height:' + Math.max(2, Math.round(lvl / maxLvl * 100)) + '%;background:' + (i === weeks.length - 1 ? 'linear-gradient(180deg,#3f5273,#16203a)' : '#c6d0de')
+    }));
+
+    return {
+      level, nextLevel: Math.min(100, level + 1), xp: s.xp, xpLabel: s.xp.toLocaleString('en-US'),
+      xpPct: ((s.xp % 440) / 4.4).toFixed(1) + '%',
+      isWeek: s.tab === 'week', isPlan: s.tab === 'plan', isProjects: s.tab === 'projects', isParis: s.tab === 'paris',
+      tabWeek: s.tab === 'week' ? TAB_ON : TAB_OFF, tabPlan: s.tab === 'plan' ? TAB_ON : TAB_OFF,
+      tabProjects: s.tab === 'projects' ? TAB_ON : TAB_OFF, tabParis: s.tab === 'paris' ? TAB_ON : TAB_OFF,
+      goWeek: () => this.set('tab', 'week'), goPlan: () => this.set('tab', 'plan'),
+      goProjects: () => this.set('tab', 'projects'), goParis: () => this.set('tab', 'paris'),
+      padelShort: 'PADEL',
+      calTitle: s.planDone ? 'NEXT WEEK · 17–23 AUGUST · LOCKED IN' : 'THIS WEEK · HOUR BY HOUR',
+      calDays: DAYS.map((d, i) => ({
+        label: d, date: (s.planDone ? 17 + i : 10 + i) + '',
+        style: 'grid-column:' + (i + 2) + ';display:flex;align-items:baseline;gap:5px;padding-bottom:6px;border-bottom:1px solid rgba(0,0,0,.16);font-family:\'JetBrains Mono\',monospace'
+      })),
+      calBlocks: [].concat.apply([], (s.planDone ? this.planRows() : this.weekBlocks()).map((day, i) => day.map(b => mk(i, b[0], b[1], b[2], b[3])))),
+
+      current: cur.toFixed(1), pending: s.pendingW.toFixed(1),
+      toGoal: (80 - cur).toFixed(1) + ' KG', eta: 'ETA ' + Math.max(1, Math.round((80 - cur) / 0.4)) + ' WEEKS',
+      bars, path, area, dotX: X(s.series.length - 1).toFixed(1), dotY: Y(cur).toFixed(1),
+      barsNote: s.logged ? '70–80 KG SCALE · LOGGED ' + cur.toFixed(1) + ' KG' : '70–80 KG SCALE · THIS SUNDAY PENDING',
+      minus: () => this.setState(st => ({ pendingW: Math.round((st.pendingW - 0.1) * 10) / 10 })),
+      plus: () => this.setState(st => ({ pendingW: Math.round((st.pendingW + 0.1) * 10) / 10 })),
+      logStyle: s.logged
+        ? "padding:0 16px;display:flex;align-items:center;font:600 10.5px/1 'JetBrains Mono',monospace;border:1px solid rgba(22,32,58,.2);background:#e9edf4;color:#9fadc2"
+        : "cursor:pointer;padding:0 16px;display:flex;align-items:center;font:600 10.5px/1 'JetBrains Mono',monospace;border:1px solid #16203a;background:linear-gradient(160deg,#3f5273,#16203a);color:#fff",
+      logLabel: s.logged ? 'LOGGED' : 'LOG',
+      logNote: s.logged
+        ? 'Bar added on top of the line. Next Sunday the graph moves again.'
+        : 'Say it out loud or step it. Cross a whole kilogram and the reward is worth watching.',
+      nextKiloLabel: cur >= 80 ? 'GOAL REACHED · 80.0 KG' : 'NEXT KILO · ' + cur.toFixed(1) + ' → ' + (base + 1).toFixed(1),
+      nextKiloXp: cur >= 80 ? '+2000 XP' : '+' + (500 + (base - 73) * 50) + ' XP',
+      nextKiloPct: Math.min(100, (cur - base) * 100).toFixed(0) + '%',
+
+      rewardOn: !!s.reward,
+      rewardXp: s.reward ? '+' + s.reward.xp : '',
+      rewardSize: s.reward && s.reward.big ? '68px' : '34px',
+      rewardNote: s.reward ? s.reward.note : '',
+      logWeight: () => {
+        if (this.state.logged) return;
+        const v = this.state.pendingW, prev = this.state.series[this.state.series.length - 1];
+        const crossed = Math.floor(v) > Math.floor(prev);
+        const mkg = Math.floor(v), mxp = 500 + (mkg - 74) * 50;
+        const gained = 40 + (crossed ? mxp : 0);
+        const weekOf = isoDate(mondayOf(new Date()));
+        this.setState(st => ({
+          series: st.series.concat([v]), logged: true,
+          xp: st.xp + gained,
+          xpEvents: st.xpEvents.concat([{ amount: gained, created_at: new Date().toISOString() }]),
+          reward: crossed
+            ? { xp: mxp + 40, big: true, note: mkg + ' KG PASSED · ' + (80 - mkg) + ' TO GOAL' }
+            : { xp: 40, big: false, note: 'LOGGED · ' + v.toFixed(1) + ' KG' }
+        }));
+        setTimeout(() => this.setState({ reward: null }), crossed ? 3200 : 1900);
+        sb.from('weight_logs').upsert({ value_kg: v, week_of: weekOf }, { onConflict: 'week_of' }).then();
+        sb.from('xp_events').insert({ source: crossed ? 'weight_milestone' : 'weight_log', amount: gained, note: v.toFixed(1) + ' kg' }).then();
+      },
+
+      routineRows, taskRows, taskSummary,
+      newTaskText: s.newTaskText,
+      onTaskInput: e => this.set('newTaskText', e.target.value),
+      addTask: () => this.addTask(),
+
+      friendRows2, noFriendsYet,
+      newFriendText: s.newFriendText,
+      onFriendInput: e => this.set('newFriendText', e.target.value),
+      addFriend: () => this.addFriend(),
+
+      ritualDays, ritualTarget, ritualNote,
+      consistencyBars, consistencyStart: '26 WEEKS AGO',
+
+      carbonOptions: CARBON_OPTS.map(c => ({ label: c, style: p.carbon.indexOf(c) > -1 ? CHIP_ON : CHIP_OFF, onPick: () => this.pick('carbon', c) })),
+      padelDays: DAYS.slice(0, 5).map((d, i) => ({ label: d, style: p.padel === i ? DAY_ON : DAY_OFF, onPick: () => this.pick('padel', i) })),
+      paoDays: DAYS.map((d, i) => ({ label: d, style: p.pao === i ? DAY_ON : DAY_OFF, onPick: () => this.pick('pao', i) })),
+      paoNote: p.pao === null ? 'The weekend is free — Saturday evening holds three hours without cutting anything.' : (p.pao > 4 ? 'Three hours held on ' + DAYS[p.pao] + ' evening. Reminder fires that morning at 08:00.' : DAYS[p.pao] + ' evening it is — gym moves off that night automatically.'),
+      ticketRows: TICKET_OPTS.map(t => {
+        const on = p.ticketBuys[t.name] !== undefined;
+        return {
+          name: t.name, when: t.when, desc: t.desc, chosen: on,
+          toggleStyle: on ? CHIP_ON : CHIP_OFF, toggleLabel: on ? 'BOOKING ✓' : 'BOOK IT',
+          onToggle: () => this.toggleItem('ticketBuys', t.name),
+          days: DAYS.map((d, i) => ({ label: d, style: p.ticketBuys[t.name] === i ? MINI_ON : MINI_OFF, onPick: () => this.setDay('ticketBuys', t.name, i) }))
+        };
+      }),
+      friendRows: FRIEND_OPTS.map(fr => {
+        const on = p.friends[fr.name] !== undefined;
+        return {
+          name: fr.name, meta: fr.meta, chosen: on,
+          toggleStyle: on ? CHIP_ON : CHIP_OFF, toggleLabel: on ? 'CALLING ✓' : 'CALL',
+          onToggle: () => this.toggleItem('friends', fr.name),
+          days: DAYS.map((d, i) => ({ label: d, style: p.friends[fr.name] === i ? MINI_ON : MINI_OFF, onPick: () => this.setDay('friends', fr.name, i) }))
+        };
+      }),
+      psyDays: [{ label: 'NOT THIS WEEK', style: p.psy === 'no' ? DAY_ON : DAY_OFF, onPick: () => this.pick('psy', 'no') }]
+        .concat(DAYS.slice(0, 5).map((d, i) => ({ label: d, style: p.psy === i ? DAY_ON : DAY_OFF, onPick: () => this.pick('psy', i) }))),
+      extraOptions: EXTRA_OPTS.map(x => ({ label: x, style: p.extras.indexOf(x) > -1 ? CHIP_ON : CHIP_OFF, onPick: () => this.pick('extras', x) })),
+      planAnswered: answeredCount, planXpLabel: '+' + (answeredCount * 15 + (s.planDone ? 250 : 0)) + ' XP THIS SESSION',
+      planPlacedNote: placed + ' THINGS READY TO PLACE · GYM FITS ITSELF AROUND YOU',
+      planBurst: s.planBurst,
+      finishStyle: (answeredCount >= 6 && !s.planDone)
+        ? "cursor:pointer;padding:12px 20px;font:600 11px/1 'JetBrains Mono',monospace;letter-spacing:.1em;border:1px solid #16203a;background:linear-gradient(100deg,#3f5273,#16203a);color:#fff;border-radius:999px;box-shadow:0 6px 16px rgba(22,32,58,.22)"
+        : "padding:12px 20px;font:600 11px/1 'JetBrains Mono',monospace;letter-spacing:.1em;border:1px solid rgba(22,32,58,.2);background:#e9edf4;color:#9fadc2",
+      finishLabel: s.planDone ? 'WEEK LOCKED' : 'LOCK THE ANSWERS · +250 XP',
+      finishNote: s.planDone
+        ? 'Locked — The Week now shows 17–23 August with everything you just decided. Sunday evening I will ask what actually happened, from this list.'
+        : answeredCount >= 6 ? 'Everything essential is answered. Lock it and the dashboard calendar rebuilds around it.' : (7 - answeredCount) + ' questions left. Answer six and you can lock it.',
+      finishPlan: () => {
+        if (this.state.planDone || answeredCount < 6) return;
+        this.setState(st => ({ planDone: true, planBurst: true, xp: st.xp + 250 }));
+        setTimeout(() => this.setState({ tab: 'week' }), 1600);
+        setTimeout(() => this.setState({ planBurst: false }), 2400);
+      },
+
+      events, reviewItems: REVIEW.map(r => ({
+        q: r.q, meta: r.meta, xpLabel: '+' + r.xp,
+        yesStyle: s.answers[r.id] === true ? BTN_ON : BTN_OFF, noStyle: s.answers[r.id] === false ? BTN_ON : BTN_OFF,
+        onYes: () => this.setState(st => ({ answers: { ...st.answers, [r.id]: true } })),
+        onNo: () => this.setState(st => ({ answers: { ...st.answers, [r.id]: false } }))
+      })),
+      reviewOpen: s.reviewOpen, burst: s.burst,
+      openReview: () => this.set('reviewOpen', true),
+      closeReview: () => this.setState({ reviewOpen: false, burst: false }),
+      haulLabel: (s.awarded ? '+' + s.haul : '+' + potential) + ' XP',
+      awardStyle: (potential > 0 && !s.awarded)
+        ? "cursor:pointer;padding:11px 18px;font:600 11px/1 'JetBrains Mono',monospace;letter-spacing:.1em;border:1px solid #16203a;background:linear-gradient(100deg,#3f5273,#16203a);color:#fff;border-radius:999px;box-shadow:0 6px 16px rgba(22,32,58,.22)"
+        : "padding:11px 18px;font:600 11px/1 'JetBrains Mono',monospace;letter-spacing:.1em;border:1px solid rgba(22,32,58,.2);background:#e9edf4;color:#9fadc2",
+      awardLabel: s.awarded ? 'BANKED' : 'BANK IT',
+      awardNote: s.awarded
+        ? 'Level moved. Two streaks held — weight twelve weeks, ritual seven. Now organize the week ahead.'
+        : pendingCount > 0 ? pendingCount + ' still unanswered. Answer them all and the count is honest.' : 'Everything answered. Bank it.',
+      award: () => {
+        if (potential <= 0 || this.state.awarded) return;
+        this.setState({ awarded: true, burst: true, haul: potential, xp: this.state.xp + potential });
+        setTimeout(() => this.setState({ burst: false }), 2200);
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>
