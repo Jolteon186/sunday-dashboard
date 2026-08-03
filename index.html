@@ -268,33 +268,17 @@
 <div style="display:flex;align-items:center;gap:9px"><span style="width:96px;font:400 10px/1 'JetBrains Mono',monospace;color:#8a8a8a">MORNING RITUAL</span><span style="border-radius:4px 4px 0 0;flex:1;height:10px;background:#e9edf4;border-radius:999px;overflow:hidden;position:relative"><span style="position:absolute;inset:0 auto 0 0;width:66%;background:linear-gradient(90deg,#9fadc2,#34496b)"></span></span><span style="font:500 10px/1 'JetBrains Mono',monospace;color:#34496b;width:64px;text-align:right">7 WK 🔥</span></div>
 </div>
 
-<div style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:#8a8a8a;padding-bottom:8px;border-bottom:1px solid rgba(0,0,0,.16);margin-top:26px">PARIS · NEXT 180 DAYS · ≤ €200</div>
-<sc-for list="{{ events }}" as="ev" hint-placeholder-count="5">
+<div style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:#8a8a8a;padding-bottom:8px;border-bottom:1px solid rgba(0,0,0,.16);margin-top:26px">PARIS · NEXT 180 DAYS</div>
+<sc-for list="{{ interestedRows }}" as="ev" hint-placeholder-count="5">
 <div style="padding:11px 0;border-bottom:1px solid rgba(0,0,0,.06)">
-<div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px"><span style="font:500 13px/1.2 'Space Grotesk',sans-serif">{{ ev.name }}</span><span style="font:400 10.5px/1 'JetBrains Mono',monospace;white-space:nowrap">{{ ev.window }}</span></div>
-<div style="font:400 10.5px/1.4 'Space Grotesk',sans-serif;color:#6b6b6b;margin-top:3px">{{ ev.venue }}</div>
-<div style="display:flex;align-items:center;gap:7px;margin-top:8px">
-<span style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">TICKETS?</span>
-<div onClick="{{ ev.onYes }}" style="{{ ev.yesStyle }}">YES</div>
-<div onClick="{{ ev.onNo }}" style="{{ ev.noStyle }}">NOT YET</div>
-<span style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#61708c;margin-left:auto">{{ ev.status }}</span>
-</div>
-<sc-if value="{{ ev.showDate }}">
-<div style="margin-top:8px;border:1px solid rgba(22,32,58,.25);background:#f5f7fb;padding:9px 10px;animation:pop .28s ease both">
-<div style="font:500 10px/1 'JetBrains Mono',monospace;color:#253550;margin-bottom:7px">WHICH DATE ARE YOU GOING?</div>
-<div style="display:flex;gap:5px;flex-wrap:wrap">
-<div onClick="{{ ev.pick1 }}" style="{{ ev.pick1Style }}">{{ ev.opt1 }}</div>
-<div onClick="{{ ev.pick2 }}" style="{{ ev.pick2Style }}">{{ ev.opt2 }}</div>
-<div onClick="{{ ev.pick3 }}" style="{{ ev.pick3Style }}">{{ ev.opt3 }}</div>
-</div>
-</div>
-</sc-if>
-<sc-if value="{{ ev.placed }}">
-<div style="margin-top:8px;display:flex;align-items:center;gap:8px;font:500 10px/1 'JetBrains Mono',monospace;color:#16203a;animation:pop .3s ease both"><span style="width:6px;height:6px;background:#16203a;border-radius:50%"></span>{{ ev.placedLabel }}</div>
-</sc-if>
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px"><span style="font:500 13px/1.2 'Space Grotesk',sans-serif">{{ ev.title }}</span><span style="font:400 10.5px/1 'JetBrains Mono',monospace;white-space:nowrap">{{ ev.window }}</span></div>
+<div style="font:400 10.5px/1.4 'Space Grotesk',sans-serif;color:#6b6b6b;margin-top:3px">{{ ev.desc }}</div>
 </div>
 </sc-for>
-<div style="font:400 10px/1 'JetBrains Mono',monospace;color:#b5b5b5;margin-top:10px">14 MORE IN THE PARIS PLAYBOOK · REFRESHED THIS MORNING</div>
+<sc-if value="{{ noInterested }}">
+<div style="padding:11px 0;font:400 11.5px/1.4 'Space Grotesk',sans-serif;color:#8a8a8a">Nothing marked yet — say YES to events in the Paris Playbook's "New This Week" list.</div>
+</sc-if>
+<div style="font:400 10px/1 'JetBrains Mono',monospace;color:#b5b5b5;margin-top:10px">{{ interestedNote }}</div>
 </div>
 </div>
 <div style="border-top:1px solid rgba(0,0,0,.08);padding:20px 30px 26px">
@@ -553,17 +537,30 @@
 <div>
 <div style="display:flex;align-items:baseline;justify-content:space-between;border-bottom:1px solid rgba(0,0,0,.16);padding-bottom:8px">
 <span style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:#8a8a8a">NEW THIS WEEK · {{ findsCount }}</span>
-<div style="display:flex;align-items:center;gap:8px">
-<span style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">{{ updateStatus }}</span>
-<div onClick="{{ requestParisUpdate }}" style="{{ updateButtonStyle }}">UPDATE</div>
-</div>
+<span style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">{{ nextRefreshLabel }}</span>
 </div>
 <div style="margin-top:4px">
 <sc-for list="{{ findRows }}" as="f" hint-placeholder-count="6">
-<div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="font:600 15px/1 'JetBrains Mono',monospace;color:#16203a;width:26px">{{ f.num }}</span><div style="flex:1"><div style="font:600 14px/1.2 'Space Grotesk',sans-serif">{{ f.title }}</div><div style="font:400 10.5px/1.4 'Space Grotesk',sans-serif;color:#6b6b6b;margin-top:3px">{{ f.desc }}</div></div></div>
+<div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid rgba(0,0,0,.05)">
+<span style="font:600 15px/1 'JetBrains Mono',monospace;color:#16203a;width:26px">{{ f.num }}</span>
+<div style="flex:1">
+<div style="font:600 14px/1.2 'Space Grotesk',sans-serif">{{ f.title }}</div>
+<div style="font:400 10.5px/1.4 'Space Grotesk',sans-serif;color:#6b6b6b;margin-top:3px">{{ f.desc }}</div>
+<sc-if value="{{ f.pending }}">
+<div style="display:flex;align-items:center;gap:7px;margin-top:8px">
+<span style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">INTERESTED?</span>
+<div onClick="{{ f.onYes }}" style="{{ f.yesStyle }}">YES</div>
+<div onClick="{{ f.onNo }}" style="{{ f.noStyle }}">NO</div>
+</div>
+</sc-if>
+<sc-if value="{{ f.interested }}">
+<div style="margin-top:8px;display:flex;align-items:center;gap:6px;font:500 10px/1 'JetBrains Mono',monospace;color:#16203a"><span style="width:6px;height:6px;background:#16203a;border-radius:50%"></span>INTERESTED · SHOWING IN THE WEEK TAB</div>
+</sc-if>
+</div>
+</div>
 </sc-for>
 <sc-if value="{{ noFinds }}">
-<div style="padding:14px 0;font:400 12px/1.5 'Space Grotesk',sans-serif;color:#8a8a8a">Nothing found yet. Click UPDATE, then ask Claude in a chat to check for pending Paris update requests.</div>
+<div style="padding:14px 0;font:400 12px/1.5 'Space Grotesk',sans-serif;color:#8a8a8a">Nothing found yet — Claude refreshes this every Sunday morning.</div>
 </sc-if>
 </div>
 
@@ -693,14 +690,6 @@ const MINI_ON = "cursor:pointer;padding:5px 8px;border-radius:999px;font-family:
 const MINI_OFF = "cursor:pointer;padding:5px 8px;border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:400;border:1px solid rgba(0,0,0,.14);color:#6b6b6b;background:#fff";
 const PARIS_INTERESTS = ['Padel', 'Tennis', 'Street art', 'Museums', 'Fashion', 'Important Paris events that everyone wants to see', 'Concerts — pop and piano', 'Monet', 'World wars', 'Music', 'Carbon or sustainability forums, expos, or meetings'];
 
-const EVENTS = [
-  { id: 'rolex', name: 'Rolex Paris Masters', window: '31 OCT', venue: 'La Défense Arena · early rounds are the good value', opts: ['TUE 3 NOV', 'WED 4 NOV', 'THU 5 NOV'] },
-  { id: 'gpe', name: "Grand Palais d'été", window: '15 AUG', venue: 'Nave concerts & DJ sets · discount from 3 events', opts: ['SAT 15 AUG', 'SAT 22 AUG', 'FRI 28 AUG'] },
-  { id: 'rock', name: 'Rock en Seine', window: '26 AUG', venue: 'Parc de Saint-Cloud · day tickets', opts: ['WED 26 AUG', 'SAT 29 AUG', 'SUN 30 AUG'] },
-  { id: 'cez', name: 'Cézanne et nous', window: '23 SEP', venue: "Grand Palais & Musée d'Orsay · to 17 Jan", opts: ['THU 24 SEP', 'THU 1 OCT', 'FRI 9 OCT'] },
-  { id: 'basel', name: 'Art Basel Paris', window: '23 OCT', venue: 'Grand Palais · 195 galleries', opts: ['FRI 23 OCT', 'SAT 24 OCT', 'SUN 25 OCT'] }
-];
-
 const REVIEW = [
   { id: 'w', q: 'Did you gain the kilo? Scale says 73.0 — up 0.4', meta: 'WEIGHT · 12-WEEK STREAK · HIGHEST VALUE', xp: 520 },
   { id: 'p', q: 'Did the date with Pao happen on Saturday?', meta: 'PAO · 7-WEEK STREAK', xp: 300 },
@@ -740,7 +729,7 @@ const DEFAULT_ROUTINE = [
 
 class Component extends DCLogic {
   state = {
-    tab: 'week', xp: 0, answers: {}, tickets: {}, dates: {}, reviewOpen: false, awarded: false, burst: false, haul: 0,
+    tab: 'week', xp: 0, answers: {}, reviewOpen: false, awarded: false, burst: false, haul: 0,
     series: DEFAULT_SERIES, pendingW: DEFAULT_SERIES[DEFAULT_SERIES.length - 1], logged: false,
     reward: null,
     plan: { carbon: [], padel: null, pao: null, ticketBuys: {}, friends: {}, psy: null, extras: {} },
@@ -927,11 +916,14 @@ class Component extends DCLogic {
     });
   }
 
-  requestParisUpdate() {
-    if (this.state.parisRequest && this.state.parisRequest.status === 'pending') return;
-    sb.from('paris_update_requests').insert({ status: 'pending', interests: PARIS_INTERESTS, horizon_days: 180 }).select().then(r => {
-      if (r.data && r.data[0]) this.setState({ parisRequest: r.data[0] });
-    });
+  markFindInterested(id) {
+    this.setState(st => ({ parisFinds: st.parisFinds.map(f => f.id === id ? { ...f, status: 'interested' } : f) }));
+    sb.from('paris_new_finds').update({ status: 'interested' }).eq('id', id).then();
+  }
+
+  removeFind(id) {
+    this.setState(st => ({ parisFinds: st.parisFinds.filter(f => f.id !== id) }));
+    sb.from('paris_new_finds').delete().eq('id', id).then();
   }
 
   toggleExtra(id) {
@@ -1123,25 +1115,16 @@ class Component extends DCLogic {
     const potential = REVIEW.filter(r => s.answers[r.id] === true).reduce((n, r) => n + r.xp, 0);
     const pendingCount = REVIEW.reduce((n, r) => n + (s.answers[r.id] === undefined ? 1 : 0), 0);
 
-    const events = EVENTS.map(e => {
-      const has = s.tickets[e.id], picked = s.dates[e.id];
-      return {
-        name: e.name, window: e.window, venue: e.venue,
-        yesStyle: has === true ? BTN_ON : BTN_OFF, noStyle: has === false ? BTN_ON : BTN_OFF,
-        onYes: () => this.setState(st => ({ tickets: { ...st.tickets, [e.id]: true } })),
-        onNo: () => this.setState(st => ({ tickets: { ...st.tickets, [e.id]: false } })),
-        status: has === true ? (picked ? 'ADDED TO CALENDARS' : 'PICK THE DATE') : has === false ? 'REMINDER 3 WEEKS BEFORE · +60 XP ON PURCHASE' : '',
-        showDate: has === true && !picked, placed: has === true && !!picked,
-        placedLabel: picked ? picked + ' · ON THE WEEK AND THE MONTH' : '',
-        opt1: e.opts[0], opt2: e.opts[1], opt3: e.opts[2],
-        pick1Style: picked === e.opts[0] ? PICK_ON : PICK_OFF,
-        pick2Style: picked === e.opts[1] ? PICK_ON : PICK_OFF,
-        pick3Style: picked === e.opts[2] ? PICK_ON : PICK_OFF,
-        pick1: () => this.setState(st => ({ dates: { ...st.dates, [e.id]: e.opts[0] }, xp: st.xp + 80 })),
-        pick2: () => this.setState(st => ({ dates: { ...st.dates, [e.id]: e.opts[1] }, xp: st.xp + 80 })),
-        pick3: () => this.setState(st => ({ dates: { ...st.dates, [e.id]: e.opts[2] }, xp: st.xp + 80 }))
-      };
-    });
+    const interestedAll = (s.parisFinds || []).filter(f => f.status === 'interested');
+    const interestedRows = interestedAll.slice(0, 7).map(f => ({
+      title: f.title,
+      window: f.window_label || '',
+      desc: f.description || ''
+    }));
+    const noInterested = interestedRows.length === 0;
+    const interestedNote = interestedAll.length > 7
+      ? (interestedAll.length - 7) + ' MORE IN THE PARIS PLAYBOOK · TOP 7 SHOWN HERE'
+      : 'REFRESHED EVERY SUNDAY MORNING';
 
     const answeredCount = [p.carbon.length > 0, p.padel !== null, p.pao !== null, Object.keys(p.ticketBuys).length > 0, Object.keys(p.friends).length > 0, p.psy !== null, Object.keys(p.extras).length > 0].filter(Boolean).length;
     const placed = this.planRows().reduce((n, r) => n + r.length, 0) - 21;
@@ -1249,6 +1232,14 @@ class Component extends DCLogic {
     while (monthCells.length % 7 !== 0) monthCells.push({ style: 'background:#fbfaf8;min-height:74px', day: '', dayStyle: '', label: '', labelStyle: '' });
     const monthLabel = MONTH_NAMES[monthIdx] + ' ' + year + ' · THE MONTH AHEAD';
     const monthEventCount = totalMonthEvents + (totalMonthEvents === 1 ? ' EVENT THIS MONTH' : ' EVENTS THIS MONTH');
+
+    const nextSun = new Date(today);
+    const nextSunDow = today.getDay();
+    if (!(nextSunDow === 0 && today.getHours() < 8)) {
+      nextSun.setDate(today.getDate() + (nextSunDow === 0 ? 7 : 7 - nextSunDow));
+    }
+    nextSun.setHours(8, 0, 0, 0);
+    const nextRefreshLabel = 'NEXT AUTO-REFRESH · SUN ' + nextSun.getDate() + ' ' + MONTH_NAMES[nextSun.getMonth()].slice(0, 3) + ' · 08:00';
 
     return {
       level, nextLevel: Math.min(100, level + 1), xp: s.xp, xpLabel: s.xp.toLocaleString('en-US'),
@@ -1401,17 +1392,19 @@ class Component extends DCLogic {
       findRows: (s.parisFinds || []).map((f, i) => ({
         num: String(i + 1).padStart(2, '0'),
         title: f.title,
-        desc: [f.window_label, f.description].filter(Boolean).join(' · ')
+        desc: [f.window_label, f.description].filter(Boolean).join(' · '),
+        pending: f.status !== 'interested',
+        interested: f.status === 'interested',
+        yesStyle: BTN_OFF, noStyle: BTN_OFF,
+        onYes: () => this.markFindInterested(f.id),
+        onNo: () => this.removeFind(f.id)
       })),
-      findsCount: (s.parisFinds || []).length + ' FOUND',
+      findsCount: (s.parisFinds || []).length + ' OF 11',
       noFinds: (s.parisFinds || []).length === 0,
-      updateStatus: s.parisRequest ? (s.parisRequest.status === 'pending' ? 'REQUESTED · WAITING ON CLAUDE' : 'LAST UPDATED ' + new Date(s.parisRequest.requested_at).toLocaleDateString()) : '',
-      updateButtonStyle: (s.parisRequest && s.parisRequest.status === 'pending')
-        ? "padding:6px 12px;border-radius:999px;font:600 9.5px/1 'JetBrains Mono',monospace;letter-spacing:.06em;border:1px solid rgba(22,32,58,.2);background:#e9edf4;color:#9fadc2"
-        : "cursor:pointer;padding:6px 12px;border-radius:999px;font:600 9.5px/1 'JetBrains Mono',monospace;letter-spacing:.06em;border:1px solid #16203a;background:linear-gradient(160deg,#3f5273,#16203a);color:#fff",
-      requestParisUpdate: () => this.requestParisUpdate(),
+      nextRefreshLabel: nextRefreshLabel,
 
-      events, reviewItems: REVIEW.map(r => ({
+      interestedRows, noInterested, interestedNote,
+      reviewItems: REVIEW.map(r => ({
         q: r.q, meta: r.meta, xpLabel: '+' + r.xp,
         yesStyle: s.answers[r.id] === true ? BTN_ON : BTN_OFF, noStyle: s.answers[r.id] === false ? BTN_ON : BTN_OFF,
         onYes: () => this.setState(st => ({ answers: { ...st.answers, [r.id]: true } })),
