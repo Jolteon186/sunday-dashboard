@@ -195,6 +195,8 @@
 <div style="display:flex;align-items:center;gap:6px;margin-top:9px;flex-wrap:wrap">
 <input value="{{ newEventTitle }}" onInput="{{ onEventTitleInput }}" placeholder="Event title…" style="flex:1;min-width:120px;border:1px dashed rgba(0,0,0,.18);border-radius:10px;padding:7px 10px;outline:none;background:transparent;font:400 11.5px/1.2 'Space Grotesk',sans-serif;color:#1a1a1a">
 <input type="date" value="{{ newEventDate }}" onInput="{{ onEventDateInput }}" style="border:1px solid rgba(0,0,0,.16);border-radius:10px;padding:6px 8px;font:400 10.5px/1 'JetBrains Mono',monospace;color:#4a4a4a;background:#fff">
+<span style="font:400 10px/1 'JetBrains Mono',monospace;color:#a5a5a5">→</span>
+<input type="date" value="{{ newEventEndDate }}" onInput="{{ onEventEndDateInput }}" style="border:1px solid rgba(0,0,0,.16);border-radius:10px;padding:6px 8px;font:400 10.5px/1 'JetBrains Mono',monospace;color:#4a4a4a;background:#fff">
 <sc-if value="{{ !newEventAllDay }}">
 <input type="time" value="{{ newEventTime }}" onInput="{{ onEventTimeInput }}" style="border:1px solid rgba(0,0,0,.16);border-radius:10px;padding:6px 8px;font:400 10.5px/1 'JetBrains Mono',monospace;color:#4a4a4a;background:#fff">
 </sc-if>
@@ -289,6 +291,8 @@
 <div style="display:flex;align-items:center;gap:6px;margin-bottom:14px;flex-wrap:wrap">
 <input value="{{ newEventTitle }}" onInput="{{ onEventTitleInput }}" placeholder="Event title…" style="flex:1;min-width:120px;border:1px dashed rgba(0,0,0,.18);border-radius:10px;padding:7px 10px;outline:none;background:transparent;font:400 11.5px/1.2 'Space Grotesk',sans-serif;color:#1a1a1a">
 <input type="date" value="{{ newEventDate }}" onInput="{{ onEventDateInput }}" style="border:1px solid rgba(0,0,0,.16);border-radius:10px;padding:6px 8px;font:400 10.5px/1 'JetBrains Mono',monospace;color:#4a4a4a;background:#fff">
+<span style="font:400 10px/1 'JetBrains Mono',monospace;color:#a5a5a5">→</span>
+<input type="date" value="{{ newEventEndDate }}" onInput="{{ onEventEndDateInput }}" style="border:1px solid rgba(0,0,0,.16);border-radius:10px;padding:6px 8px;font:400 10.5px/1 'JetBrains Mono',monospace;color:#4a4a4a;background:#fff">
 <sc-if value="{{ !newEventAllDay }}">
 <input type="time" value="{{ newEventTime }}" onInput="{{ onEventTimeInput }}" style="border:1px solid rgba(0,0,0,.16);border-radius:10px;padding:6px 8px;font:400 10.5px/1 'JetBrains Mono',monospace;color:#4a4a4a;background:#fff">
 </sc-if>
@@ -747,7 +751,7 @@ class Component extends DCLogic {
     routine: DEFAULT_ROUTINE, tasks: [], friendsList: [], ritual: {}, xpEvents: [],
     newTaskText: '', newFriendText: '', loaded: false,
     agendaEvents: [],
-    newEventTitle: '', newEventDate: isoDate(new Date()), newEventTime: '09:00', newEventAllDay: false,
+    newEventTitle: '', newEventDate: isoDate(new Date()), newEventEndDate: isoDate(new Date()), newEventTime: '09:00', newEventAllDay: false,
     parisFixed: [], parisFinds: [], parisRequest: null,
     newFixedLabel: '', newFixedLocation: ''
   };
@@ -902,11 +906,13 @@ class Component extends DCLogic {
     const s = this.state;
     const title = (s.newEventTitle || '').trim();
     if (!title || !s.newEventDate) return;
+    const endDate = (s.newEventEndDate && s.newEventEndDate >= s.newEventDate) ? s.newEventEndDate : s.newEventDate;
     const startsAt = s.newEventAllDay
       ? new Date(s.newEventDate + 'T00:00:00').toISOString()
       : new Date(s.newEventDate + 'T' + (s.newEventTime || '09:00') + ':00').toISOString();
+    const endsAt = endDate !== s.newEventDate ? new Date(endDate + 'T23:59:59').toISOString() : null;
     this.setState({ newEventTitle: '' });
-    sb.from('agenda_events').insert({ title, starts_at: startsAt, all_day: !!s.newEventAllDay }).select().then(r => {
+    sb.from('agenda_events').insert({ title, starts_at: startsAt, ends_at: endsAt, all_day: !!s.newEventAllDay }).select().then(r => {
       if (r.data && r.data[0]) {
         this.setState(st => (st.agendaEvents.some(e => e.id === r.data[0].id) ? null : { agendaEvents: st.agendaEvents.concat(r.data) }));
       }
@@ -1199,10 +1205,16 @@ class Component extends DCLogic {
 
     const allDayByDay = WEEKDAY_NAMES.map(() => []);
     (s.agendaEvents || []).filter(ev => ev.all_day).forEach(ev => {
-      const d = new Date(ev.starts_at);
-      if (mondayOf(d).getTime() !== monday.getTime()) return;
-      const dow = (d.getDay() + 6) % 7;
-      allDayByDay[dow].push(ev.title);
+      const startD = new Date(ev.starts_at);
+      const startDay = new Date(startD.getFullYear(), startD.getMonth(), startD.getDate());
+      const endD = ev.ends_at ? new Date(ev.ends_at) : startD;
+      const endDay = new Date(endD.getFullYear(), endD.getMonth(), endD.getDate());
+      for (let i = 0; i < 7; i++) {
+        const dayDate = new Date(monday.getTime() + i * 86400000);
+        if (dayDate.getTime() >= startDay.getTime() && dayDate.getTime() <= endDay.getTime()) {
+          allDayByDay[i].push(ev.title);
+        }
+      }
     });
     const hasAllDay = allDayByDay.some(a => a.length > 0);
     const allDayRow = allDayByDay.map((titles, i) => ({
@@ -1213,8 +1225,17 @@ class Component extends DCLogic {
     const today = new Date();
     const monthEventsByDate = {};
     (s.agendaEvents || []).forEach(ev => {
-      const key = isoDate(new Date(ev.starts_at));
-      (monthEventsByDate[key] = monthEventsByDate[key] || []).push(ev.title);
+      const startD = new Date(ev.starts_at);
+      let cur = new Date(startD.getFullYear(), startD.getMonth(), startD.getDate());
+      const endD = ev.ends_at ? new Date(ev.ends_at) : startD;
+      const last = new Date(endD.getFullYear(), endD.getMonth(), endD.getDate());
+      let guard = 0;
+      while (cur.getTime() <= last.getTime() && guard < 200) {
+        const key = isoDate(cur);
+        (monthEventsByDate[key] = monthEventsByDate[key] || []).push(ev.title);
+        cur = new Date(cur.getTime() + 86400000);
+        guard++;
+      }
     });
     const MONTH_NAMES = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
     const year = today.getFullYear(), monthIdx = today.getMonth();
@@ -1270,9 +1291,10 @@ class Component extends DCLogic {
       calBlocks: [].concat.apply([], (s.planDone ? this.planRows() : this.weekBlocks()).map((day, i) => day.map(b => mk(i, b[0], b[1], b[2], b[3])))),
       hasAllDay, allDayRow,
       monthLabel, monthEventCount, monthCells,
-      newEventTitle: s.newEventTitle, newEventDate: s.newEventDate, newEventTime: s.newEventTime,
+      newEventTitle: s.newEventTitle, newEventDate: s.newEventDate, newEventEndDate: s.newEventEndDate, newEventTime: s.newEventTime,
       onEventTitleInput: e => this.set('newEventTitle', e.target.value),
       onEventDateInput: e => this.set('newEventDate', e.target.value),
+      onEventEndDateInput: e => this.set('newEventEndDate', e.target.value),
       onEventTimeInput: e => this.set('newEventTime', e.target.value),
       toggleEventAllDay: () => this.toggleEventAllDay(),
       allDayChipStyle: s.newEventAllDay ? MINI_ON : MINI_OFF,
