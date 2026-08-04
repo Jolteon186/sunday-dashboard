@@ -284,11 +284,7 @@
 </div>
 </div>
 <div style="border-top:1px solid rgba(0,0,0,.08);padding:20px 30px 26px">
-<div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px">
-<span style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:#8a8a8a">{{ monthLabel }}</span>
-<span style="font:400 10px/1 'JetBrains Mono',monospace;color:#8a8a8a">{{ monthEventCount }}</span>
-</div>
-<div style="display:flex;align-items:center;gap:6px;margin-bottom:14px;flex-wrap:wrap">
+<div style="display:flex;align-items:center;gap:6px;margin-bottom:18px;flex-wrap:wrap">
 <input value="{{ newEventTitle }}" onInput="{{ onEventTitleInput }}" placeholder="Event title…" style="flex:1;min-width:120px;border:1px dashed rgba(0,0,0,.18);border-radius:10px;padding:7px 10px;outline:none;background:transparent;font:400 11.5px/1.2 'Space Grotesk',sans-serif;color:#1a1a1a">
 <input type="date" value="{{ newEventDate }}" onInput="{{ onEventDateInput }}" style="border:1px solid rgba(0,0,0,.16);border-radius:10px;padding:6px 8px;font:400 10.5px/1 'JetBrains Mono',monospace;color:#4a4a4a;background:#fff">
 <span style="font:400 10px/1 'JetBrains Mono',monospace;color:#a5a5a5">→</span>
@@ -299,9 +295,15 @@
 <div onClick="{{ toggleEventAllDay }}" style="{{ allDayChipStyle }}">ALL DAY</div>
 <div onClick="{{ addEvent }}" style="cursor:pointer;padding:7px 12px;font:600 10px/1 'JetBrains Mono',monospace;letter-spacing:.06em;border:1px solid #16203a;background:linear-gradient(160deg,#3f5273,#16203a);color:#fff;border-radius:999px">+ ADD EVENT</div>
 </div>
+<sc-for list="{{ monthsData }}" as="m" hint-placeholder-count="2">
+<div style="margin-bottom:26px">
+<div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px">
+<span style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:#8a8a8a">{{ m.label }}</span>
+<span style="font:400 10px/1 'JetBrains Mono',monospace;color:#8a8a8a">{{ m.eventCount }}</span>
+</div>
 <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:rgba(0,0,0,.07);border:1px solid rgba(0,0,0,.06);border-radius:18px;overflow:hidden">
 <div style="background:#f4f2ee;padding:7px 9px;font:500 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">MON</div><div style="background:#f4f2ee;padding:7px 9px;font:500 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">TUE</div><div style="background:#f4f2ee;padding:7px 9px;font:500 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">WED</div><div style="background:#f4f2ee;padding:7px 9px;font:500 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">THU</div><div style="background:#f4f2ee;padding:7px 9px;font:500 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">FRI</div><div style="background:#f4f2ee;padding:7px 9px;font:500 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">SAT</div><div style="background:#f4f2ee;padding:7px 9px;font:500 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">SUN</div>
-<sc-for list="{{ monthCells }}" as="c" hint-placeholder-count="35">
+<sc-for list="{{ m.cells }}" as="c" hint-placeholder-count="35">
 <div style="{{ c.style }}">
 <sc-if value="{{ c.day }}">
 <div style="{{ c.dayStyle }}">{{ c.day }}</div>
@@ -312,6 +314,8 @@
 </div>
 </sc-for>
 </div>
+</div>
+</sc-for>
 </div>
 </div>
 </sc-if>
@@ -740,6 +744,41 @@ const DEFAULT_ROUTINE = [
   { day_of_week: 4, title: 'Legs & core', duration_min: 45, exercises: 'Back squat 4×6 · Romanian deadlift 3×8 · Bulgarian split squat 3×10 · Hanging leg raise 3×12', cue: 'ENOUGH TO GROW, NOT ENOUGH TO RUIN THE WEEKEND', is_gym: true }
 ];
 
+const MONTH_NAMES = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
+function parseLocalDate(str) {
+  const [y, m, d] = str.split('-').map(Number);
+  return new Date(y, m - 1, d);
+}
+function buildMonthGrid(year, monthIdx, eventsByDate, todayKey) {
+  const daysInMonth = new Date(year, monthIdx + 1, 0).getDate();
+  const firstWeekday = (new Date(year, monthIdx, 1).getDay() + 6) % 7;
+  const blank = () => ({ style: 'background:#fbfaf8;min-height:74px', day: '', dayStyle: '', label: '', labelStyle: '' });
+  const cells = [];
+  for (let i = 0; i < firstWeekday; i++) cells.push(blank());
+  let total = 0;
+  for (let d = 1; d <= daysInMonth; d++) {
+    const key = isoDate(new Date(year, monthIdx, d));
+    const isToday = key === todayKey;
+    const evs = eventsByDate[key] || [];
+    total += evs.length;
+    const shown = evs.slice(0, 5);
+    const rest = evs.length > 5 ? ['+ ' + (evs.length - 5) + ' more'] : [];
+    cells.push({
+      style: 'background:' + (isToday ? '#f4f2ee' : '#fff') + ';min-height:74px;padding:6px 8px',
+      day: d + '',
+      dayStyle: 'font:' + (isToday || evs.length ? '600' : '500') + ' 11px/1 \'JetBrains Mono\',monospace;color:' + (isToday ? '#16203a' : (evs.length ? '#1a1a1a' : '#8a8a8a')),
+      label: shown.concat(rest).join('\n'),
+      labelStyle: 'font:400 9px/1.4 \'JetBrains Mono\',monospace;color:' + (isToday ? '#1a1a1a' : '#6b6b6b') + ';margin-top:4px;white-space:pre-line;overflow-wrap:break-word'
+    });
+  }
+  while (cells.length % 7 !== 0) cells.push(blank());
+  return {
+    label: MONTH_NAMES[monthIdx] + ' ' + year + ' · THE MONTH AHEAD',
+    eventCount: total + (total === 1 ? ' EVENT' : ' EVENTS'),
+    cells
+  };
+}
+
 class Component extends DCLogic {
   state = {
     tab: 'week', xp: 0, answers: {}, reviewOpen: false, awarded: false, burst: false, haul: 0,
@@ -752,7 +791,7 @@ class Component extends DCLogic {
     newTaskText: '', newFriendText: '', loaded: false,
     agendaEvents: [],
     newEventTitle: '', newEventDate: isoDate(new Date()), newEventEndDate: isoDate(new Date()), newEventTime: '09:00', newEventAllDay: false,
-    parisFixed: [], parisFinds: [], parisRequest: null,
+    parisFixed: [], parisFinds: [], parisRequest: null, allTasks: [],
     newFixedLabel: '', newFixedLocation: ''
   };
 
@@ -806,7 +845,7 @@ class Component extends DCLogic {
     const weekOf = isoDate(monday);
     const since26 = isoDate(new Date(monday.getTime() - 26 * 7 * 86400000));
 
-    const [weightRes, routineRes, taskRes, friendRes, ritualRes, xpRes, agendaRes, parisFixedRes, parisFindsRes, parisReqRes] = await Promise.all([
+    const [weightRes, routineRes, taskRes, friendRes, ritualRes, xpRes, agendaRes, parisFixedRes, parisFindsRes, parisReqRes, allTasksRes] = await Promise.all([
       sb.from('weight_logs').select('*').order('week_of', { ascending: true }).limit(10),
       sb.from('routine_days').select('*').order('day_of_week', { ascending: true }),
       sb.from('carbon_actions').select('*').eq('week_of', weekOf).order('created_at', { ascending: true }),
@@ -816,7 +855,8 @@ class Component extends DCLogic {
       sb.from('agenda_events').select('*').order('starts_at', { ascending: true }),
       sb.from('paris_activities').select('*').eq('archived', false).order('created_at', { ascending: true }),
       sb.from('paris_new_finds').select('*').order('rank', { ascending: true }),
-      sb.from('paris_update_requests').select('*').order('requested_at', { ascending: false }).limit(1)
+      sb.from('paris_update_requests').select('*').order('requested_at', { ascending: false }).limit(1),
+      sb.from('carbon_actions').select('id,label,week_of,day_of_week')
     ]);
 
     let routine = (routineRes.data && routineRes.data.length) ? routineRes.data : null;
@@ -848,6 +888,7 @@ class Component extends DCLogic {
       parisFixed: parisFixedRes.data || [],
       parisFinds: parisFindsRes.data || [],
       parisRequest: (parisReqRes.data && parisReqRes.data[0]) || null,
+      allTasks: allTasksRes.data || [],
       loaded: true
     });
   }
@@ -869,7 +910,7 @@ class Component extends DCLogic {
     const weekOf = isoDate(mondayOf(new Date()));
     this.setState({ newTaskText: '' });
     sb.from('carbon_actions').insert({ label, week_of: weekOf }).select().then(r => {
-      if (r.data && r.data[0]) this.setState(st => ({ tasks: st.tasks.concat(r.data) }));
+      if (r.data && r.data[0]) this.setState(st => ({ tasks: st.tasks.concat(r.data), allTasks: st.allTasks.concat(r.data) }));
     });
   }
 
@@ -1223,6 +1264,7 @@ class Component extends DCLogic {
     }));
 
     const today = new Date();
+    const todayKey = isoDate(today);
     const monthEventsByDate = {};
     (s.agendaEvents || []).forEach(ev => {
       const startD = new Date(ev.starts_at);
@@ -1237,31 +1279,19 @@ class Component extends DCLogic {
         guard++;
       }
     });
-    const MONTH_NAMES = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
+    (s.allTasks || []).forEach(t => {
+      const base = parseLocalDate(t.week_of);
+      const dow = (t.day_of_week === null || t.day_of_week === undefined) ? 0 : t.day_of_week;
+      const key = isoDate(new Date(base.getTime() + dow * 86400000));
+      (monthEventsByDate[key] = monthEventsByDate[key] || []).push(t.label);
+    });
     const year = today.getFullYear(), monthIdx = today.getMonth();
-    const daysInMonth = new Date(year, monthIdx + 1, 0).getDate();
-    const firstWeekday = (new Date(year, monthIdx, 1).getDay() + 6) % 7;
-    const todayKey = isoDate(today);
-    const monthCells = [];
-    for (let i = 0; i < firstWeekday; i++) monthCells.push({ style: 'background:#fbfaf8;min-height:74px', day: '', dayStyle: '', label: '', labelStyle: '' });
-    let totalMonthEvents = 0;
-    for (let d = 1; d <= daysInMonth; d++) {
-      const key = isoDate(new Date(year, monthIdx, d));
-      const isToday = key === todayKey;
-      const evs = monthEventsByDate[key] || [];
-      totalMonthEvents += evs.length;
-      const label = evs.slice(0, 2).map(t => t.length > 16 ? t.slice(0, 16) + '…' : t).join(' · ');
-      monthCells.push({
-        style: 'background:' + (isToday ? '#f4f2ee' : '#fff') + ';min-height:74px;padding:6px 8px',
-        day: d + '',
-        dayStyle: 'font:' + (isToday || evs.length ? '600' : '500') + ' 11px/1 \'JetBrains Mono\',monospace;color:' + (isToday ? '#16203a' : (evs.length ? '#1a1a1a' : '#8a8a8a')),
-        label,
-        labelStyle: 'font:400 9px/1.3 \'JetBrains Mono\',monospace;color:' + (isToday ? '#1a1a1a' : '#6b6b6b') + ';margin-top:4px'
-      });
-    }
-    while (monthCells.length % 7 !== 0) monthCells.push({ style: 'background:#fbfaf8;min-height:74px', day: '', dayStyle: '', label: '', labelStyle: '' });
-    const monthLabel = MONTH_NAMES[monthIdx] + ' ' + year + ' · THE MONTH AHEAD';
-    const monthEventCount = totalMonthEvents + (totalMonthEvents === 1 ? ' EVENT THIS MONTH' : ' EVENTS THIS MONTH');
+    const monthsData = [0, 1].map(offset => {
+      const idx = monthIdx + offset;
+      const y = year + Math.floor(idx / 12);
+      const mIdx = ((idx % 12) + 12) % 12;
+      return buildMonthGrid(y, mIdx, monthEventsByDate, todayKey);
+    });
 
     const nextSun = new Date(today);
     const nextSunDow = today.getDay();
@@ -1290,7 +1320,7 @@ class Component extends DCLogic {
       }),
       calBlocks: [].concat.apply([], (s.planDone ? this.planRows() : this.weekBlocks()).map((day, i) => day.map(b => mk(i, b[0], b[1], b[2], b[3])))),
       hasAllDay, allDayRow,
-      monthLabel, monthEventCount, monthCells,
+      monthsData,
       newEventTitle: s.newEventTitle, newEventDate: s.newEventDate, newEventEndDate: s.newEventEndDate, newEventTime: s.newEventTime,
       onEventTitleInput: e => this.set('newEventTitle', e.target.value),
       onEventDateInput: e => this.set('newEventDate', e.target.value),
