@@ -749,7 +749,7 @@ function parseLocalDate(str) {
   const [y, m, d] = str.split('-').map(Number);
   return new Date(y, m - 1, d);
 }
-function buildMonthGrid(year, monthIdx, eventsByDate, todayKey) {
+function buildMonthGrid(year, monthIdx, eventsByDate, todayKey, routine) {
   const daysInMonth = new Date(year, monthIdx + 1, 0).getDate();
   const firstWeekday = (new Date(year, monthIdx, 1).getDay() + 6) % 7;
   const blank = () => ({ style: 'background:#fbfaf8;min-height:74px', day: '', dayStyle: '', label: '', labelStyle: '' });
@@ -757,9 +757,16 @@ function buildMonthGrid(year, monthIdx, eventsByDate, todayKey) {
   for (let i = 0; i < firstWeekday; i++) cells.push(blank());
   let total = 0;
   for (let d = 1; d <= daysInMonth; d++) {
-    const key = isoDate(new Date(year, monthIdx, d));
+    const dateObj = new Date(year, monthIdx, d);
+    const key = isoDate(dateObj);
     const isToday = key === todayKey;
-    const evs = eventsByDate[key] || [];
+    const dow = (dateObj.getDay() + 6) % 7;
+    const rd = (routine || []).find(r => r.day_of_week === dow);
+    const evs = (eventsByDate[key] || []).slice();
+    if (rd) {
+      const short = (rd.title.split('·')[0] || rd.title).trim().toUpperCase();
+      evs.unshift('GYM · ' + short);
+    }
     total += evs.length;
     const shown = evs.slice(0, 5);
     const rest = evs.length > 5 ? ['+ ' + (evs.length - 5) + ' more'] : [];
@@ -1290,7 +1297,7 @@ class Component extends DCLogic {
       const idx = monthIdx + offset;
       const y = year + Math.floor(idx / 12);
       const mIdx = ((idx % 12) + 12) % 12;
-      return buildMonthGrid(y, mIdx, monthEventsByDate, todayKey);
+      return buildMonthGrid(y, mIdx, monthEventsByDate, todayKey, s.routine);
     });
 
     const nextSun = new Date(today);
