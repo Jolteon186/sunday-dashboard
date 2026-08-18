@@ -324,7 +324,7 @@
 <div style="padding:22px 30px 28px">
 <div style="display:flex;align-items:flex-end;justify-content:space-between;border-bottom:1px solid rgba(0,0,0,.16);padding-bottom:12px">
 <div><div style="font:400 10px/1 'JetBrains Mono',monospace;letter-spacing:.16em;color:#8a8a8a;margin-bottom:8px">PLANNING 17–23 AUGUST</div><div style="font:600 26px/1 'Space Grotesk',sans-serif;letter-spacing:-.02em">Organize next week</div></div>
-<div style="text-align:right"><div style="font:400 10px/1 'JetBrains Mono',monospace;color:#8a8a8a">{{ planAnswered }} OF 7 ANSWERED · EACH ONE PAYS +15 XP</div><div style="font:600 22px/1 'Space Grotesk',sans-serif;color:#16203a;margin-top:5px">{{ planXpLabel }}</div></div>
+<div style="text-align:right"><div style="font:400 10px/1 'JetBrains Mono',monospace;color:#8a8a8a">{{ planAnswered }} OF 8 ANSWERED · EACH ONE PAYS +15 XP</div><div style="font:600 22px/1 'Space Grotesk',sans-serif;color:#16203a;margin-top:5px">{{ planXpLabel }}</div></div>
 </div>
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px">
@@ -429,6 +429,45 @@
 </sc-for>
 <sc-if value="{{ noFixedForExtras }}">
 <div style="padding:11px 0;font:400 11.5px/1.4 'Space Grotesk',sans-serif;color:#8a8a8a">Your fixed list is empty — add items in the Paris Playbook tab first.</div>
+</sc-if>
+</div>
+
+<div style="border:1px solid rgba(0,0,0,.08);border-radius:18px;background:#fff;padding:14px 16px;grid-column:1 / span 2">
+<div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px">
+<div style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a;letter-spacing:.1em">08 · JULIEN'S LIST</div>
+<div style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">{{ julienCountLabel }}</div>
+</div>
+<div style="font:600 15px/1.3 'Space Grotesk',sans-serif;margin:8px 0 4px">Pick what to tackle next week, then set the day(s), the time and how long.</div>
+<sc-for list="{{ julienRows }}" as="j" hint-placeholder-count="5">
+<div style="{{ j.rowStyle }}">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px">
+<span style="font:600 13px/1.3 'Space Grotesk',sans-serif;flex:1">{{ j.title }}</span>
+<span style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#61708c;white-space:nowrap">{{ j.meta }}</span>
+</div>
+<sc-if value="{{ j.notes }}">
+<div style="font:400 10.5px/1.45 'Space Grotesk',sans-serif;color:#8a8a8a;margin-top:4px">{{ j.notes }}</div>
+</sc-if>
+<div style="display:flex;align-items:center;gap:5px;margin-top:8px;flex-wrap:wrap">
+<div onClick="{{ j.onToggle }}" style="{{ j.toggleStyle }}">{{ j.toggleLabel }}</div>
+<sc-if value="{{ j.chosen }}">
+<span style="font:400 9px/1 'JetBrains Mono',monospace;color:#8a8a8a;margin-left:3px">DAYS</span>
+<sc-for list="{{ j.days }}" as="d" hint-placeholder-count="7">
+<div onClick="{{ d.onPick }}" style="{{ d.style }}">{{ d.label }}</div>
+</sc-for>
+<input type="time" value="{{ j.hour }}" onInput="{{ j.onHourInput }}" style="border:1px solid rgba(0,0,0,.16);border-radius:999px;padding:5px 8px;font:400 9px/1 'JetBrains Mono',monospace;color:#4a4a4a;background:#fff">
+<span style="font:400 9px/1 'JetBrains Mono',monospace;color:#8a8a8a;margin-left:3px">FOR</span>
+<sc-for list="{{ j.durations }}" as="du" hint-placeholder-count="8">
+<div onClick="{{ du.onPick }}" style="{{ du.style }}">{{ du.label }}</div>
+</sc-for>
+</sc-if>
+</div>
+<sc-if value="{{ j.chosen }}">
+<div style="font:400 10px/1.4 'JetBrains Mono',monospace;color:#61708c;margin-top:6px">{{ j.summary }}</div>
+</sc-if>
+</div>
+</sc-for>
+<sc-if value="{{ noJulienItems }}">
+<div style="padding:11px 0;font:400 11.5px/1.4 'Space Grotesk',sans-serif;color:#8a8a8a">Julien's List is empty — add items to the julien_list table and they show up here.</div>
 </sc-if>
 </div>
 </div>
@@ -791,7 +830,7 @@ class Component extends DCLogic {
     tab: 'week', xp: 0, answers: {}, reviewOpen: false, awarded: false, burst: false, haul: 0,
     series: DEFAULT_SERIES, pendingW: DEFAULT_SERIES[DEFAULT_SERIES.length - 1], logged: false,
     reward: null,
-    plan: { carbon: [], padel: null, pao: null, ticketBuys: {}, friends: {}, psy: null, extras: {} },
+    plan: { carbon: [], padel: null, pao: null, ticketBuys: {}, friends: {}, psy: null, extras: {}, julien: {} },
     planDone: false, planBurst: false,
 
     routine: DEFAULT_ROUTINE, tasks: [], friendsList: [], ritual: {}, xpEvents: [],
@@ -799,7 +838,8 @@ class Component extends DCLogic {
     agendaEvents: [],
     newEventTitle: '', newEventDate: isoDate(new Date()), newEventEndDate: isoDate(new Date()), newEventTime: '09:00', newEventAllDay: false,
     parisFixed: [], parisFinds: [], parisRequest: null, allTasks: [],
-    newFixedLabel: '', newFixedLocation: ''
+    newFixedLabel: '', newFixedLocation: '',
+    julienList: []
   };
 
   componentDidMount() {
@@ -818,6 +858,7 @@ class Component extends DCLogic {
       .on('postgres_changes', { event: '*', schema: 'public', table: 'morning_ritual_logs' }, payload => this.handleRitualRealtime(payload))
       .on('postgres_changes', { event: '*', schema: 'public', table: 'paris_activities' }, payload => this.handleRealtimeList('parisFixed', payload))
       .on('postgres_changes', { event: '*', schema: 'public', table: 'paris_new_finds' }, payload => this.handleRealtimeList('parisFinds', payload))
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'julien_list' }, payload => this.handleRealtimeList('julienList', payload))
       .subscribe();
   }
 
@@ -852,7 +893,7 @@ class Component extends DCLogic {
     const weekOf = isoDate(monday);
     const since26 = isoDate(new Date(monday.getTime() - 26 * 7 * 86400000));
 
-    const [weightRes, routineRes, taskRes, friendRes, ritualRes, xpRes, agendaRes, parisFixedRes, parisFindsRes, parisReqRes, allTasksRes] = await Promise.all([
+    const [weightRes, routineRes, taskRes, friendRes, ritualRes, xpRes, agendaRes, parisFixedRes, parisFindsRes, parisReqRes, allTasksRes, julienRes] = await Promise.all([
       sb.from('weight_logs').select('*').order('week_of', { ascending: true }).limit(10),
       sb.from('routine_days').select('*').order('day_of_week', { ascending: true }),
       sb.from('carbon_actions').select('*').eq('week_of', weekOf).order('created_at', { ascending: true }),
@@ -863,7 +904,8 @@ class Component extends DCLogic {
       sb.from('paris_activities').select('*').eq('archived', false).order('created_at', { ascending: true }),
       sb.from('paris_new_finds').select('*').order('rank', { ascending: true }),
       sb.from('paris_update_requests').select('*').order('requested_at', { ascending: false }).limit(1),
-      sb.from('carbon_actions').select('id,label,week_of,day_of_week')
+      sb.from('carbon_actions').select('id,label,week_of,day_of_week'),
+      sb.from('julien_list').select('*').eq('status', 'open').order('priority', { ascending: true }).order('created_at', { ascending: true })
     ]);
 
     let routine = (routineRes.data && routineRes.data.length) ? routineRes.data : null;
@@ -896,6 +938,7 @@ class Component extends DCLogic {
       parisFinds: parisFindsRes.data || [],
       parisRequest: (parisReqRes.data && parisReqRes.data[0]) || null,
       allTasks: allTasksRes.data || [],
+      julienList: julienRes.data || [],
       loaded: true
     });
   }
@@ -1017,6 +1060,66 @@ class Component extends DCLogic {
       p.extras = m;
       return { plan: p };
     });
+  }
+
+  toggleJulien(id) {
+    this.setState(s => {
+      const p = { ...s.plan }, m = { ...p.julien };
+      if (m[id]) delete m[id];
+      else m[id] = { days: [], hour: '19:00', duration: 60 };
+      p.julien = m;
+      return { plan: p, xp: s.xp + 15 };
+    });
+  }
+
+  setJulienField(id, patch) {
+    this.setState(s => {
+      if (!s.plan.julien[id]) return null;
+      const p = { ...s.plan }, m = { ...p.julien };
+      m[id] = { ...m[id], ...patch };
+      p.julien = m;
+      return { plan: p };
+    });
+  }
+
+  toggleJulienDay(id, day) {
+    const cur = (this.state.plan.julien[id] || {}).days || [];
+    const days = cur.indexOf(day) > -1 ? cur.filter(d => d !== day) : cur.concat([day]).sort((a, b) => a - b);
+    this.setJulienField(id, { days });
+  }
+
+  async scheduleJulienItems() {
+    const s = this.state;
+    const picks = s.plan.julien || {};
+    const nextMonday = new Date(mondayOf(new Date()).getTime() + 7 * 86400000);
+    for (const id of Object.keys(picks)) {
+      const info = picks[id];
+      if (!info || !info.days || !info.days.length) continue;
+      const item = (s.julienList || []).find(x => String(x.id) === String(id));
+      if (!item) continue;
+      const created = [];
+      for (const day of info.days) {
+        const d = new Date(nextMonday.getTime() + day * 86400000);
+        const parts = (info.hour || '19:00').split(':');
+        const start = new Date(d.getFullYear(), d.getMonth(), d.getDate(), parseInt(parts[0], 10) || 19, parseInt(parts[1], 10) || 0);
+        const end = new Date(start.getTime() + (info.duration || 60) * 60000);
+        const r = await sb.from('agenda_events').insert({
+          title: item.title,
+          starts_at: start.toISOString(),
+          ends_at: end.toISOString(),
+          all_day: false,
+          notes: item.notes || null
+        }).select();
+        if (r.data && r.data[0]) created.push(r.data[0]);
+      }
+      if (created.length) {
+        await sb.from('julien_list').update({ scheduled: true, agenda_event_id: created[0].id }).eq('id', item.id);
+        this.setState(st => ({
+          agendaEvents: st.agendaEvents.concat(created.filter(c => !st.agendaEvents.some(e => e.id === c.id))),
+          julienList: st.julienList.map(x => x.id === item.id ? { ...x, scheduled: true, agenda_event_id: created[0].id } : x)
+        }));
+      }
+    }
   }
 
   ritualStreak() {
@@ -1189,7 +1292,7 @@ class Component extends DCLogic {
       ? (interestedAll.length - 7) + ' MORE IN THE PARIS PLAYBOOK · TOP 7 SHOWN HERE'
       : 'REFRESHED EVERY SUNDAY MORNING';
 
-    const answeredCount = [p.carbon.length > 0, p.padel !== null, p.pao !== null, Object.keys(p.ticketBuys).length > 0, Object.keys(p.friends).length > 0, p.psy !== null, Object.keys(p.extras).length > 0].filter(Boolean).length;
+    const answeredCount = [p.carbon.length > 0, p.padel !== null, p.pao !== null, Object.keys(p.ticketBuys).length > 0, Object.keys(p.friends).length > 0, p.psy !== null, Object.keys(p.extras).length > 0, Object.keys(p.julien).length > 0].filter(Boolean).length;
     const placed = this.planRows().reduce((n, r) => n + r.length, 0) - 21;
 
     // --- Week-tab computed props, backed by Supabase-loaded state ---
@@ -1429,6 +1532,38 @@ class Component extends DCLogic {
         };
       }),
       noFixedForExtras: (s.parisFixed || []).length === 0,
+
+      julienRows: (s.julienList || []).map(it => {
+        const info = p.julien[it.id];
+        const on = !!info;
+        const days = on ? (info.days || []) : [];
+        const dur = on ? (info.duration || 60) : 60;
+        const durLabel = m => m < 60 ? m + ' min' : (m % 60 === 0 ? (m / 60) + 'h' : Math.floor(m / 60) + 'h' + (m % 60));
+        return {
+          title: it.title,
+          notes: it.notes || '',
+          meta: [it.category ? it.category.toUpperCase() : '', 'P' + it.priority, it.scheduled ? 'ALREADY SCHEDULED' : ''].filter(Boolean).join(' · '),
+          rowStyle: 'padding:11px 0;border-bottom:1px solid rgba(0,0,0,.06);' + (it.scheduled ? 'opacity:.62' : ''),
+          chosen: on,
+          toggleStyle: on ? CHIP_ON : CHIP_OFF,
+          toggleLabel: on ? 'SCHEDULING ✓' : 'SCHEDULE',
+          onToggle: () => this.toggleJulien(it.id),
+          hour: on ? (info.hour || '19:00') : '19:00',
+          onHourInput: e => this.setJulienField(it.id, { hour: e.target.value }),
+          days: DAYS.map((d, i) => ({ label: d, style: on && days.indexOf(i) > -1 ? MINI_ON : MINI_OFF, onPick: () => this.toggleJulienDay(it.id, i) })),
+          durations: [15, 30, 45, 60, 90, 120, 180, 240].map(mn => ({
+            label: durLabel(mn),
+            style: on && dur === mn ? MINI_ON : MINI_OFF,
+            onPick: () => this.setJulienField(it.id, { duration: mn })
+          })),
+          summary: days.length
+            ? days.map(i => DAYS[i]).join(', ') + ' at ' + (info.hour || '19:00') + ' for ' + durLabel(dur) + ' · ' + days.length + (days.length === 1 ? ' slot' : ' slots') + ' next week'
+            : 'Pick at least one day to place it on next week.'
+        };
+      }),
+      noJulienItems: (s.julienList || []).length === 0,
+      julienCountLabel: (s.julienList || []).length + ' OPEN · ' + Object.keys(p.julien).length + ' PICKED',
+
       planAnswered: answeredCount, planXpLabel: '+' + (answeredCount * 15 + (s.planDone ? 250 : 0)) + ' XP THIS SESSION',
       planPlacedNote: placed + ' THINGS READY TO PLACE · GYM FITS ITSELF AROUND YOU',
       planBurst: s.planBurst,
@@ -1438,10 +1573,11 @@ class Component extends DCLogic {
       finishLabel: s.planDone ? 'WEEK LOCKED' : 'LOCK THE ANSWERS · +250 XP',
       finishNote: s.planDone
         ? 'Locked — The Week now shows 17–23 August with everything you just decided. Sunday evening I will ask what actually happened, from this list.'
-        : answeredCount >= 6 ? 'Everything essential is answered. Lock it and the dashboard calendar rebuilds around it.' : (7 - answeredCount) + ' questions left. Answer six and you can lock it.',
+        : answeredCount >= 6 ? 'Everything essential is answered. Lock it — the calendar rebuilds and anything picked from Julien\'s List gets placed on next week.' : (8 - answeredCount) + ' questions left. Answer six and you can lock it.',
       finishPlan: () => {
         if (this.state.planDone || answeredCount < 6) return;
         this.setState(st => ({ planDone: true, planBurst: true, xp: st.xp + 250 }));
+        this.scheduleJulienItems();
         setTimeout(() => this.setState({ tab: 'week' }), 1600);
         setTimeout(() => this.setState({ planBurst: false }), 2400);
       },
