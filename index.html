@@ -22,9 +22,9 @@
 
 <div style="padding:24px 30px 20px;border-bottom:1px solid rgba(0,0,0,.1);display:flex;align-items:flex-end;justify-content:space-between;gap:30px">
 <div>
-<div style="font:400 10px/1 'JetBrains Mono',monospace;letter-spacing:.22em;color:#8a8a8a;margin-bottom:10px">SUNDAY EDITION · NO. 33 · 09 AUG 2026</div>
+<div style="font:400 10px/1 'JetBrains Mono',monospace;letter-spacing:.22em;color:#8a8a8a;margin-bottom:10px">{{ editionLabel }}</div>
 <div style="display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap">
-<div style="font:600 42px/.95 'Space Grotesk',sans-serif;letter-spacing:-.035em">The week of<br>10–16 August</div>
+<div style="font:600 42px/.95 'Space Grotesk',sans-serif;letter-spacing:-.035em">The week of<br>{{ weekTitle }}</div>
 <div onClick="{{ openReview }}" style="cursor:pointer;background:linear-gradient(100deg,#e9edf4,#9fadc2,#3f5273,#16203a);background-size:200% 100%;animation:shimmer 6s linear infinite alternate;color:#fff;padding:12px 18px;border-radius:999px;display:flex;align-items:center;gap:9px;box-shadow:0 6px 18px rgba(22,32,58,.22)" style-hover="box-shadow:0 1px 0 #101828;transform:translateY(1px)">
 <span style="font:600 12px/1 'JetBrains Mono',monospace;letter-spacing:.1em">COUNT MY XP</span>
 <span style="font:400 10px/1 'JetBrains Mono',monospace;opacity:.8">LAST WEEK · 6 TO CONFIRM</span>
@@ -78,15 +78,12 @@
 <div style="position:relative;height:180px;border-bottom:1px solid rgba(0,0,0,.16)">
 <svg viewBox="0 0 480 180" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible">
 <line x1="0" y1="4" x2="480" y2="4" stroke="#253550" stroke-width="1" stroke-dasharray="4 3" vector-effect="non-scaling-stroke"></line>
-<line x1="0" y1="21.8" x2="480" y2="21.8" stroke="#eae8e4" stroke-width="1" vector-effect="non-scaling-stroke"></line>
-<line x1="0" y1="39.6" x2="480" y2="39.6" stroke="#eae8e4" stroke-width="1" vector-effect="non-scaling-stroke"></line>
-<line x1="0" y1="57.4" x2="480" y2="57.4" stroke="#eae8e4" stroke-width="1" vector-effect="non-scaling-stroke"></line>
-<line x1="0" y1="75.2" x2="480" y2="75.2" stroke="#eae8e4" stroke-width="1" vector-effect="non-scaling-stroke"></line>
-<line x1="0" y1="93" x2="480" y2="93" stroke="#eae8e4" stroke-width="1" vector-effect="non-scaling-stroke"></line>
-<line x1="0" y1="110.8" x2="480" y2="110.8" stroke="#9fadc2" stroke-width="1" vector-effect="non-scaling-stroke"></line>
-<line x1="0" y1="128.6" x2="480" y2="128.6" stroke="#f0eeea" stroke-width="1" vector-effect="non-scaling-stroke"></line>
-<line x1="0" y1="146.4" x2="480" y2="146.4" stroke="#f0eeea" stroke-width="1" vector-effect="non-scaling-stroke"></line>
-<line x1="0" y1="164.2" x2="480" y2="164.2" stroke="#f0eeea" stroke-width="1" vector-effect="non-scaling-stroke"></line>
+<line x1="0" y1="29.4" x2="480" y2="29.4" stroke="#eae8e4" stroke-width="1" vector-effect="non-scaling-stroke"></line>
+<line x1="0" y1="54.9" x2="480" y2="54.9" stroke="#eae8e4" stroke-width="1" vector-effect="non-scaling-stroke"></line>
+<line x1="0" y1="80.3" x2="480" y2="80.3" stroke="#eae8e4" stroke-width="1" vector-effect="non-scaling-stroke"></line>
+<line x1="0" y1="105.7" x2="480" y2="105.7" stroke="#9fadc2" stroke-width="1" vector-effect="non-scaling-stroke"></line>
+<line x1="0" y1="131.1" x2="480" y2="131.1" stroke="#eae8e4" stroke-width="1" vector-effect="non-scaling-stroke"></line>
+<line x1="0" y1="156.6" x2="480" y2="156.6" stroke="#eae8e4" stroke-width="1" vector-effect="non-scaling-stroke"></line>
 <sc-for list="{{ bars }}" as="b" hint-placeholder-count="10">
 <rect x="{{ b.x }}" y="{{ b.y }}" width="13" height="{{ b.h }}" fill="{{ b.fill }}"></rect>
 </sc-for>
@@ -112,16 +109,16 @@
 </sc-if>
 <div style="position:absolute;right:-26px;top:0;bottom:0;width:24px">
 <span style="position:absolute;top:2.2%;right:0;transform:translateY(-50%);font:600 9.5px/1 'JetBrains Mono',monospace;color:#253550">80</span>
-<span style="position:absolute;top:12.1%;right:0;transform:translateY(-50%);font:400 9.5px/1 'JetBrains Mono',monospace;color:#9a9a9a">79</span>
-<span style="position:absolute;top:22%;right:0;transform:translateY(-50%);font:400 9.5px/1 'JetBrains Mono',monospace;color:#9a9a9a">78</span>
-<span style="position:absolute;top:31.9%;right:0;transform:translateY(-50%);font:400 9.5px/1 'JetBrains Mono',monospace;color:#9a9a9a">77</span>
-<span style="position:absolute;top:41.8%;right:0;transform:translateY(-50%);font:400 9.5px/1 'JetBrains Mono',monospace;color:#9a9a9a">76</span>
-<span style="position:absolute;top:51.7%;right:0;transform:translateY(-50%);font:400 9.5px/1 'JetBrains Mono',monospace;color:#9a9a9a">75</span>
-<span style="position:absolute;top:61.6%;right:0;transform:translateY(-50%);font:600 9.5px/1 'JetBrains Mono',monospace;color:#3f5273">74</span>
-<span style="position:absolute;top:100%;right:0;transform:translateY(-50%);font:400 9.5px/1 'JetBrains Mono',monospace;color:#9a9a9a">70</span>
+<span style="position:absolute;top:16.3%;right:0;transform:translateY(-50%);font:400 9.5px/1 'JetBrains Mono',monospace;color:#9a9a9a">79</span>
+<span style="position:absolute;top:30.5%;right:0;transform:translateY(-50%);font:400 9.5px/1 'JetBrains Mono',monospace;color:#9a9a9a">78</span>
+<span style="position:absolute;top:44.6%;right:0;transform:translateY(-50%);font:400 9.5px/1 'JetBrains Mono',monospace;color:#9a9a9a">77</span>
+<span style="position:absolute;top:58.7%;right:0;transform:translateY(-50%);font:600 9.5px/1 'JetBrains Mono',monospace;color:#3f5273">76</span>
+<span style="position:absolute;top:72.9%;right:0;transform:translateY(-50%);font:400 9.5px/1 'JetBrains Mono',monospace;color:#9a9a9a">75</span>
+<span style="position:absolute;top:87%;right:0;transform:translateY(-50%);font:400 9.5px/1 'JetBrains Mono',monospace;color:#9a9a9a">74</span>
+<span style="position:absolute;top:100%;right:0;transform:translateY(-50%);font:600 9.5px/1 'JetBrains Mono',monospace;color:#253550">73</span>
 </div>
 </div>
-<div style="display:flex;justify-content:space-between;font:400 9px/1 'JetBrains Mono',monospace;color:#8a8a8a;margin-top:6px"><span>10 WEEKS AGO</span><span>{{ barsNote }}</span></div>
+<div style="display:flex;justify-content:space-between;font:400 9px/1 'JetBrains Mono',monospace;color:#8a8a8a;margin-top:6px"><span>{{ barsStartLabel }}</span><span>{{ barsNote }}</span></div>
 </div>
 
 <div style="display:flex;gap:6px;margin-top:14px;align-items:stretch">
@@ -208,11 +205,9 @@
 <sc-for list="{{ taskRows }}" as="t" hint-placeholder-count="3">
 <div onClick="{{ t.onToggle }}" style="cursor:pointer;display:flex;align-items:center;gap:10px;border:1px solid rgba(0,0,0,.1);border-radius:12px;padding:9px 11px"><span style="{{ t.boxStyle }}"></span><span style="{{ t.labelStyle }}">{{ t.label }}</span><span style="font:400 10px/1 'JetBrains Mono',monospace;color:#8a8a8a">{{ t.meta }}</span></div>
 </sc-for>
-<div style="display:flex;align-items:center;gap:10px;border:1px dashed rgba(0,0,0,.18);border-radius:12px;padding:9px 11px;color:#b5b5b5">
-<span style="width:14px;height:14px;border:1px dashed rgba(0,0,0,.18);border-radius:5px;flex:none"></span>
-<input value="{{ newTaskText }}" onInput="{{ onTaskInput }}" placeholder="Type an action…" style="flex:1;border:none;outline:none;background:transparent;font:400 12.5px/1.2 'Space Grotesk',sans-serif;color:#1a1a1a">
-<span onClick="{{ addTask }}" style="cursor:pointer;font:400 10px/1 'JetBrains Mono',monospace">+ ADD</span>
-</div>
+<sc-if value="{{ noWeekCarbon }}">
+<div style="border:1px dashed rgba(0,0,0,.18);border-radius:12px;padding:11px;font:400 11.5px/1.45 'Space Grotesk',sans-serif;color:#8a8a8a">Nothing locked in for this week yet. Pick your Carbon Plus actions in the Next Week Plan tab, give them a day and an hour, then lock the answers.</div>
+</sc-if>
 </div>
 <div style="display:flex;align-items:center;gap:10px;margin-top:9px;border-top:1px solid rgba(0,0,0,.1);padding-top:9px">
 <span style="font:400 10px/1.4 'JetBrains Mono',monospace;color:#8a8a8a;flex:1">{{ taskSummary }}</span>
@@ -329,35 +324,69 @@
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px">
 
-<div style="border:1px solid rgba(0,0,0,.08);border-radius:18px;background:#fff;padding:14px 16px">
+<div style="border:1px solid rgba(0,0,0,.08);border-radius:18px;background:#fff;padding:14px 16px;grid-column:1 / span 2">
+<div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px">
 <div style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a;letter-spacing:.1em">01 · CARBON PLUS</div>
-<div style="font:600 15px/1.3 'Space Grotesk',sans-serif;margin:8px 0 11px">What are your actions this week?</div>
-<div style="display:flex;flex-wrap:wrap;gap:5px">
-<sc-for list="{{ carbonOptions }}" as="c" hint-placeholder-count="4">
-<div onClick="{{ c.onPick }}" style="{{ c.style }}">{{ c.label }}</div>
+<div style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">{{ carbonCountLabel }}</div>
+</div>
+<div style="font:600 15px/1.3 'Space Grotesk',sans-serif;margin:8px 0 4px">Which actions this week, and when do they happen?</div>
+<sc-for list="{{ carbonRows }}" as="c" hint-placeholder-count="4">
+<div style="{{ c.rowStyle }}">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px">
+<span style="font:600 13px/1.3 'Space Grotesk',sans-serif;flex:1">{{ c.label }}</span>
+<span style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#61708c;white-space:nowrap">{{ c.meta }}</span>
+</div>
+<div style="display:flex;align-items:center;gap:5px;margin-top:8px;flex-wrap:wrap">
+<div onClick="{{ c.onToggle }}" style="{{ c.toggleStyle }}">{{ c.toggleLabel }}</div>
+<sc-if value="{{ c.chosen }}">
+<span style="font:400 9px/1 'JetBrains Mono',monospace;color:#8a8a8a;margin-left:3px">DAYS</span>
+<sc-for list="{{ c.days }}" as="d" hint-placeholder-count="7">
+<div onClick="{{ d.onPick }}" style="{{ d.style }}">{{ d.label }}</div>
 </sc-for>
+<input type="time" value="{{ c.hour }}" onInput="{{ c.onHourInput }}" style="border:1px solid rgba(0,0,0,.16);border-radius:999px;padding:5px 8px;font:400 9px/1 'JetBrains Mono',monospace;color:#4a4a4a;background:#fff">
+</sc-if>
+</div>
+<sc-if value="{{ c.chosen }}">
+<div style="font:400 10px/1.4 'JetBrains Mono',monospace;color:#61708c;margin-top:6px">{{ c.summary }}</div>
+</sc-if>
+<sc-if value="{{ c.clash }}">
+<div style="font:500 10px/1.4 'JetBrains Mono',monospace;color:#b00020;margin-top:4px">{{ c.clash }}</div>
+</sc-if>
+</div>
+</sc-for>
+<div style="display:flex;align-items:center;gap:10px;padding:11px 0 0">
+<input value="{{ newCarbonText }}" onInput="{{ onCarbonInput }}" placeholder="Add a Carbon Plus action…" style="flex:1;border:1px dashed rgba(0,0,0,.18);border-radius:12px;padding:8px 11px;outline:none;background:transparent;font:400 12.5px/1.2 'Space Grotesk',sans-serif;color:#1a1a1a">
+<span onClick="{{ addCarbon }}" style="cursor:pointer;font:400 10px/1 'JetBrains Mono',monospace;color:#8a8a8a">+ ADD</span>
 </div>
 </div>
 
 <div style="border:1px solid rgba(0,0,0,.08);border-radius:18px;background:#fff;padding:14px 16px">
 <div style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a;letter-spacing:.1em">02 · PADEL</div>
-<div style="font:600 15px/1.3 'Space Grotesk',sans-serif;margin:8px 0 11px">Which night is padel?</div>
-<div style="display:flex;gap:5px">
+<div style="font:600 15px/1.3 'Space Grotesk',sans-serif;margin:8px 0 11px">Which night is padel, and at what time?</div>
+<div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap">
 <sc-for list="{{ padelDays }}" as="p" hint-placeholder-count="5">
 <div onClick="{{ p.onPick }}" style="{{ p.style }}">{{ p.label }}</div>
 </sc-for>
+<input type="time" value="{{ padelHour }}" onInput="{{ onPadelHourInput }}" style="border:1px solid rgba(0,0,0,.16);border-radius:999px;padding:5px 8px;font:400 9px/1 'JetBrains Mono',monospace;color:#4a4a4a;background:#fff">
 </div>
+<sc-if value="{{ padelClash }}">
+<div style="font:500 10px/1.4 'JetBrains Mono',monospace;color:#b00020;margin-top:7px">{{ padelClash }}</div>
+</sc-if>
 </div>
 
 <div style="border:1px solid rgba(0,0,0,.08);border-radius:18px;background:#fff;padding:14px 16px">
 <div style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a;letter-spacing:.1em">03 · PAO</div>
-<div style="font:600 15px/1.3 'Space Grotesk',sans-serif;margin:8px 0 11px">Which night is the date with Pao?</div>
-<div style="display:flex;gap:5px">
+<div style="font:600 15px/1.3 'Space Grotesk',sans-serif;margin:8px 0 11px">Which night is the date with Pao, and at what time?</div>
+<div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap">
 <sc-for list="{{ paoDays }}" as="p" hint-placeholder-count="7">
 <div onClick="{{ p.onPick }}" style="{{ p.style }}">{{ p.label }}</div>
 </sc-for>
+<input type="time" value="{{ paoHour }}" onInput="{{ onPaoHourInput }}" style="border:1px solid rgba(0,0,0,.16);border-radius:999px;padding:5px 8px;font:400 9px/1 'JetBrains Mono',monospace;color:#4a4a4a;background:#fff">
 </div>
 <div style="font:400 10px/1.4 'Space Grotesk',sans-serif;color:#61708c;margin-top:9px">{{ paoNote }}</div>
+<sc-if value="{{ paoClash }}">
+<div style="font:500 10px/1.4 'JetBrains Mono',monospace;color:#b00020;margin-top:4px">{{ paoClash }}</div>
+</sc-if>
 </div>
 
 <div style="border:1px solid rgba(0,0,0,.08);border-radius:18px;background:#fff;padding:14px 16px">
@@ -401,12 +430,16 @@
 
 <div style="border:1px solid rgba(0,0,0,.08);border-radius:18px;background:#fff;padding:14px 16px">
 <div style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a;letter-spacing:.1em">06 · PSYCHOLOGIST</div>
-<div style="font:600 15px/1.3 'Space Grotesk',sans-serif;margin:8px 0 11px">Going this week? Which day?</div>
-<div style="display:flex;gap:5px">
+<div style="font:600 15px/1.3 'Space Grotesk',sans-serif;margin:8px 0 11px">Going this week? Which day, and at what time?</div>
+<div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap">
 <sc-for list="{{ psyDays }}" as="p" hint-placeholder-count="6">
 <div onClick="{{ p.onPick }}" style="{{ p.style }}">{{ p.label }}</div>
 </sc-for>
+<input type="time" value="{{ psyHour }}" onInput="{{ onPsyHourInput }}" style="border:1px solid rgba(0,0,0,.16);border-radius:999px;padding:5px 8px;font:400 9px/1 'JetBrains Mono',monospace;color:#4a4a4a;background:#fff">
 </div>
+<sc-if value="{{ psyClash }}">
+<div style="font:500 10px/1.4 'JetBrains Mono',monospace;color:#b00020;margin-top:7px">{{ psyClash }}</div>
+</sc-if>
 </div>
 
 <div style="border:1px solid rgba(0,0,0,.08);border-radius:18px;background:#fff;padding:14px 16px;grid-column:1 / span 2">
@@ -425,6 +458,9 @@
 <input type="time" value="{{ x.hour }}" onInput="{{ x.onHourInput }}" style="border:1px solid rgba(0,0,0,.16);border-radius:999px;padding:5px 8px;font:400 9px/1 'JetBrains Mono',monospace;color:#4a4a4a;background:#fff">
 </sc-if>
 </div>
+<sc-if value="{{ x.clash }}">
+<div style="font:500 10px/1.4 'JetBrains Mono',monospace;color:#b00020;margin-top:4px">{{ x.clash }}</div>
+</sc-if>
 </div>
 </sc-for>
 <sc-if value="{{ noFixedForExtras }}">
@@ -463,6 +499,9 @@
 </div>
 <sc-if value="{{ j.chosen }}">
 <div style="font:400 10px/1.4 'JetBrains Mono',monospace;color:#61708c;margin-top:6px">{{ j.summary }}</div>
+</sc-if>
+<sc-if value="{{ j.clash }}">
+<div style="font:500 10px/1.4 'JetBrains Mono',monospace;color:#b00020;margin-top:4px">{{ j.clash }}</div>
 </sc-if>
 </div>
 </sc-for>
@@ -728,7 +767,6 @@ const TAB_ON = "cursor:pointer;margin:8px 4px 8px 0;padding:10px 20px;border-rad
 const TAB_OFF = "cursor:pointer;margin:8px 4px 8px 0;padding:10px 20px;border-radius:999px;font:400 11px/1 'JetBrains Mono',monospace;letter-spacing:.1em;color:#8a8a8a";
 
 const DAYS = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
-const CARBON_OPTS = ['DUE DILIGENCE · PART 2', 'SEND GON THE MODEL', 'PIPELINE REVIEW', 'CALL THE INVESTOR', '+ TYPE YOUR OWN'];
 const TICKET_OPTS = [
   { id: 'rolex', name: 'Rolex Paris Masters', when: '31 OCT – 8 NOV', desc: 'ATP Masters 1000 at Paris La Défense Arena. Early rounds are the cheap seats and the best tennis per euro.' },
   { id: 'rock', name: 'Rock en Seine', when: '26 – 30 AUG', desc: 'Five days in the Parc de Saint-Cloud. Day tickets go before the weekend.' },
@@ -755,7 +793,8 @@ const REVIEW = [
   { id: 'c', q: 'Carbon Plus — 4 of 6 actions closed?', meta: 'PROJECT ACTIONS', xp: 240 }
 ];
 
-const Y = v => 182 - (v - 70) * 17.8;
+// Vertical axis runs 73 kg (bottom, y=182) to 80 kg (goal line, y=4).
+const Y = v => 182 - (Math.max(73, v) - 73) * (178 / 7);
 const X = i => 14 + i * (452 / 11);
 
 // --- Supabase wiring helpers -------------------------------------------------
@@ -767,6 +806,14 @@ function mondayOf(d) {
   dt.setHours(0, 0, 0, 0);
   return dt;
 }
+// The week the dashboard is "on". Every Sunday it rolls forward to the week
+// that starts the next day, and stays there until the following Sunday.
+// Sun 23 Aug -> week of Mon 24 Aug; Mon 24..Sat 29 -> still 24 Aug; Sun 30 -> 31 Aug.
+function displayMonday() {
+  const t = new Date();
+  t.setDate(t.getDate() + 1);
+  return mondayOf(t);
+}
 function isoDate(d) {
   const y = d.getFullYear();
   const m = String(d.getMonth() + 1).padStart(2, '0');
@@ -775,7 +822,7 @@ function isoDate(d) {
 }
 function daysBetween(a, b) { return Math.max(0, Math.round((b - a) / 86400000)); }
 
-const DEFAULT_SERIES = [70.1, 70.4, 70.8, 71.2, 71.5, 71.9, 72.2, 72.4, 72.7, 73.0];
+const DEFAULT_SERIES = [73.5];
 const DEFAULT_ROUTINE = [
   { day_of_week: 0, title: 'Push · chest & shoulders', duration_min: 55, exercises: 'Incline dumbbell press 4×6 · Flat barbell press 4×8 · Seated lateral raise 4×12 · Cable fly 3×12 · Weighted dips 3×10', cue: '+2 KG ON THE INCLINE · DROP SET ON THE LAST RAISE', is_gym: true },
   { day_of_week: 1, title: 'Pull · back & biceps', duration_min: 50, exercises: 'Weighted pull-up 4×6 · Chest-supported row 4×8 · Wide lat pulldown 3×12 · EZ-bar curl 4×10 · Hammer curl 3×12', cue: '+4 KG ON THE PULL-UP · ONE EXTRA REP ON THE CURL', is_gym: true },
@@ -830,16 +877,16 @@ class Component extends DCLogic {
     tab: 'week', xp: 0, answers: {}, reviewOpen: false, awarded: false, burst: false, haul: 0,
     series: DEFAULT_SERIES, pendingW: DEFAULT_SERIES[DEFAULT_SERIES.length - 1], logged: false,
     reward: null,
-    plan: { carbon: [], padel: null, pao: null, ticketBuys: {}, friends: {}, psy: null, extras: {}, julien: {} },
+    plan: { carbon: {}, padel: null, padelHour: '19:00', pao: null, paoHour: '20:00', ticketBuys: {}, friends: {}, psy: null, psyHour: '18:00', extras: {}, julien: {} },
     planDone: false, planBurst: false,
 
     routine: DEFAULT_ROUTINE, tasks: [], friendsList: [], ritual: {}, xpEvents: [],
-    newTaskText: '', newFriendText: '', loaded: false,
+    newFriendText: '', loaded: false,
     agendaEvents: [],
     newEventTitle: '', newEventDate: isoDate(new Date()), newEventEndDate: isoDate(new Date()), newEventTime: '09:00', newEventAllDay: false,
     parisFixed: [], parisFinds: [], parisRequest: null, allTasks: [],
     newFixedLabel: '', newFixedLocation: '',
-    julienList: []
+    julienList: [], carbonBacklog: [], newCarbonText: ''
   };
 
   componentDidMount() {
@@ -889,14 +936,14 @@ class Component extends DCLogic {
   }
 
   async loadAll() {
-    const monday = mondayOf(new Date());
+    const monday = displayMonday();
     const weekOf = isoDate(monday);
     const since26 = isoDate(new Date(monday.getTime() - 26 * 7 * 86400000));
 
     const [weightRes, routineRes, taskRes, friendRes, ritualRes, xpRes, agendaRes, parisFixedRes, parisFindsRes, parisReqRes, allTasksRes, julienRes] = await Promise.all([
       sb.from('weight_logs').select('*').order('week_of', { ascending: true }).limit(10),
       sb.from('routine_days').select('*').order('day_of_week', { ascending: true }),
-      sb.from('carbon_actions').select('*').eq('week_of', weekOf).order('created_at', { ascending: true }),
+      sb.from('carbon_actions').select('*').order('created_at', { ascending: true }),
       sb.from('friends').select('*').eq('archived', false),
       sb.from('morning_ritual_logs').select('*').gte('log_date', since26),
       sb.from('xp_events').select('amount, created_at'),
@@ -929,7 +976,7 @@ class Component extends DCLogic {
       pendingW: series[series.length - 1],
       logged: lastLoggedWeek === weekOf,
       routine,
-      tasks: taskRes.data || [],
+      carbonBacklog: taskRes.data || [],
       friendsList: friendRes.data || [],
       ritual,
       xpEvents,
@@ -949,19 +996,46 @@ class Component extends DCLogic {
   }
 
   toggleTask(id, wasDone) {
-    this.setState(st => ({ tasks: st.tasks.map(t => t.id === id ? { ...t, done: !wasDone } : t) }));
+    this.setState(st => ({ carbonBacklog: st.carbonBacklog.map(t => t.id === id ? { ...t, done: !wasDone } : t) }));
     sb.from('carbon_actions').update({ done: !wasDone }).eq('id', id).then();
     if (!wasDone) this.bumpXp(40, 'task_done', 'carbon action');
   }
 
-  addTask() {
-    const label = (this.state.newTaskText || '').trim();
+  addCarbon() {
+    const label = (this.state.newCarbonText || '').trim();
     if (!label) return;
-    const weekOf = isoDate(mondayOf(new Date()));
-    this.setState({ newTaskText: '' });
-    sb.from('carbon_actions').insert({ label, week_of: weekOf }).select().then(r => {
-      if (r.data && r.data[0]) this.setState(st => ({ tasks: st.tasks.concat(r.data), allTasks: st.allTasks.concat(r.data) }));
+    this.setState({ newCarbonText: '' });
+    sb.from('carbon_actions').insert({ label, week_of: null, scheduled: false }).select().then(r => {
+      if (r.data && r.data[0]) {
+        this.setState(st => (st.carbonBacklog.some(c => c.id === r.data[0].id) ? null : { carbonBacklog: st.carbonBacklog.concat(r.data) }));
+      }
     });
+  }
+
+  toggleCarbon(id) {
+    this.setState(s => {
+      const p = { ...s.plan }, m = { ...p.carbon };
+      if (m[id]) delete m[id];
+      else m[id] = { days: [], hour: '21:00' };
+      p.carbon = m;
+      return { plan: p, xp: s.xp + 15 };
+    });
+  }
+
+  setCarbonField(id, patch) {
+    this.setState(s => {
+      if (!s.plan.carbon[id]) return null;
+      const p = { ...s.plan }, m = { ...p.carbon };
+      m[id] = { ...m[id], ...patch };
+      p.carbon = m;
+      return { plan: p };
+    });
+  }
+
+  toggleCarbonDay(id, day) {
+    const cur = (this.state.plan.carbon[id] || {}).days || [];
+    const days = cur.indexOf(day) > -1 ? cur.filter(d => d !== day) : cur.concat([day]).sort((a, b) => a - b);
+    this.setCarbonField(id, { days });
   }
 
   markFriendCalled(id, name) {
@@ -1062,6 +1136,54 @@ class Component extends DCLogic {
     });
   }
 
+  // Every day+hour slot claimed anywhere in the plan, so each module can warn
+  // about the ones already taken by something else.
+  bookedSlots() {
+    const p = this.state.plan, out = [];
+    const push = (day, hour, label) => {
+      if (day === null || day === undefined || !hour) return;
+      out.push({ day, hour, label, key: day + '@' + hour });
+    };
+    push(p.padel, p.padelHour, 'Padel');
+    push(p.pao, p.paoHour, 'Date with Pao');
+    if (p.psy !== 'no') push(p.psy, p.psyHour, 'Psychologist');
+    Object.keys(p.extras).forEach(id => {
+      const info = p.extras[id];
+      const act = (this.state.parisFixed || []).find(a => String(a.id) === String(id));
+      push(info.day, info.hour, act ? act.label : 'Activity');
+    });
+    Object.keys(p.julien).forEach(id => {
+      const info = p.julien[id];
+      const it = (this.state.julienList || []).find(x => String(x.id) === String(id));
+      (info.days || []).forEach(d => push(d, info.hour, it ? it.title : "Julien's List item"));
+    });
+    Object.keys(p.carbon).forEach(id => {
+      const info = p.carbon[id];
+      const c = (this.state.carbonBacklog || []).find(x => String(x.id) === String(id));
+      (info.days || []).forEach(d => push(d, info.hour, c ? c.label : 'Carbon Plus action'));
+    });
+    return out;
+  }
+
+  // Red warning line for one module: which of ITS slots are already taken by others.
+  clashNote(ownLabel, mySlots) {
+    if (!mySlots.length) return '';
+    const all = this.bookedSlots();
+    const hits = [];
+    mySlots.forEach(ms => {
+      all.forEach(b => {
+        if (b.key === ms.key && b.label !== ownLabel && hits.indexOf(b.label + '|' + b.key) === -1) {
+          hits.push(b.label + '|' + b.key);
+        }
+      });
+    });
+    if (!hits.length) return '';
+    return 'ALREADY BOOKED — ' + hits.map(h => {
+      const parts = h.split('|'), dh = parts[1].split('@');
+      return parts[0] + ' at ' + dh[1] + ' on ' + DAYS[Number(dh[0])];
+    }).join(' · ');
+  }
+
   toggleJulien(id) {
     this.setState(s => {
       const p = { ...s.plan }, m = { ...p.julien };
@@ -1091,7 +1213,7 @@ class Component extends DCLogic {
   async scheduleJulienItems() {
     const s = this.state;
     const picks = s.plan.julien || {};
-    const nextMonday = new Date(mondayOf(new Date()).getTime() + 7 * 86400000);
+    const targetMonday = displayMonday();
     for (const id of Object.keys(picks)) {
       const info = picks[id];
       if (!info || !info.days || !info.days.length) continue;
@@ -1099,12 +1221,13 @@ class Component extends DCLogic {
       if (!item) continue;
       const created = [];
       for (const day of info.days) {
-        const d = new Date(nextMonday.getTime() + day * 86400000);
+        const d = new Date(targetMonday.getTime() + day * 86400000);
         const parts = (info.hour || '19:00').split(':');
         const start = new Date(d.getFullYear(), d.getMonth(), d.getDate(), parseInt(parts[0], 10) || 19, parseInt(parts[1], 10) || 0);
         const end = new Date(start.getTime() + (info.duration || 60) * 60000);
         const r = await sb.from('agenda_events').insert({
           title: item.title,
+          kind: 'julien',
           starts_at: start.toISOString(),
           ends_at: end.toISOString(),
           all_day: false,
@@ -1122,9 +1245,46 @@ class Component extends DCLogic {
     }
   }
 
+  // Carbon Plus actions picked in the Plan tab become real events on the
+  // displayed week, which is what "The Week" tab and Monday's calendar sync read.
+  async scheduleCarbonItems() {
+    const s = this.state;
+    const picks = s.plan.carbon || {};
+    const targetMonday = displayMonday();
+    const weekOf = isoDate(targetMonday);
+    for (const id of Object.keys(picks)) {
+      const info = picks[id];
+      if (!info || !info.days || !info.days.length) continue;
+      const item = (s.carbonBacklog || []).find(x => String(x.id) === String(id));
+      if (!item) continue;
+      const created = [];
+      for (const day of info.days) {
+        const d = new Date(targetMonday.getTime() + day * 86400000);
+        const parts = (info.hour || '21:00').split(':');
+        const start = new Date(d.getFullYear(), d.getMonth(), d.getDate(), parseInt(parts[0], 10) || 21, parseInt(parts[1], 10) || 0);
+        const end = new Date(start.getTime() + 30 * 60000);
+        const r = await sb.from('agenda_events').insert({
+          title: item.label,
+          kind: 'carbon',
+          starts_at: start.toISOString(),
+          ends_at: end.toISOString(),
+          all_day: false
+        }).select();
+        if (r.data && r.data[0]) created.push(r.data[0]);
+      }
+      if (created.length) {
+        await sb.from('carbon_actions').update({ scheduled: true, week_of: weekOf, day_of_week: info.days[0] }).eq('id', item.id);
+        this.setState(st => ({
+          agendaEvents: st.agendaEvents.concat(created.filter(c => !st.agendaEvents.some(e => e.id === c.id))),
+          carbonBacklog: st.carbonBacklog.map(x => x.id === item.id ? { ...x, scheduled: true, week_of: weekOf, day_of_week: info.days[0] } : x)
+        }));
+      }
+    }
+  }
+
   ritualStreak() {
     const s = this.state;
-    const monday = mondayOf(new Date());
+    const monday = displayMonday();
     let streak = 0;
     for (let w = 1; w < 27; w++) {
       const wkStart = new Date(monday.getTime() - w * 7 * 86400000);
@@ -1153,14 +1313,7 @@ class Component extends DCLogic {
         rows[rd.day_of_week].push([11, 1, 'GYM · ' + short, 'gym']);
       }
     });
-    const used = {};
-    (s.tasks || []).filter(t => !t.done).forEach(t => {
-      const day = (t.day_of_week === null || t.day_of_week === undefined) ? 0 : t.day_of_week;
-      const n = used[day] || 0; used[day] = n + 1;
-      const label = t.label.length > 18 ? t.label.slice(0, 18).toUpperCase() + '…' : t.label.toUpperCase();
-      rows[day].push([n === 0 ? 14 : 15, 1, label, 'task']);
-    });
-    const curMonday = mondayOf(new Date());
+    const curMonday = displayMonday();
     (s.agendaEvents || []).filter(ev => !ev.all_day).forEach(ev => {
       const d = new Date(ev.starts_at);
       if (mondayOf(d).getTime() !== curMonday.getTime()) return;
@@ -1219,9 +1372,11 @@ class Component extends DCLogic {
       r.push([12, 1, 'DINNER 19:30', 'meal']);
       r.push([16, 1, 'SLEEP', 'meal']);
     });
-    if (p.padel !== null) rows[p.padel].push([13, 1, 'PADEL · 17e', 'sport']);
-    if (p.pao !== null) rows[p.pao].push([13, 3, 'DATE WITH PAO', 'pao']);
-    if (p.psy !== null && p.psy !== 'no') rows[p.psy].push([13, 1, 'PSYCHOLOGIST', 'care']);
+    // Grid row 1 is 08:00, so a chosen hour H sits on row H-7.
+    const rowForHour = (h, fallback) => Math.max(1, Math.min(16, (parseInt((h || '').split(':')[0], 10) || fallback) - 7));
+    if (p.padel !== null) rows[p.padel].push([rowForHour(p.padelHour, 19), 1, 'PADEL · 17e', 'sport']);
+    if (p.pao !== null) rows[p.pao].push([rowForHour(p.paoHour, 20), 3, 'DATE WITH PAO', 'pao']);
+    if (p.psy !== null && p.psy !== 'no') rows[p.psy].push([rowForHour(p.psyHour, 18), 1, 'PSYCHOLOGIST', 'care']);
     const splits = ['PUSH', 'PULL', 'ARMS', 'LEGS'];
     let g = 0;
     for (let i = 0; i < 5 && g < 4; i++) if (p.pao !== i) { rows[i].push([11, 1, 'GYM · ' + splits[g], 'gym']); g++; }
@@ -1243,7 +1398,14 @@ class Component extends DCLogic {
       if (d === null || d === undefined) floating.push('BOOK · ' + short);
       else put(d, 'BOOK · ' + short);
     });
-    p.carbon.forEach(c => floating.push(c === '+ TYPE YOUR OWN' ? 'YOUR ACTION' : c));
+    Object.keys(p.carbon).forEach(id => {
+      const info = p.carbon[id];
+      const c = (this.state.carbonBacklog || []).find(x => String(x.id) === String(id));
+      if (!c) return;
+      const short = c.label.length > 18 ? c.label.slice(0, 18).toUpperCase() + '…' : c.label.toUpperCase();
+      if (info.days && info.days.length) info.days.forEach(d => put(d, short));
+      else floating.push(short);
+    });
     let fi = 0;
     for (let i = 0; i < 7 && fi < floating.length; i++) {
       if ((used[i] || 0) >= 2) continue;
@@ -1292,7 +1454,7 @@ class Component extends DCLogic {
       ? (interestedAll.length - 7) + ' MORE IN THE PARIS PLAYBOOK · TOP 7 SHOWN HERE'
       : 'REFRESHED EVERY SUNDAY MORNING';
 
-    const answeredCount = [p.carbon.length > 0, p.padel !== null, p.pao !== null, Object.keys(p.ticketBuys).length > 0, Object.keys(p.friends).length > 0, p.psy !== null, Object.keys(p.extras).length > 0, Object.keys(p.julien).length > 0].filter(Boolean).length;
+    const answeredCount = [Object.keys(p.carbon).length > 0, p.padel !== null, p.pao !== null, Object.keys(p.ticketBuys).length > 0, Object.keys(p.friends).length > 0, p.psy !== null, Object.keys(p.extras).length > 0, Object.keys(p.julien).length > 0].filter(Boolean).length;
     const placed = this.planRows().reduce((n, r) => n + r.length, 0) - 21;
 
     // --- Week-tab computed props, backed by Supabase-loaded state ---
@@ -1304,15 +1466,31 @@ class Component extends DCLogic {
       cue: rd.cue || ''
     }));
 
-    const taskRows = (s.tasks || []).map(t => ({
-      label: t.label,
-      meta: t.done ? 'DONE' : '',
-      boxStyle: 'width:14px;height:14px;border-radius:5px;flex:none;' + (t.done ? 'background:#1a1a1a' : 'border:1px solid rgba(0,0,0,.28)'),
-      labelStyle: "flex:1;font:500 12.5px/1.2 'Space Grotesk',sans-serif;" + (t.done ? 'color:#a5a5a5;text-decoration:line-through' : ''),
-      onToggle: () => this.toggleTask(t.id, t.done)
-    }));
-    const doneTasks = s.tasks.filter(t => t.done).length;
-    const taskSummary = s.tasks.length ? (doneTasks + ' of ' + s.tasks.length + ' done this week') : 'Nothing logged yet — add your first action below.';
+    // "The Week" shows only the Carbon Plus actions locked in for this week.
+    // Read-only here on purpose - adding/scheduling lives in the Next Week Plan tab.
+    const weekMon = displayMonday();
+    const weekEnd = new Date(weekMon.getTime() + 7 * 86400000);
+    const weekCarbon = (s.agendaEvents || [])
+      .filter(ev => ev.kind === 'carbon')
+      .filter(ev => { const t = new Date(ev.starts_at); return t >= weekMon && t < weekEnd; })
+      .sort((a, b) => new Date(a.starts_at) - new Date(b.starts_at));
+    const taskRows = weekCarbon.map(ev => {
+      const t = new Date(ev.starts_at);
+      const backing = (s.carbonBacklog || []).find(c => c.label === ev.title);
+      const isDone = !!(backing && backing.done);
+      return {
+        label: ev.title,
+        meta: DAYS[(t.getDay() + 6) % 7] + ' ' + String(t.getHours()).padStart(2, '0') + ':' + String(t.getMinutes()).padStart(2, '0'),
+        boxStyle: 'width:14px;height:14px;border-radius:5px;flex:none;' + (isDone ? 'background:#1a1a1a' : 'border:1px solid rgba(0,0,0,.28)'),
+        labelStyle: "flex:1;font:500 12.5px/1.2 'Space Grotesk',sans-serif;" + (isDone ? 'color:#a5a5a5;text-decoration:line-through' : ''),
+        onToggle: backing ? (() => this.toggleTask(backing.id, backing.done)) : undefined
+      };
+    });
+    const noWeekCarbon = taskRows.length === 0;
+    const doneTasks = taskRows.filter(r => r.labelStyle.indexOf('line-through') > -1).length;
+    const taskSummary = taskRows.length
+      ? doneTasks + ' of ' + taskRows.length + ' done this week'
+      : 'Locked-in Carbon Plus actions show up here.';
 
     const friendRows2 = (s.friendsList || []).map(f => {
       const days = daysBetween(new Date(f.last_contact_at), new Date());
@@ -1327,7 +1505,7 @@ class Component extends DCLogic {
     }).sort((a, b) => b._days - a._days);
     const noFriendsYet = friendRows2.length === 0;
 
-    const monday = mondayOf(new Date());
+    const monday = displayMonday();
     const ritualDays = WEEKDAY_NAMES.map((label, i) => {
       const dateStr = isoDate(new Date(monday.getTime() + i * 86400000));
       const isWeekday = i < 5;
@@ -1389,7 +1567,10 @@ class Component extends DCLogic {
         guard++;
       }
     });
+    // Carbon actions still sitting in the backlog have no week yet, so they
+    // have no place on the month grid until they are scheduled.
     (s.allTasks || []).forEach(t => {
+      if (!t.week_of) return;
       const base = parseLocalDate(t.week_of);
       const dow = (t.day_of_week === null || t.day_of_week === undefined) ? 0 : t.day_of_week;
       const key = isoDate(new Date(base.getTime() + dow * 86400000));
@@ -1402,6 +1583,24 @@ class Component extends DCLogic {
       const mIdx = ((idx % 12) + 12) % 12;
       return buildMonthGrid(y, mIdx, monthEventsByDate, todayKey, s.routine);
     });
+
+    const dispMon = displayMonday();
+    const dispSun = new Date(dispMon.getTime() + 6 * 86400000);
+    const planSun = new Date(dispMon.getTime() - 86400000);
+    const MON_TITLE = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const weekTitle = dispMon.getMonth() === dispSun.getMonth()
+      ? dispMon.getDate() + '\u2013' + dispSun.getDate() + ' ' + MON_TITLE[dispMon.getMonth()]
+      : dispMon.getDate() + ' ' + MON_TITLE[dispMon.getMonth()] + ' \u2013 ' + dispSun.getDate() + ' ' + MON_TITLE[dispSun.getMonth()];
+    const weekTitleShort = dispMon.getDate() + '\u2013' + dispSun.getDate() + ' ' + MONTH_NAMES[dispSun.getMonth()].slice(0, 3);
+    const isoWeekNo = (function (d) {
+      const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+      const dow = t.getUTCDay() || 7;
+      t.setUTCDate(t.getUTCDate() + 4 - dow);
+      const ys = new Date(Date.UTC(t.getUTCFullYear(), 0, 1));
+      return Math.ceil((((t - ys) / 86400000) + 1) / 7);
+    })(dispMon);
+    const editionLabel = 'SUNDAY EDITION \u00b7 NO. ' + isoWeekNo + ' \u00b7 ' + planSun.getDate() + ' ' + MONTH_NAMES[planSun.getMonth()].slice(0, 3) + ' ' + planSun.getFullYear();
+    const barsStartLabel = s.series.length > 1 ? (s.series.length - 1) + ' WEEKS AGO' : 'FIRST ENTRY';
 
     const nextSun = new Date(today);
     const nextSunDow = today.getDay();
@@ -1420,9 +1619,9 @@ class Component extends DCLogic {
       goWeek: () => this.set('tab', 'week'), goPlan: () => this.set('tab', 'plan'),
       goProjects: () => this.set('tab', 'projects'), goParis: () => this.set('tab', 'paris'),
       padelShort: 'PADEL',
-      calTitle: s.planDone ? 'NEXT WEEK · LOCKED IN' : 'THIS WEEK · HOUR BY HOUR',
+      calTitle: (s.planDone ? 'LOCKED IN · ' : '') + weekTitleShort + ' · HOUR BY HOUR',
       calDays: DAYS.map((d, i) => {
-        const base = s.planDone ? monday.getTime() + 7 * 86400000 : monday.getTime();
+        const base = monday.getTime();
         return {
           label: d, date: new Date(base + i * 86400000).getDate() + '',
           style: 'grid-column:' + (i + 2) + ';display:flex;align-items:baseline;gap:5px;padding-bottom:6px;border-bottom:1px solid rgba(0,0,0,.16);font-family:\'JetBrains Mono\',monospace'
@@ -1430,6 +1629,7 @@ class Component extends DCLogic {
       }),
       calBlocks: [].concat.apply([], (s.planDone ? this.planRows() : this.weekBlocks()).map((day, i) => day.map(b => mk(i, b[0], b[1], b[2], b[3])))),
       hasAllDay, allDayRow,
+      editionLabel, weekTitle, barsStartLabel,
       monthsData,
       newEventTitle: s.newEventTitle, newEventDate: s.newEventDate, newEventEndDate: s.newEventEndDate, newEventTime: s.newEventTime,
       onEventTitleInput: e => this.set('newEventTitle', e.target.value),
@@ -1443,7 +1643,7 @@ class Component extends DCLogic {
       current: cur.toFixed(1), pending: s.pendingW.toFixed(1),
       toGoal: (80 - cur).toFixed(1) + ' KG', eta: 'ETA ' + Math.max(1, Math.round((80 - cur) / 0.4)) + ' WEEKS',
       bars, path, area, dotX: X(s.series.length - 1).toFixed(1), dotY: Y(cur).toFixed(1),
-      barsNote: s.logged ? '70–80 KG SCALE · LOGGED ' + cur.toFixed(1) + ' KG' : '70–80 KG SCALE · THIS SUNDAY PENDING',
+      barsNote: s.logged ? '73–80 KG SCALE · LOGGED ' + cur.toFixed(1) + ' KG' : '73–80 KG SCALE · THIS SUNDAY PENDING',
       minus: () => this.setState(st => ({ pendingW: Math.round((st.pendingW - 0.1) * 10) / 10 })),
       plus: () => this.setState(st => ({ pendingW: Math.round((st.pendingW + 0.1) * 10) / 10 })),
       logStyle: s.logged
@@ -1467,7 +1667,7 @@ class Component extends DCLogic {
         const crossed = Math.floor(v) > Math.floor(prev);
         const mkg = Math.floor(v), mxp = 500 + (mkg - 74) * 50;
         const gained = 40 + (crossed ? mxp : 0);
-        const weekOf = isoDate(mondayOf(new Date()));
+        const weekOf = isoDate(displayMonday());
         this.setState(st => ({
           series: st.series.concat([v]), logged: true,
           xp: st.xp + gained,
@@ -1481,10 +1681,7 @@ class Component extends DCLogic {
         sb.from('xp_events').insert({ source: crossed ? 'weight_milestone' : 'weight_log', amount: gained, note: v.toFixed(1) + ' kg' }).then();
       },
 
-      routineRows, taskRows, taskSummary,
-      newTaskText: s.newTaskText,
-      onTaskInput: e => this.set('newTaskText', e.target.value),
-      addTask: () => this.addTask(),
+      routineRows, taskRows, taskSummary, noWeekCarbon,
 
       friendRows2, noFriendsYet,
       newFriendText: s.newFriendText,
@@ -1494,9 +1691,45 @@ class Component extends DCLogic {
       ritualDays, ritualTarget, ritualNote,
       consistencyBars, consistencyStart: '26 WEEKS AGO',
 
-      carbonOptions: CARBON_OPTS.map(c => ({ label: c, style: p.carbon.indexOf(c) > -1 ? CHIP_ON : CHIP_OFF, onPick: () => this.pick('carbon', c) })),
+      carbonRows: (s.carbonBacklog || []).map(it => {
+        const info = p.carbon[it.id];
+        const on = !!info;
+        const days = on ? (info.days || []) : [];
+        const hour = on ? (info.hour || '21:00') : '21:00';
+        return {
+          label: it.label,
+          meta: it.scheduled ? 'ALREADY SCHEDULED' : (it.done ? 'DONE' : ''),
+          rowStyle: 'padding:11px 0;border-bottom:1px solid rgba(0,0,0,.06);' + (it.scheduled ? 'opacity:.62' : ''),
+          chosen: on,
+          toggleStyle: on ? CHIP_ON : CHIP_OFF,
+          toggleLabel: on ? 'PLANNED ✓' : 'PLAN IT',
+          onToggle: () => this.toggleCarbon(it.id),
+          hour,
+          onHourInput: e => this.setCarbonField(it.id, { hour: e.target.value }),
+          days: DAYS.map((d, i) => ({ label: d, style: on && days.indexOf(i) > -1 ? MINI_ON : MINI_OFF, onPick: () => this.toggleCarbonDay(it.id, i) })),
+          summary: days.length
+            ? days.map(i => DAYS[i]).join(', ') + ' at ' + hour + ' · ' + days.length + (days.length === 1 ? ' slot' : ' slots')
+            : 'Pick at least one day to place it on the week.',
+          clash: on ? this.clashNote(it.label, days.map(d => ({ key: d + '@' + hour }))) : ''
+        };
+      }),
+      noCarbonItems: (s.carbonBacklog || []).length === 0,
+      carbonCountLabel: (s.carbonBacklog || []).length + ' IN THE LIST · ' + Object.keys(p.carbon).length + ' PLANNED',
+      newCarbonText: s.newCarbonText,
+      onCarbonInput: e => this.set('newCarbonText', e.target.value),
+      addCarbon: () => this.addCarbon(),
+
       padelDays: DAYS.slice(0, 5).map((d, i) => ({ label: d, style: p.padel === i ? DAY_ON : DAY_OFF, onPick: () => this.pick('padel', i) })),
+      padelHour: p.padelHour || '19:00',
+      onPadelHourInput: e => this.setState(st => ({ plan: { ...st.plan, padelHour: e.target.value } })),
+      padelClash: p.padel === null ? '' : this.clashNote('Padel', [{ key: p.padel + '@' + (p.padelHour || '19:00') }]),
       paoDays: DAYS.map((d, i) => ({ label: d, style: p.pao === i ? DAY_ON : DAY_OFF, onPick: () => this.pick('pao', i) })),
+      paoHour: p.paoHour || '20:00',
+      onPaoHourInput: e => this.setState(st => ({ plan: { ...st.plan, paoHour: e.target.value } })),
+      paoClash: p.pao === null ? '' : this.clashNote('Date with Pao', [{ key: p.pao + '@' + (p.paoHour || '20:00') }]),
+      psyHour: p.psyHour || '18:00',
+      onPsyHourInput: e => this.setState(st => ({ plan: { ...st.plan, psyHour: e.target.value } })),
+      psyClash: (p.psy === null || p.psy === 'no') ? '' : this.clashNote('Psychologist', [{ key: p.psy + '@' + (p.psyHour || '18:00') }]),
       paoNote: p.pao === null ? 'The weekend is free — Saturday evening holds three hours without cutting anything.' : (p.pao > 4 ? 'Three hours held on ' + DAYS[p.pao] + ' evening. Reminder fires that morning at 08:00.' : DAYS[p.pao] + ' evening it is — gym moves off that night automatically.'),
       ticketRows: TICKET_OPTS.map(t => {
         const on = p.ticketBuys[t.name] !== undefined;
@@ -1528,7 +1761,8 @@ class Component extends DCLogic {
           onToggle: () => this.toggleExtra(act.id),
           hour: on ? (info.hour || '19:00') : '19:00',
           onHourInput: e => this.setExtraHour(act.id, e.target.value),
-          days: DAYS.map((d, i) => ({ label: d, style: on && info.day === i ? MINI_ON : MINI_OFF, onPick: () => this.setExtraDay(act.id, i) }))
+          days: DAYS.map((d, i) => ({ label: d, style: on && info.day === i ? MINI_ON : MINI_OFF, onPick: () => this.setExtraDay(act.id, i) })),
+          clash: (on && info.day !== null && info.day !== undefined) ? this.clashNote(act.label, [{ key: info.day + '@' + (info.hour || '19:00') }]) : ''
         };
       }),
       noFixedForExtras: (s.parisFixed || []).length === 0,
@@ -1557,8 +1791,9 @@ class Component extends DCLogic {
             onPick: () => this.setJulienField(it.id, { duration: mn })
           })),
           summary: days.length
-            ? days.map(i => DAYS[i]).join(', ') + ' at ' + (info.hour || '19:00') + ' for ' + durLabel(dur) + ' · ' + days.length + (days.length === 1 ? ' slot' : ' slots') + ' next week'
-            : 'Pick at least one day to place it on next week.'
+            ? days.map(i => DAYS[i]).join(', ') + ' at ' + (info.hour || '19:00') + ' for ' + durLabel(dur) + ' · ' + days.length + (days.length === 1 ? ' slot' : ' slots')
+            : 'Pick at least one day to place it on the week.',
+          clash: on ? this.clashNote(it.title, days.map(d => ({ key: d + '@' + (info.hour || '19:00') }))) : ''
         };
       }),
       noJulienItems: (s.julienList || []).length === 0,
@@ -1578,6 +1813,7 @@ class Component extends DCLogic {
         if (this.state.planDone || answeredCount < 6) return;
         this.setState(st => ({ planDone: true, planBurst: true, xp: st.xp + 250 }));
         this.scheduleJulienItems();
+        this.scheduleCarbonItems();
         setTimeout(() => this.setState({ tab: 'week' }), 1600);
         setTimeout(() => this.setState({ planBurst: false }), 2400);
       },
