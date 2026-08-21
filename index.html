@@ -456,6 +456,10 @@
 <div onClick="{{ d.onPick }}" style="{{ d.style }}">{{ d.label }}</div>
 </sc-for>
 <input type="time" value="{{ x.hour }}" onInput="{{ x.onHourInput }}" style="border:1px solid rgba(0,0,0,.16);border-radius:999px;padding:5px 8px;font:400 9px/1 'JetBrains Mono',monospace;color:#4a4a4a;background:#fff">
+<span style="font:400 9px/1 'JetBrains Mono',monospace;color:#8a8a8a;margin-left:3px">FOR</span>
+<sc-for list="{{ x.durations }}" as="du" hint-placeholder-count="6">
+<div onClick="{{ du.onPick }}" style="{{ du.style }}">{{ du.label }}</div>
+</sc-for>
 </sc-if>
 </div>
 <sc-if value="{{ x.clash }}">
@@ -506,8 +510,16 @@
 </div>
 </sc-for>
 <sc-if value="{{ noJulienItems }}">
-<div style="padding:11px 0;font:400 11.5px/1.4 'Space Grotesk',sans-serif;color:#8a8a8a">Julien's List is empty — add items to the julien_list table and they show up here.</div>
+<div style="padding:11px 0;font:400 11.5px/1.4 'Space Grotesk',sans-serif;color:#8a8a8a">Julien's List is empty — add your first item below.</div>
 </sc-if>
+<div style="display:flex;align-items:center;gap:6px;padding:12px 0 0;flex-wrap:wrap;border-top:1px solid rgba(0,0,0,.08);margin-top:6px">
+<input value="{{ newJulienText }}" onInput="{{ onJulienTextInput }}" placeholder="Add something to the list…" style="flex:1;min-width:150px;border:1px dashed rgba(0,0,0,.18);border-radius:12px;padding:8px 11px;outline:none;background:transparent;font:400 12.5px/1.2 'Space Grotesk',sans-serif;color:#1a1a1a">
+<input type="date" value="{{ newJulienDate }}" onInput="{{ onJulienDateInput }}" style="border:1px solid rgba(0,0,0,.16);border-radius:10px;padding:6px 8px;font:400 10.5px/1 'JetBrains Mono',monospace;color:#4a4a4a;background:#fff">
+<input type="time" value="{{ newJulienHour }}" onInput="{{ onJulienHourNewInput }}" style="border:1px solid rgba(0,0,0,.16);border-radius:10px;padding:6px 8px;font:400 10.5px/1 'JetBrains Mono',monospace;color:#4a4a4a;background:#fff">
+<div onClick="{{ addJulienScheduled }}" style="cursor:pointer;padding:8px 12px;font:600 10px/1 'JetBrains Mono',monospace;letter-spacing:.06em;border:1px solid #16203a;background:linear-gradient(160deg,#3f5273,#16203a);color:#fff;border-radius:999px">+ ADD &amp; SCHEDULE</div>
+<div onClick="{{ addJulienOnly }}" style="cursor:pointer;padding:8px 12px;font:600 10px/1 'JetBrains Mono',monospace;letter-spacing:.06em;border:1px solid rgba(0,0,0,.16);background:#fff;color:#4a4a4a;border-radius:999px">+ LIST ONLY</div>
+</div>
+<div style="font:400 10px/1.4 'JetBrains Mono',monospace;color:#8a8a8a;margin-top:6px">{{ julienAddNote }}</div>
 </div>
 </div>
 
@@ -529,6 +541,42 @@
 </sc-if>
 </div>
 </div>
+
+<sc-if value="{{ showPreview }}">
+<div style="margin-top:26px;border-top:1px solid rgba(0,0,0,.16);padding-top:18px">
+<div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:13px">
+<span style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:#8a8a8a">PREVIEW · HOW THE WEEK WOULD LOOK</span>
+<span style="font:400 10px/1 'JetBrains Mono',monospace;color:#8a8a8a">{{ previewNote }}</span>
+</div>
+<div style="display:grid;grid-template-columns:54px repeat(7,1fr);gap:2px;margin-bottom:5px">
+<span></span>
+<sc-for list="{{ calDays }}" as="h" hint-placeholder-count="7">
+<div style="{{ h.style }}"><span style="font-weight:600;font-size:11px">{{ h.label }}</span><span style="font-weight:400;font-size:10px;color:#a5a5a5">{{ h.date }}</span></div>
+</sc-for>
+</div>
+<div style="display:grid;grid-template-columns:54px repeat(7,1fr);grid-template-rows:repeat(16,24px);gap:2px;background-image:repeating-linear-gradient(to bottom,rgba(0,0,0,.055) 0 1px,transparent 1px 26px)">
+<span style="grid-column:1;grid-row:1;font:400 8.5px/1 'JetBrains Mono',monospace;color:#a5a5a5;display:flex;align-items:flex-start;padding-top:1px">08:00</span>
+<span style="grid-column:1;grid-row:2;font:400 8.5px/1 'JetBrains Mono',monospace;color:#a5a5a5;display:flex;align-items:flex-start;padding-top:1px">09:00</span>
+<span style="grid-column:1;grid-row:3;font:400 8.5px/1 'JetBrains Mono',monospace;color:#a5a5a5;display:flex;align-items:flex-start;padding-top:1px">10:00</span>
+<span style="grid-column:1;grid-row:4;font:400 8.5px/1 'JetBrains Mono',monospace;color:#a5a5a5;display:flex;align-items:flex-start;padding-top:1px">11:00</span>
+<span style="grid-column:1;grid-row:5;font:400 8.5px/1 'JetBrains Mono',monospace;color:#a5a5a5;display:flex;align-items:flex-start;padding-top:1px">12:00</span>
+<span style="grid-column:1;grid-row:6;font:400 8.5px/1 'JetBrains Mono',monospace;color:#a5a5a5;display:flex;align-items:flex-start;padding-top:1px">13:00</span>
+<span style="grid-column:1;grid-row:7;font:400 8.5px/1 'JetBrains Mono',monospace;color:#a5a5a5;display:flex;align-items:flex-start;padding-top:1px">14:00</span>
+<span style="grid-column:1;grid-row:8;font:400 8.5px/1 'JetBrains Mono',monospace;color:#a5a5a5;display:flex;align-items:flex-start;padding-top:1px">15:00</span>
+<span style="grid-column:1;grid-row:9;font:400 8.5px/1 'JetBrains Mono',monospace;color:#a5a5a5;display:flex;align-items:flex-start;padding-top:1px">16:00</span>
+<span style="grid-column:1;grid-row:10;font:400 8.5px/1 'JetBrains Mono',monospace;color:#a5a5a5;display:flex;align-items:flex-start;padding-top:1px">17:00</span>
+<span style="grid-column:1;grid-row:11;font:400 8.5px/1 'JetBrains Mono',monospace;color:#a5a5a5;display:flex;align-items:flex-start;padding-top:1px">18:00</span>
+<span style="grid-column:1;grid-row:12;font:400 8.5px/1 'JetBrains Mono',monospace;color:#a5a5a5;display:flex;align-items:flex-start;padding-top:1px">19:00</span>
+<span style="grid-column:1;grid-row:13;font:400 8.5px/1 'JetBrains Mono',monospace;color:#a5a5a5;display:flex;align-items:flex-start;padding-top:1px">20:00</span>
+<span style="grid-column:1;grid-row:14;font:400 8.5px/1 'JetBrains Mono',monospace;color:#a5a5a5;display:flex;align-items:flex-start;padding-top:1px">21:00</span>
+<span style="grid-column:1;grid-row:15;font:400 8.5px/1 'JetBrains Mono',monospace;color:#a5a5a5;display:flex;align-items:flex-start;padding-top:1px">22:00</span>
+<span style="grid-column:1;grid-row:16;font:400 8.5px/1 'JetBrains Mono',monospace;color:#a5a5a5;display:flex;align-items:flex-start;padding-top:1px">23:00</span>
+<sc-for list="{{ previewBlocks }}" as="b" hint-placeholder-count="30">
+<div style="{{ b.style }}">{{ b.label }}</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
 </div>
 </sc-if>
 
@@ -630,8 +678,38 @@
 </div>
 
 <div>
-<div style="display:flex;align-items:baseline;justify-content:space-between;border-bottom:1px solid rgba(0,0,0,.16);padding-bottom:8px">
-<span style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:#8a8a8a">NEW THIS WEEK · {{ findsCount }}</span>
+<div style="display:flex;align-items:baseline;justify-content:space-between;border-bottom:1px solid #16203a;padding-bottom:8px">
+<span style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:#16203a">THIS WEEKEND IN PARIS · {{ weekendCount }}</span>
+<span style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">{{ weekendLabel }}</span>
+</div>
+<div style="margin-top:4px">
+<sc-for list="{{ weekendRows }}" as="f" hint-placeholder-count="4">
+<div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid rgba(0,0,0,.05)">
+<span style="font:600 15px/1 'JetBrains Mono',monospace;color:#16203a;width:26px">{{ f.num }}</span>
+<div style="flex:1">
+<div style="font:600 14px/1.2 'Space Grotesk',sans-serif">{{ f.title }}</div>
+<div style="font:400 10.5px/1.4 'Space Grotesk',sans-serif;color:#6b6b6b;margin-top:3px">{{ f.desc }}</div>
+<div style="{{ f.ticketStyle }}">{{ f.ticketLine }}</div>
+<sc-if value="{{ f.pending }}">
+<div style="display:flex;align-items:center;gap:7px;margin-top:8px">
+<span style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">INTERESTED?</span>
+<div onClick="{{ f.onYes }}" style="{{ f.yesStyle }}">YES</div>
+<div onClick="{{ f.onNo }}" style="{{ f.noStyle }}">NO</div>
+</div>
+</sc-if>
+<sc-if value="{{ f.interested }}">
+<div style="margin-top:8px;display:flex;align-items:center;gap:6px;font:500 10px/1 'JetBrains Mono',monospace;color:#16203a"><span style="width:6px;height:6px;background:#16203a;border-radius:50%"></span>INTERESTED · SHOWING IN THE WEEK TAB</div>
+</sc-if>
+</div>
+</div>
+</sc-for>
+<sc-if value="{{ noWeekend }}">
+<div style="padding:14px 0;font:400 12px/1.5 'Space Grotesk',sans-serif;color:#8a8a8a">Nothing found for this weekend yet — refreshed every Sunday morning.</div>
+</sc-if>
+</div>
+
+<div style="display:flex;align-items:baseline;justify-content:space-between;border-bottom:1px solid rgba(0,0,0,.16);padding-bottom:8px;margin-top:26px">
+<span style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:#8a8a8a">BOOK AHEAD · NEXT 6 MONTHS · {{ findsCount }}</span>
 <span style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">{{ nextRefreshLabel }}</span>
 </div>
 <div style="margin-top:4px">
@@ -641,6 +719,7 @@
 <div style="flex:1">
 <div style="font:600 14px/1.2 'Space Grotesk',sans-serif">{{ f.title }}</div>
 <div style="font:400 10.5px/1.4 'Space Grotesk',sans-serif;color:#6b6b6b;margin-top:3px">{{ f.desc }}</div>
+<div style="{{ f.ticketStyle }}">{{ f.ticketLine }}</div>
 <sc-if value="{{ f.pending }}">
 <div style="display:flex;align-items:center;gap:7px;margin-top:8px">
 <span style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">INTERESTED?</span>
@@ -886,7 +965,8 @@ class Component extends DCLogic {
     newEventTitle: '', newEventDate: isoDate(new Date()), newEventEndDate: isoDate(new Date()), newEventTime: '09:00', newEventAllDay: false,
     parisFixed: [], parisFinds: [], parisRequest: null, allTasks: [],
     newFixedLabel: '', newFixedLocation: '',
-    julienList: [], carbonBacklog: [], newCarbonText: ''
+    julienList: [], carbonBacklog: [], newCarbonText: '',
+    newJulienText: '', newJulienDate: isoDate(displayMonday()), newJulienHour: '19:00'
   };
 
   componentDidMount() {
@@ -1110,7 +1190,7 @@ class Component extends DCLogic {
     this.setState(s => {
       const p = { ...s.plan }, m = { ...p.extras };
       if (m[id]) delete m[id];
-      else m[id] = { day: null, hour: '19:00' };
+      else m[id] = { day: null, hour: '19:00', duration: 120 };
       p.extras = m;
       return { plan: p, xp: s.xp + 15 };
     });
@@ -1127,10 +1207,14 @@ class Component extends DCLogic {
   }
 
   setExtraHour(id, hour) {
+    this.setExtraField(id, { hour });
+  }
+
+  setExtraField(id, patch) {
     this.setState(s => {
       if (!s.plan.extras[id]) return null;
       const p = { ...s.plan }, m = { ...p.extras };
-      m[id] = { ...m[id], hour };
+      m[id] = { ...m[id], ...patch };
       p.extras = m;
       return { plan: p };
     });
@@ -1242,6 +1326,117 @@ class Component extends DCLogic {
           julienList: st.julienList.map(x => x.id === item.id ? { ...x, scheduled: true, agenda_event_id: created[0].id } : x)
         }));
       }
+    }
+  }
+
+  // Live preview of the week being planned. Only items with everything chosen
+  // (day + hour, plus duration where it applies) appear; unset ones stay hidden.
+  previewRows() {
+    const s = this.state, p = s.plan;
+    const rows = WEEKDAY_NAMES.map(() => []);
+    rows.forEach((r, i) => {
+      r.push([1, 1, 'BREAKFAST', 'meal']);
+      if (i < 4) r.push([2, 9, 'WORK 09-18', 'work']);
+      else if (i === 4) r.push([2, 8, 'WORK 09-17', 'work']);
+      if (i < 5) r.push([12, 1, 'DINNER 19:30', 'meal']);
+      r.push([16, 1, 'SLEEP', 'meal']);
+    });
+    (s.routine || []).forEach(rd => {
+      if (rd.day_of_week >= 0 && rd.day_of_week < 5) {
+        const short = (rd.title.split('\u00b7')[0] || rd.title).trim().toUpperCase();
+        rows[rd.day_of_week].push([11, 1, 'GYM \u00b7 ' + short, 'gym']);
+      }
+    });
+    let placed = 0;
+    const place = (day, hour, minutes, label, kind) => {
+      if (day === null || day === undefined || day === 'no' || !hour) return;
+      const h = parseInt(String(hour).split(':')[0], 10);
+      if (isNaN(h)) return;
+      const row = Math.max(1, Math.min(16, h - 7));
+      const span = Math.max(1, Math.min(Math.ceil((minutes || 60) / 60), 17 - row));
+      rows[day].push([row, span, label, kind]);
+      placed++;
+    };
+    place(p.padel, p.padelHour, 90, 'PADEL', 'sport');
+    place(p.pao, p.paoHour, 120, 'DATE WITH PAO', 'pao');
+    place(p.psy, p.psyHour, 60, 'PSYCHOLOGIST', 'care');
+    Object.keys(p.extras).forEach(id => {
+      const info = p.extras[id];
+      const act = (s.parisFixed || []).find(a => String(a.id) === String(id));
+      if (act) place(info.day, info.hour, info.duration || 120, act.label.toUpperCase(), 'fun');
+    });
+    Object.keys(p.julien).forEach(id => {
+      const info = p.julien[id];
+      const it = (s.julienList || []).find(x => String(x.id) === String(id));
+      if (!it) return;
+      (info.days || []).forEach(d => place(d, info.hour, info.duration || 60, it.title.toUpperCase(), 'task'));
+    });
+    Object.keys(p.carbon).forEach(id => {
+      const info = p.carbon[id];
+      const c = (s.carbonBacklog || []).find(x => String(x.id) === String(id));
+      if (!c) return;
+      (info.days || []).forEach(d => place(d, info.hour, 30, c.label.toUpperCase(), 'task'));
+    });
+    this._previewPlaced = placed;
+    return rows;
+  }
+
+  // Manual add straight into Julien's List, optionally scheduled on the spot.
+  addJulienItem(withSchedule) {
+    const title = (this.state.newJulienText || '').trim();
+    if (!title) return;
+    const date = this.state.newJulienDate;
+    const hour = this.state.newJulienHour || '19:00';
+    this.setState({ newJulienText: '' });
+    sb.from('julien_list').insert({ title, status: 'open', priority: 2, scheduled: false }).select().then(async r => {
+      if (!r.data || !r.data[0]) return;
+      const item = r.data[0];
+      this.setState(st => (st.julienList.some(x => x.id === item.id) ? null : { julienList: st.julienList.concat([item]) }));
+      if (!withSchedule || !date) return;
+      const parts = hour.split(':');
+      const d = parseLocalDate(date);
+      const start = new Date(d.getFullYear(), d.getMonth(), d.getDate(), parseInt(parts[0], 10) || 19, parseInt(parts[1], 10) || 0);
+      const end = new Date(start.getTime() + 60 * 60000);
+      const ev = await sb.from('agenda_events').insert({
+        title, kind: 'julien', starts_at: start.toISOString(), ends_at: end.toISOString(), all_day: false
+      }).select();
+      if (ev.data && ev.data[0]) {
+        await sb.from('julien_list').update({ scheduled: true, agenda_event_id: ev.data[0].id }).eq('id', item.id);
+        this.setState(st => ({
+          agendaEvents: st.agendaEvents.concat(ev.data.filter(c => !st.agendaEvents.some(e => e.id === c.id))),
+          julienList: st.julienList.map(x => x.id === item.id ? { ...x, scheduled: true, agenda_event_id: ev.data[0].id } : x)
+        }));
+      }
+    });
+  }
+
+  // Padel, Pao, the psychologist and the Paris activities were previously only
+  // held in browser memory, so they never reached Supabase or Google Calendar.
+  async scheduleFixedPlanItems() {
+    const s = this.state, p = s.plan;
+    const targetMonday = displayMonday();
+    const place = async (day, hour, minutes, title) => {
+      if (day === null || day === undefined || day === 'no' || !hour) return;
+      const d = new Date(targetMonday.getTime() + day * 86400000);
+      const parts = hour.split(':');
+      const start = new Date(d.getFullYear(), d.getMonth(), d.getDate(), parseInt(parts[0], 10) || 19, parseInt(parts[1], 10) || 0);
+      const iso = start.toISOString();
+      if ((this.state.agendaEvents || []).some(e => e.title === title && e.starts_at === iso)) return;
+      const end = new Date(start.getTime() + minutes * 60000);
+      const r = await sb.from('agenda_events').insert({
+        title, kind: 'plan', starts_at: iso, ends_at: end.toISOString(), all_day: false
+      }).select();
+      if (r.data && r.data[0]) {
+        this.setState(st => (st.agendaEvents.some(e => e.id === r.data[0].id) ? null : { agendaEvents: st.agendaEvents.concat(r.data) }));
+      }
+    };
+    await place(p.padel, p.padelHour, 90, 'Padel');
+    await place(p.pao, p.paoHour, 120, 'Date with Pao');
+    await place(p.psy, p.psyHour, 60, 'Psychologist');
+    for (const id of Object.keys(p.extras)) {
+      const info = p.extras[id];
+      const act = (s.parisFixed || []).find(a => String(a.id) === String(id));
+      if (act) await place(info.day, info.hour, info.duration || 120, act.label);
     }
   }
 
@@ -1418,7 +1613,8 @@ class Component extends DCLogic {
       if (!act) return;
       const hourNum = parseInt(info.hour.split(':')[0], 10) || 19;
       const row = Math.max(1, Math.min(16, hourNum - 7));
-      rows[info.day].push([row, 2, act.label.toUpperCase(), 'fun']);
+      const span = Math.max(1, Math.min(Math.ceil((info.duration || 120) / 60), 17 - row));
+      rows[info.day].push([row, span, act.label.toUpperCase(), 'fun']);
     });
     return rows;
   }
@@ -1610,6 +1806,43 @@ class Component extends DCLogic {
     nextSun.setHours(8, 0, 0, 0);
     const nextRefreshLabel = 'NEXT AUTO-REFRESH · SUN ' + nextSun.getDate() + ' ' + MONTH_NAMES[nextSun.getMonth()].slice(0, 3) + ' · 08:00';
 
+    // Paris finds split into two lists: what's on this coming weekend, and
+    // what to book far ahead before tickets sell out.
+    const allFinds = s.parisFinds || [];
+    const weekendFinds = allFinds.filter(f => f.list_type === 'weekend');
+    const longTermFinds = allFinds.filter(f => f.list_type !== 'weekend');
+    const wkSat = new Date(dispMon.getTime() + 5 * 86400000);
+    const wkSun = new Date(dispMon.getTime() + 6 * 86400000);
+    const weekendWindowLabel = 'SAT ' + wkSat.getDate() + ' – SUN ' + wkSun.getDate() + ' ' + MONTH_NAMES[wkSun.getMonth()].slice(0, 3);
+    const parisRow = (f, i) => {
+      let ticketLine, onSale = false, unknown = false;
+      if (f.ticket_sales_opens_at) {
+        const d = new Date(f.ticket_sales_opens_at);
+        onSale = d <= new Date();
+        ticketLine = (onSale ? 'TICKETS ON SALE NOW · since ' : 'TICKETS OPEN ') +
+          d.getDate() + ' ' + MONTH_NAMES[d.getMonth()].slice(0, 3) + ' ' + d.getFullYear() +
+          (f.ticket_sales_note ? ' · ' + f.ticket_sales_note : '');
+      } else if (f.ticket_sales_note) {
+        ticketLine = 'TICKETS · ' + f.ticket_sales_note;
+      } else {
+        unknown = true;
+        ticketLine = 'TICKETS · no confirmed on-sale date';
+      }
+      return {
+        num: String(i + 1).padStart(2, '0'),
+        title: f.title,
+        desc: [f.window_label, f.description].filter(Boolean).join(' · '),
+        ticketLine,
+        ticketStyle: "margin-top:5px;font:500 9.5px/1.35 'JetBrains Mono',monospace;color:" +
+          (unknown ? '#a5a5a5' : (onSale ? '#16203a' : '#b00020')),
+        pending: f.status !== 'interested',
+        interested: f.status === 'interested',
+        yesStyle: BTN_OFF, noStyle: BTN_OFF,
+        onYes: () => this.markFindInterested(f.id),
+        onNo: () => this.removeFind(f.id)
+      };
+    };
+
     return {
       level, nextLevel: Math.min(100, level + 1), xp: s.xp, xpLabel: s.xp.toLocaleString('en-US'),
       xpPct: ((s.xp % 440) / 4.4).toFixed(1) + '%',
@@ -1628,6 +1861,11 @@ class Component extends DCLogic {
         };
       }),
       calBlocks: [].concat.apply([], (s.planDone ? this.planRows() : this.weekBlocks()).map((day, i) => day.map(b => mk(i, b[0], b[1], b[2], b[3])))),
+      previewBlocks: [].concat.apply([], this.previewRows().map((day, i) => day.map(b => mk(i, b[0], b[1], b[2], b[3])))),
+      showPreview: !s.planDone,
+      previewNote: (this._previewPlaced || 0) === 0
+        ? 'NOTHING PLACED YET \u00b7 PICK A DAY AND A TIME'
+        : (this._previewPlaced + (this._previewPlaced === 1 ? ' ITEM PLACED' : ' ITEMS PLACED') + ' \u00b7 NOT SAVED UNTIL YOU LOCK'),
       hasAllDay, allDayRow,
       editionLabel, weekTitle, barsStartLabel,
       monthsData,
@@ -1762,6 +2000,11 @@ class Component extends DCLogic {
           hour: on ? (info.hour || '19:00') : '19:00',
           onHourInput: e => this.setExtraHour(act.id, e.target.value),
           days: DAYS.map((d, i) => ({ label: d, style: on && info.day === i ? MINI_ON : MINI_OFF, onPick: () => this.setExtraDay(act.id, i) })),
+          durations: [30, 60, 90, 120, 180, 240].map(mn => ({
+            label: mn < 60 ? mn + ' min' : (mn % 60 === 0 ? (mn / 60) + 'h' : Math.floor(mn / 60) + 'h' + (mn % 60)),
+            style: on && (info.duration || 120) === mn ? MINI_ON : MINI_OFF,
+            onPick: () => this.setExtraField(act.id, { duration: mn })
+          })),
           clash: (on && info.day !== null && info.day !== undefined) ? this.clashNote(act.label, [{ key: info.day + '@' + (info.hour || '19:00') }]) : ''
         };
       }),
@@ -1797,6 +2040,15 @@ class Component extends DCLogic {
         };
       }),
       noJulienItems: (s.julienList || []).length === 0,
+      newJulienText: s.newJulienText,
+      newJulienDate: s.newJulienDate,
+      newJulienHour: s.newJulienHour,
+      onJulienTextInput: e => this.set('newJulienText', e.target.value),
+      onJulienDateInput: e => this.set('newJulienDate', e.target.value),
+      onJulienHourNewInput: e => this.set('newJulienHour', e.target.value),
+      addJulienScheduled: () => this.addJulienItem(true),
+      addJulienOnly: () => this.addJulienItem(false),
+      julienAddNote: 'ADD & SCHEDULE puts it straight on the date and time you picked, and on Google Calendar at Monday\u2019s sync. LIST ONLY just parks it here for later.',
       julienCountLabel: (s.julienList || []).length + ' OPEN · ' + Object.keys(p.julien).length + ' PICKED',
 
       planAnswered: answeredCount, planXpLabel: '+' + (answeredCount * 15 + (s.planDone ? 250 : 0)) + ' XP THIS SESSION',
@@ -1814,6 +2066,7 @@ class Component extends DCLogic {
         this.setState(st => ({ planDone: true, planBurst: true, xp: st.xp + 250 }));
         this.scheduleJulienItems();
         this.scheduleCarbonItems();
+        this.scheduleFixedPlanItems();
         setTimeout(() => this.setState({ tab: 'week' }), 1600);
         setTimeout(() => this.setState({ planBurst: false }), 2400);
       },
@@ -1829,19 +2082,15 @@ class Component extends DCLogic {
       onFixedLocationInput: e => this.set('newFixedLocation', e.target.value),
       addFixedItem: () => this.addFixedItem(),
 
-      findRows: (s.parisFinds || []).map((f, i) => ({
-        num: String(i + 1).padStart(2, '0'),
-        title: f.title,
-        desc: [f.window_label, f.description].filter(Boolean).join(' · '),
-        pending: f.status !== 'interested',
-        interested: f.status === 'interested',
-        yesStyle: BTN_OFF, noStyle: BTN_OFF,
-        onYes: () => this.markFindInterested(f.id),
-        onNo: () => this.removeFind(f.id)
-      })),
-      findsCount: (s.parisFinds || []).length + ' OF 11',
-      noFinds: (s.parisFinds || []).length === 0,
+      findRows: longTermFinds.map((f, i) => parisRow(f, i)),
+      findsCount: longTermFinds.length + ' OF 17',
+      noFinds: longTermFinds.length === 0,
       nextRefreshLabel: nextRefreshLabel,
+
+      weekendRows: weekendFinds.map((f, i) => parisRow(f, i)),
+      weekendCount: weekendFinds.length + ' FOUND',
+      noWeekend: weekendFinds.length === 0,
+      weekendLabel: weekendWindowLabel,
 
       interestedRows, noInterested, interestedNote,
       reviewItems: REVIEW.map(r => ({
