@@ -244,26 +244,34 @@
 </div>
 
 <div>
-<div style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:#8a8a8a;padding-bottom:8px;border-bottom:1px solid rgba(0,0,0,.16)">CONSISTENCY · YOUR LEVEL OVER 26 WEEKS</div>
+<div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding-bottom:8px;border-bottom:1px solid rgba(0,0,0,.16)">
+<div style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:#8a8a8a">CONSISTENCY</div>
+<div style="font:400 9px/1 'JetBrains Mono',monospace;color:#a5a5a5">{{ consistencySub }}</div>
+</div>
 <div style="position:relative;height:96px;margin-top:16px;border-bottom:1px solid rgba(0,0,0,.16)">
 <div style="position:absolute;left:0;right:0;top:0;border-top:1px dashed rgba(22,32,58,.4)"></div>
-<div style="position:absolute;right:0;top:-14px;font:400 9px/1 'JetBrains Mono',monospace;color:#253550;background:#fbfaf8;padding:0 3px">100 · LOCKED UNTIL 80 KG</div>
-<div style="position:absolute;inset:0;display:flex;align-items:flex-end;gap:2px">
-<sc-for list="{{ consistencyBars }}" as="cb" hint-placeholder-count="26">
-<span style="{{ cb.style }}"></span>
+<div style="position:absolute;right:0;top:-14px;font:400 9px/1 'JetBrains Mono',monospace;color:#253550;background:#fbfaf8;padding:0 3px">ALL 6 HABITS · CLEAN WEEK</div>
+<div style="position:absolute;inset:0;display:flex;align-items:flex-end;gap:3px">
+<sc-for list="{{ consistencyBars }}" as="cb" hint-placeholder-count="12">
+<span title="{{ cb.tip }}" style="{{ cb.style }}"></span>
 </sc-for>
 </div>
 </div>
-<div style="display:flex;justify-content:space-between;font:400 9px/1 'JetBrains Mono',monospace;color:#8a8a8a;margin-top:5px"><span>{{ consistencyStart }}</span><span>NOW · LVL {{ level }}</span></div>
-<div style="font:400 10.5px/1.5 'Space Grotesk',sans-serif;color:#6b6b6b;margin-top:10px">Level tracks consistency, not effort. Miss a Sunday and it slides; string weeks together and it climbs fast. <span style="color:#16203a">Level 100 needs six clean months in a row and 80 kg on the scale</span> — it is not buyable any other way.</div>
-
-<div style="margin-top:14px;display:flex;flex-direction:column;gap:6px">
-<div style="display:flex;align-items:center;gap:9px"><span style="width:96px;font:400 10px/1 'JetBrains Mono',monospace;color:#8a8a8a">WEIGHT</span><span style="border-radius:4px 4px 0 0;flex:1;height:10px;background:#e9edf4;border-radius:999px;overflow:hidden;position:relative"><span style="position:absolute;inset:0 auto 0 0;width:92%;background:linear-gradient(90deg,#3f5273,#16203a)"></span></span><span style="font:500 10px/1 'JetBrains Mono',monospace;color:#16203a;width:64px;text-align:right">12 WK 🔥</span></div>
-<div style="display:flex;align-items:center;gap:9px"><span style="width:96px;font:400 10px/1 'JetBrains Mono',monospace;color:#8a8a8a">DATE WITH PAO</span><span style="border-radius:4px 4px 0 0;flex:1;height:10px;background:#e9edf4;border-radius:999px;overflow:hidden;position:relative"><span style="position:absolute;inset:0 auto 0 0;width:78%;background:linear-gradient(90deg,#47597c,#253550)"></span></span><span style="font:500 10px/1 'JetBrains Mono',monospace;color:#253550;width:64px;text-align:right">7 WK 🔥</span></div>
-<div style="display:flex;align-items:center;gap:9px"><span style="width:96px;font:400 10px/1 'JetBrains Mono',monospace;color:#8a8a8a">FRIEND CALLS</span><span style="border-radius:4px 4px 0 0;flex:1;height:10px;background:#e9edf4;border-radius:999px;overflow:hidden;position:relative"><span style="position:absolute;inset:0 auto 0 0;width:44%;background:linear-gradient(90deg,#8b9cb6,#56688a)"></span></span><span style="font:500 10px/1 'JetBrains Mono',monospace;color:#56688a;width:64px;text-align:right">2 WK</span></div>
-<div style="display:flex;align-items:center;gap:9px"><span style="width:96px;font:400 10px/1 'JetBrains Mono',monospace;color:#8a8a8a">CHECK-IN FILLED</span><span style="border-radius:4px 4px 0 0;flex:1;height:10px;background:#e9edf4;border-radius:999px;overflow:hidden;position:relative"><span style="position:absolute;inset:0 auto 0 0;width:100%;background:linear-gradient(90deg,#3f5273,#16203a)"></span></span><span style="font:500 10px/1 'JetBrains Mono',monospace;color:#16203a;width:64px;text-align:right">14 WK 🔥</span></div>
-<div style="display:flex;align-items:center;gap:9px"><span style="width:96px;font:400 10px/1 'JetBrains Mono',monospace;color:#8a8a8a">MORNING RITUAL</span><span style="border-radius:4px 4px 0 0;flex:1;height:10px;background:#e9edf4;border-radius:999px;overflow:hidden;position:relative"><span style="position:absolute;inset:0 auto 0 0;width:66%;background:linear-gradient(90deg,#9fadc2,#34496b)"></span></span><span style="font:500 10px/1 'JetBrains Mono',monospace;color:#34496b;width:64px;text-align:right">7 WK 🔥</span></div>
+<div style="display:flex;justify-content:space-between;font:400 9px/1 'JetBrains Mono',monospace;color:#8a8a8a;margin-top:5px"><span>{{ consistencyStart }}</span><span>LAST SUNDAY</span></div>
+<div style="font:500 12.5px/1.4 'Space Grotesk',sans-serif;color:#16203a;margin-top:12px">{{ consistencyLead }}</div>
+<div style="font:400 9.5px/1 'JetBrains Mono',monospace;letter-spacing:.1em;color:#8a8a8a;margin-top:14px">WHERE YOU ARE NOT CONSISTENT</div>
+<div style="margin-top:8px;display:flex;flex-direction:column;gap:7px">
+<sc-for list="{{ consistencyMissRows }}" as="m" hint-placeholder-count="4">
+<div style="display:flex;gap:9px;align-items:flex-start"><span style="{{ m.dotStyle }}"></span><div style="flex:1"><div style="font:500 11.5px/1.2 'Space Grotesk',sans-serif;color:#1a1a1a">{{ m.label }}</div><div style="font:400 10px/1.35 'JetBrains Mono',monospace;color:#8a8a8a;margin-top:2px">{{ m.note }}</div></div></div>
+</sc-for>
+<sc-if value="{{ noConsistencyMisses }}">
+<div style="font:400 11.5px/1.4 'Space Grotesk',sans-serif;color:#16203a">Every habit held every week. Nothing to fix.</div>
+</sc-if>
 </div>
+<sc-if value="{{ consistencyGood }}">
+<div style="font:400 9.5px/1.3 'JetBrains Mono',monospace;color:#56688a;margin-top:10px">{{ consistencyGood }}</div>
+</sc-if>
+<div style="font:500 9.5px/1.3 'JetBrains Mono',monospace;color:#16203a;margin-top:10px;padding-top:9px;border-top:1px solid rgba(0,0,0,.08)">{{ consistencyEarned }}</div>
 
 <div style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:#8a8a8a;padding-bottom:8px;border-bottom:1px solid rgba(0,0,0,.16);margin-top:26px">PARIS · NEXT 180 DAYS</div>
 <sc-for list="{{ interestedRows }}" as="ev" hint-placeholder-count="5">
@@ -890,6 +898,7 @@ const TAB_ON = "cursor:pointer;margin:8px 4px 8px 0;padding:10px 20px;border-rad
 const TAB_OFF = "cursor:pointer;margin:8px 4px 8px 0;padding:10px 20px;border-radius:999px;font:400 11px/1 'JetBrains Mono',monospace;letter-spacing:.1em;color:#8a8a8a";
 
 const DAYS = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+const CONSISTENCY_WEEKS = 12;
 const DEL_BTN = "cursor:pointer;flex:none;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:600 12px/1 'JetBrains Mono',monospace;color:#b00020;border:1px solid rgba(176,0,32,.35);background:#fff";
 const MINI_ON = "cursor:pointer;padding:5px 8px;border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;background:linear-gradient(180deg,#3f5273,#16203a);color:#fff";
 const MINI_OFF = "cursor:pointer;padding:5px 8px;border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:400;border:1px solid rgba(0,0,0,.14);color:#6b6b6b;background:#fff";
@@ -998,6 +1007,7 @@ class Component extends DCLogic {
     parisFixed: [], parisFinds: [], parisRequest: null, allTasks: [],
     newFixedLabel: '', newFixedLocation: '',
     julienList: [], carbonBacklog: [], newCarbonText: '',
+    gymLogs: [], weightWeeks: [],
     newJulienText: '', newJulienDate: isoDate(displayMonday()), newJulienHour: '19:00'
   };
 
@@ -1052,19 +1062,21 @@ class Component extends DCLogic {
     const weekOf = isoDate(monday);
     const since26 = isoDate(new Date(monday.getTime() - 26 * 7 * 86400000));
 
-    const [weightRes, routineRes, taskRes, friendRes, ritualRes, xpRes, agendaRes, parisFixedRes, parisFindsRes, parisReqRes, allTasksRes, julienRes] = await Promise.all([
+    const [weightRes, routineRes, taskRes, friendRes, ritualRes, xpRes, agendaRes, parisFixedRes, parisFindsRes, parisReqRes, allTasksRes, julienRes, gymRes, weightWeeksRes] = await Promise.all([
       sb.from('weight_logs').select('*').order('week_of', { ascending: true }).limit(10),
       sb.from('routine_days').select('*').order('day_of_week', { ascending: true }),
       sb.from('carbon_actions').select('*').order('created_at', { ascending: true }),
       sb.from('friends').select('*').eq('archived', false),
       sb.from('morning_ritual_logs').select('*').gte('log_date', since26),
-      sb.from('xp_events').select('amount, created_at'),
+      sb.from('xp_events').select('amount, created_at, source, note'),
       sb.from('agenda_events').select('*').order('starts_at', { ascending: true }),
       sb.from('paris_activities').select('*').eq('archived', false).order('created_at', { ascending: true }),
       sb.from('paris_new_finds').select('*').order('rank', { ascending: true }),
       sb.from('paris_update_requests').select('*').order('requested_at', { ascending: false }).limit(1),
       sb.from('carbon_actions').select('id,label,week_of,day_of_week'),
-      sb.from('julien_list').select('*').eq('status', 'open').order('priority', { ascending: true }).order('created_at', { ascending: true })
+      sb.from('julien_list').select('*').eq('status', 'open').order('priority', { ascending: true }).order('created_at', { ascending: true }),
+      sb.from('gym_session_logs').select('session_date, completed').gte('session_date', since26),
+      sb.from('weight_logs').select('week_of')
     ]);
 
     let routine = (routineRes.data && routineRes.data.length) ? routineRes.data : null;
@@ -1098,8 +1110,94 @@ class Component extends DCLogic {
       parisRequest: (parisReqRes.data && parisReqRes.data[0]) || null,
       allTasks: allTasksRes.data || [],
       julienList: julienRes.data || [],
+      gymLogs: gymRes.data || [],
+      weightWeeks: (weightWeeksRes.data || []).map(r => r.week_of),
       loaded: true
     });
+
+    this.awardConsistency();
+  }
+
+  // --- Consistency -----------------------------------------------------------
+  // One habit = one thing you either did or did not do in a given Mon-Sun week.
+  // Everything here is derived from real rows; nothing is hardcoded.
+  consistencyHabits() {
+    const s = this.state;
+    const ritual = s.ritual || {};
+    const gym = s.gymLogs || [];
+    const carbon = s.carbonBacklog || [];
+    const weeks = s.weightWeeks || [];
+    const xpe = s.xpEvents || [];
+    const dayIn = (iso, mon) => {
+      if (!iso) return false;
+      const t = parseLocalDate(String(iso).slice(0, 10)).getTime();
+      return t >= mon && t < mon + 7 * 86400000;
+    };
+    const stampIn = (ts, mon) => {
+      const t = new Date(ts).getTime();
+      return t >= mon && t < mon + 7 * 86400000;
+    };
+    return [
+      { key: 'weight', label: 'WEIGH-IN', target: 'once a week on the scale',
+        hit: mon => weeks.indexOf(isoDate(new Date(mon))) > -1 },
+      { key: 'gym', label: 'GYM', target: '3 sessions a week',
+        hit: mon => gym.filter(g => g.completed && dayIn(g.session_date, mon)).length >= 3 },
+      { key: 'ritual', label: 'MORNING RITUAL', target: '4 of 5 mornings',
+        hit: mon => {
+          let n = 0;
+          for (let i = 0; i < 5; i++) if (ritual[isoDate(new Date(mon + i * 86400000))]) n++;
+          return n >= 4;
+        } },
+      { key: 'friends', label: 'FRIEND CALLS', target: 'call at least one person',
+        hit: mon => xpe.some(e => e.source === 'friend_called' && stampIn(e.created_at, mon)) },
+      { key: 'plan', label: 'SUNDAY PLANNING', target: 'lock the week ahead',
+        hit: mon => xpe.some(e => e.source === 'plan_locked' && stampIn(e.created_at, mon)) },
+      { key: 'carbon', label: 'CARBON PLUS', target: 'close one action',
+        hit: mon => carbon.some(c => c.done && c.week_of === isoDate(new Date(mon))) }
+    ];
+  }
+
+  // The last CONSISTENCY_WEEKS completed weeks, oldest first. Each entry is one
+  // Sunday: how many habits held that week, and which ones did not.
+  consistencyWeeks() {
+    const habits = this.consistencyHabits();
+    const dispMon = displayMonday().getTime();
+    const out = [];
+    for (let w = CONSISTENCY_WEEKS; w >= 1; w--) {
+      const mon = dispMon - w * 7 * 86400000;
+      const hit = habits.filter(h => h.hit(mon));
+      out.push({
+        mon,
+        sunday: new Date(mon + 6 * 86400000),
+        hits: hit.length,
+        total: habits.length,
+        missing: habits.filter(h => hit.indexOf(h) === -1)
+      });
+    }
+    return out;
+  }
+
+  // Consistency pays. One xp_events row per completed week, 40 XP per habit held
+  // plus 100 for a clean sweep. Keyed on the week's Monday so it never doubles up.
+  async awardConsistency() {
+    const done = {};
+    (this.state.xpEvents || []).forEach(e => { if (e.source === 'consistency') done[e.note] = true; });
+    const now = new Date();
+    const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+    for (const wk of this.consistencyWeeks()) {
+      const key = isoDate(new Date(wk.mon));
+      // Only bank a week once its Sunday is fully behind us, so a habit logged
+      // later today still counts toward this week's score.
+      if (wk.mon + 7 * 86400000 > todayStart) continue;
+      if (wk.hits === 0 || done[key]) continue;
+      done[key] = true;
+      const amount = wk.hits * 40 + (wk.hits === wk.total ? 100 : 0);
+      this.setState(st => ({
+        xp: st.xp + amount,
+        xpEvents: st.xpEvents.concat([{ amount, source: 'consistency', note: key, created_at: new Date().toISOString() }])
+      }));
+      await sb.from('xp_events').insert({ source: 'consistency', amount, note: key });
+    }
   }
 
   bumpXp(amount, source, note) {
@@ -1867,17 +1965,46 @@ class Component extends DCLogic {
     const ritualTarget = ritualDoneCount + ' / 5 this week' + (streak > 0 ? ' · ' + (streak + 1) + 'th week running' : '');
     const ritualNote = streak > 0 ? 'Consistency bonus, not a one-off. This is the compounding kind.' : 'Build the streak — hit 4 of 5 mornings to start it.';
 
-    const xpEvents = s.xpEvents || [];
-    const weeks = [];
-    for (let w = 25; w >= 0; w--) {
-      const end = new Date(monday.getTime() - w * 7 * 86400000 + 7 * 86400000);
-      const cum = xpEvents.filter(e => new Date(e.created_at) < end).reduce((n, e) => n + e.amount, 0);
-      weeks.push(Math.min(100, Math.floor(cum / 440)));
-    }
-    const maxLvl = Math.max(1, ...weeks);
-    const consistencyBars = weeks.map((lvl, i) => ({
-      style: 'border-radius:4px 4px 0 0;flex:1;height:' + Math.max(2, Math.round(lvl / maxLvl * 100)) + '%;background:' + (i === weeks.length - 1 ? 'linear-gradient(180deg,#3f5273,#16203a)' : '#c6d0de')
+    // --- Consistency: one bar per Sunday, plus a plain-text read of what slips ---
+    const habits = this.consistencyHabits();
+    const cWeeks = this.consistencyWeeks();
+    const consistencyBars = cWeeks.map((wk, i) => {
+      const pct = Math.round(wk.hits / wk.total * 100);
+      const last = i === cWeeks.length - 1;
+      const shade = wk.hits === 0 ? '#e9edf4'
+        : wk.hits === wk.total ? 'linear-gradient(180deg,#3f5273,#16203a)'
+        : 'linear-gradient(180deg,#9fadc2,#56688a)';
+      return {
+        style: 'border-radius:4px 4px 0 0;flex:1;min-height:3px;height:' + Math.max(3, pct) + '%;background:' + shade +
+          (last ? ';outline:1.5px solid #16203a;outline-offset:1px' : '') +
+          (wk.hits === 0 ? ';border:1px solid rgba(0,0,0,.08)' : ''),
+        tip: wk.sunday.getDate() + ' ' + MONTH_NAMES[wk.sunday.getMonth()].slice(0, 3) + ' — ' + wk.hits + '/' + wk.total +
+          (wk.missing.length ? ' · missed ' + wk.missing.map(h => h.label).join(', ') : ' · clean week')
+      };
+    });
+    const scored = habits.map(h => ({
+      label: h.label, target: h.target,
+      n: cWeeks.filter(wk => h.hit(wk.mon)).length
+    })).sort((a, b) => a.n - b.n);
+    const weakest = scored.filter(h => h.n < cWeeks.length);
+    const solid = scored.filter(h => h.n === cWeeks.length);
+    const consistencyMissRows = weakest.map(h => ({
+      label: h.label,
+      note: h.n + ' of the last ' + cWeeks.length + ' Sundays · target: ' + h.target,
+      dotStyle: 'flex:none;width:7px;height:7px;border-radius:50%;margin-top:5px;background:' +
+        (h.n === 0 ? '#b00020' : h.n < cWeeks.length / 2 ? '#c8804a' : '#56688a')
     }));
+    const lastWeek = cWeeks[cWeeks.length - 1];
+    const consistencyLead = lastWeek.hits + ' of ' + lastWeek.total + ' habits held last week' +
+      (lastWeek.hits === lastWeek.total ? ' — clean sweep.' : lastWeek.hits === 0 ? '. Nothing logged yet.' : '.');
+    const consistencyGood = solid.length
+      ? 'HOLDING EVERY WEEK · ' + solid.map(h => h.label).join(' · ')
+      : '';
+    const consistencyXp = (s.xpEvents || []).filter(e => e.source === 'consistency').reduce((n, e) => n + e.amount, 0);
+    const consistencySub = 'ONE BAR PER SUNDAY · LAST ' + cWeeks.length + ' WEEKS';
+    const consistencyEarned = consistencyXp > 0
+      ? '+' + consistencyXp.toLocaleString('en-US') + ' XP EARNED FROM CONSISTENCY'
+      : 'EACH HABIT HELD IS +40 XP · A CLEAN WEEK IS +100 MORE';
 
     const allDayByDay = WEEKDAY_NAMES.map(() => []);
     (s.agendaEvents || []).filter(ev => ev.all_day).forEach(ev => {
@@ -2089,7 +2216,9 @@ class Component extends DCLogic {
       addFriend: () => this.addFriend(),
 
       ritualDays, ritualTarget, ritualNote,
-      consistencyBars, consistencyStart: '26 WEEKS AGO',
+      consistencyBars, consistencyStart: CONSISTENCY_WEEKS + ' WEEKS AGO',
+      consistencyMissRows, consistencyLead, consistencyGood, consistencySub, consistencyEarned,
+      noConsistencyMisses: consistencyMissRows.length === 0,
 
       carbonRows: (s.carbonBacklog || []).map(it => {
         const info = p.carbon[it.id];
