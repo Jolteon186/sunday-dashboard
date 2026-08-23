@@ -27,11 +27,11 @@
 <div style="font:600 42px/.95 'Space Grotesk',sans-serif;letter-spacing:-.035em">The week of<br>{{ weekTitle }}</div>
 <div onClick="{{ openReview }}" style="cursor:pointer;background:linear-gradient(100deg,#e9edf4,#9fadc2,#3f5273,#16203a);background-size:200% 100%;animation:shimmer 6s linear infinite alternate;color:#fff;padding:12px 18px;border-radius:999px;display:flex;align-items:center;gap:9px;box-shadow:0 6px 18px rgba(22,32,58,.22)" style-hover="box-shadow:0 1px 0 #101828;transform:translateY(1px)">
 <span style="font:600 12px/1 'JetBrains Mono',monospace;letter-spacing:.1em">COUNT MY XP</span>
-<span style="font:400 10px/1 'JetBrains Mono',monospace;opacity:.8">LAST WEEK · 6 TO CONFIRM</span>
+<span style="font:400 10px/1 'JetBrains Mono',monospace;opacity:.8">{{ reviewBtnLabel }}</span>
 </div>
 <div onClick="{{ goPlan }}" style="cursor:pointer;border:1px solid #16203a;background:#fff;color:#16203a;padding:12px 18px;border-radius:999px;display:flex;align-items:center;gap:9px;box-shadow:0 2px 10px rgba(22,32,58,.1)" style-hover="box-shadow:0 1px 0 #16203a;transform:translateY(1px)">
 <span style="font:600 12px/1 'JetBrains Mono',monospace;letter-spacing:.1em">ORGANIZE NEXT WEEK</span>
-<span style="font:400 10px/1 'JetBrains Mono',monospace;color:#6b7d99">17–23 AUG · 7 QUESTIONS</span>
+<span style="font:400 10px/1 'JetBrains Mono',monospace;color:#6b7d99">{{ planBtnLabel }}</span>
 </div>
 </div>
 </div>
@@ -1127,10 +1127,11 @@ class Component extends DCLogic {
   toggleCarbon(id) {
     this.setState(s => {
       const p = { ...s.plan }, m = { ...p.carbon };
+      const adding = !m[id];
       if (m[id]) delete m[id];
       else m[id] = { days: [], hour: '21:00' };
       p.carbon = m;
-      return { plan: p, xp: s.xp + 15 };
+      return { plan: p, xp: s.xp + (adding ? 15 : -15) };
     });
   }
 
@@ -1221,10 +1222,11 @@ class Component extends DCLogic {
   toggleExtra(id) {
     this.setState(s => {
       const p = { ...s.plan }, m = { ...p.extras };
+      const adding = !m[id];
       if (m[id]) delete m[id];
       else m[id] = { day: null, hour: '19:00', duration: 120 };
       p.extras = m;
-      return { plan: p, xp: s.xp + 15 };
+      return { plan: p, xp: s.xp + (adding ? 15 : -15) };
     });
   }
 
@@ -1254,6 +1256,16 @@ class Component extends DCLogic {
 
   // Every day+hour slot claimed anywhere in the plan, so each module can warn
   // about the ones already taken by something else.
+  // Everything actually chosen in the wizard, so locking banks the same XP the
+  // header has been showing (and the reload can rebuild it from xp_events).
+  planPickCount() {
+    const p = this.state.plan;
+    let n = 0;
+    ['carbon', 'extras', 'julien', 'ticketBuys', 'friends'].forEach(k => { n += Object.keys(p[k] || {}).length; });
+    ['padel', 'pao', 'psy'].forEach(k => { if (p[k] !== null && p[k] !== undefined) n += 1; });
+    return n;
+  }
+
   bookedSlots() {
     const p = this.state.plan, out = [];
     const push = (day, hour, label) => {
@@ -1313,10 +1325,11 @@ class Component extends DCLogic {
   toggleJulien(id) {
     this.setState(s => {
       const p = { ...s.plan }, m = { ...p.julien };
+      const adding = !m[id];
       if (m[id]) delete m[id];
       else m[id] = { days: [], hour: '19:00', duration: 60 };
       p.julien = m;
-      return { plan: p, xp: s.xp + 15 };
+      return { plan: p, xp: s.xp + (adding ? 15 : -15) };
     });
   }
 
@@ -1421,8 +1434,7 @@ class Component extends DCLogic {
       const adding = !m[id];
       if (m[id]) delete m[id]; else m[id] = init;
       p[key] = m;
-      if (adding) this._pendingPlanXp = (this._pendingPlanXp || 0) + 15;
-      return { plan: p, xp: adding ? s.xp + 15 : s.xp - 15 };
+      return { plan: p, xp: s.xp + (adding ? 15 : -15) };
     });
   }
 
@@ -1661,30 +1673,33 @@ class Component extends DCLogic {
   setDay(key, name, day) {
     this.setState(s => {
       const p = { ...s.plan }, m = { ...p[key] };
+      const adding = m[name] !== day;
       if (m[name] === day) delete m[name]; else m[name] = day;
       p[key] = m;
-      return { plan: p, xp: s.xp + 15 };
+      return { plan: p, xp: s.xp + (adding ? 15 : -15) };
     });
   }
 
   toggleItem(key, name) {
     this.setState(s => {
       const p = { ...s.plan }, m = { ...p[key] };
+      const adding = m[name] === undefined;
       if (m[name] === undefined) m[name] = null; else delete m[name];
       p[key] = m;
-      return { plan: p, xp: s.xp + 15 };
+      return { plan: p, xp: s.xp + (adding ? 15 : -15) };
     });
   }
 
   pick(key, value) {
     this.setState(s => {
       const p = { ...s.plan };
+      const adding = Array.isArray(p[key]) ? p[key].indexOf(value) === -1 : p[key] !== value;
       if (Array.isArray(p[key])) {
         p[key] = p[key].indexOf(value) > -1 ? p[key].filter(v => v !== value) : p[key].concat([value]);
       } else {
         p[key] = p[key] === value ? null : value;
       }
-      return { plan: p, xp: s.xp + 15 };
+      return { plan: p, xp: s.xp + (adding ? 15 : -15) };
     });
   }
 
@@ -1924,6 +1939,13 @@ class Component extends DCLogic {
       ? dispMon.getDate() + '\u2013' + dispSun.getDate() + ' ' + MON_TITLE[dispMon.getMonth()]
       : dispMon.getDate() + ' ' + MON_TITLE[dispMon.getMonth()] + ' \u2013 ' + dispSun.getDate() + ' ' + MON_TITLE[dispSun.getMonth()];
     const weekTitleShort = dispMon.getDate() + '\u2013' + dispSun.getDate() + ' ' + MONTH_NAMES[dispSun.getMonth()].slice(0, 3);
+    const prevMon = new Date(dispMon.getTime() - 7 * 86400000);
+    const prevSun = new Date(dispMon.getTime() - 86400000);
+    const rangeLabel = (a, b) => a.getMonth() === b.getMonth()
+      ? a.getDate() + '\u2013' + b.getDate() + ' ' + MONTH_NAMES[b.getMonth()].slice(0, 3)
+      : a.getDate() + ' ' + MONTH_NAMES[a.getMonth()].slice(0, 3) + ' \u2013 ' + b.getDate() + ' ' + MONTH_NAMES[b.getMonth()].slice(0, 3);
+    const planBtnLabel = rangeLabel(dispMon, dispSun) + ' \u00b7 8 QUESTIONS';
+    const reviewBtnLabel = rangeLabel(prevMon, prevSun) + ' \u00b7 ' + REVIEW.length + ' TO CONFIRM';
     const isoWeekNo = (function (d) {
       const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
       const dow = t.getUTCDay() || 7;
@@ -2007,7 +2029,7 @@ class Component extends DCLogic {
         : (this._previewPlaced + (this._previewPlaced === 1 ? ' ITEM PLACED' : ' ITEMS PLACED') + ' \u00b7 NOT SAVED UNTIL YOU LOCK'),
       DEL_BTN,
       hasAllDay, allDayRow,
-      editionLabel, weekTitle, barsStartLabel,
+      editionLabel, weekTitle, barsStartLabel, planBtnLabel, reviewBtnLabel,
       monthsData,
       newEventTitle: s.newEventTitle, newEventDate: s.newEventDate, newEventEndDate: s.newEventEndDate, newEventTime: s.newEventTime,
       onEventTitleInput: e => this.set('newEventTitle', e.target.value),
@@ -2229,9 +2251,9 @@ class Component extends DCLogic {
       finishPlan: () => {
         if (this.state.planDone || answeredCount < 6) return;
         this.setState(st => ({ planDone: true, planBurst: true }));
-        const planXp = 250 + (this._pendingPlanXp || 0);
-        this._pendingPlanXp = 0;
-        this.bumpXp(planXp, 'plan_locked', 'Next-week plan locked in');
+        const picks = this.planPickCount();
+        this.setState(st => ({ xp: st.xp - picks * 15 }));
+        this.bumpXp(250 + picks * 15, 'plan_locked', picks + ' items planned for the week ahead');
         this.scheduleJulienItems();
         this.scheduleCarbonItems();
         this.scheduleFixedPlanItems();
