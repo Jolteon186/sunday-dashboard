@@ -61,8 +61,8 @@
 <div style="display:flex;align-items:center;gap:0;padding:0 22px;border-bottom:1px solid rgba(0,0,0,.07);background:#f4f2ee">
 <div onClick="{{ goWeek }}" style="{{ tabWeek }}">THE WEEK</div>
 <div onClick="{{ goPlan }}" style="{{ tabPlan }}">NEXT WEEK PLAN</div>
-<div onClick="{{ goProjects }}" style="{{ tabProjects }}">BIG PROJECTS</div>
 <div onClick="{{ goParis }}" style="{{ tabParis }}">PARIS PLAYBOOK</div>
+<div onClick="{{ goProjects }}" style="{{ tabProjects }}">BIG PROJECTS</div>
 <div style="flex:1"></div>
 <div style="padding:11px 6px;font:400 10px/1 'JetBrains Mono',monospace;color:#a5a5a5;display:flex;align-items:center">CHECK-IN 6/9 · 3 QUESTIONS LEFT</div>
 </div>
@@ -335,6 +335,7 @@
 <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px">
 <span style="font:600 13px/1.3 'Space Grotesk',sans-serif;flex:1">{{ c.label }}</span>
 <span style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#61708c;white-space:nowrap">{{ c.meta }}</span>
+<div onClick="{{ c.onDelete }}" style="{{ DEL_BTN }}">×</div>
 </div>
 <div style="display:flex;align-items:center;gap:5px;margin-top:8px;flex-wrap:wrap">
 <div onClick="{{ c.onToggle }}" style="{{ c.toggleStyle }}">{{ c.toggleLabel }}</div>
@@ -390,12 +391,24 @@
 </div>
 
 <div style="border:1px solid rgba(0,0,0,.08);border-radius:18px;background:#fff;padding:14px 16px">
-<div style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a;letter-spacing:.1em">04 · TICKETS</div>
-<div style="font:600 15px/1.3 'Space Grotesk',sans-serif;margin:8px 0 4px">Which events do you want to book, and when will you do it?</div>
+<div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px">
+<div style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a;letter-spacing:.1em">04 · TICKETS TO BOOK</div>
+<div style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">{{ ticketCountLabel }}</div>
+</div>
+<div style="font:600 15px/1.3 'Space Grotesk',sans-serif;margin:8px 0 4px">Everything you marked interested in the Paris Playbook. When will you book it?</div>
 <sc-for list="{{ ticketRows }}" as="t" hint-placeholder-count="4">
 <div style="padding:11px 0;border-bottom:1px solid rgba(0,0,0,.06)">
-<div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px"><span style="font:600 13px/1.2 'Space Grotesk',sans-serif">{{ t.name }}</span><span style="font:400 10px/1 'JetBrains Mono',monospace;color:#61708c;white-space:nowrap">{{ t.when }}</span></div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px"><span style="font:600 13px/1.2 'Space Grotesk',sans-serif;flex:1">{{ t.name }}</span><span style="font:400 10px/1 'JetBrains Mono',monospace;color:#61708c;white-space:nowrap">{{ t.when }}</span><div onClick="{{ t.onDelete }}" style="{{ DEL_BTN }}">×</div></div>
 <div style="font:400 10.5px/1.4 'Space Grotesk',sans-serif;color:#6b6b6b;margin-top:3px">{{ t.desc }}</div>
+<div style="{{ t.ticketStyle }}">{{ t.ticketLine }}</div>
+<div style="display:flex;align-items:center;gap:8px;margin-top:5px;flex-wrap:wrap">
+<sc-if value="{{ t.officialUrl }}">
+<a href="{{ t.officialUrl }}" target="_blank" rel="noopener" style="font:500 9px/1 'JetBrains Mono',monospace;color:#3f5273;text-decoration:none;border-bottom:1px solid rgba(63,82,115,.35)">OFFICIAL INFO &#8599;</a>
+</sc-if>
+<sc-if value="{{ t.ticketsUrl }}">
+<a href="{{ t.ticketsUrl }}" target="_blank" rel="noopener" style="font:600 9px/1 'JetBrains Mono',monospace;color:#16203a;text-decoration:none;border-bottom:1px solid rgba(22,32,58,.45)">BUY TICKETS &#8599;</a>
+</sc-if>
+</div>
 <div style="display:flex;align-items:center;gap:5px;margin-top:8px;flex-wrap:wrap">
 <div onClick="{{ t.onToggle }}" style="{{ t.toggleStyle }}">{{ t.toggleLabel }}</div>
 <sc-if value="{{ t.chosen }}">
@@ -403,18 +416,25 @@
 <sc-for list="{{ t.days }}" as="d" hint-placeholder-count="7">
 <div onClick="{{ d.onPick }}" style="{{ d.style }}">{{ d.label }}</div>
 </sc-for>
+<input type="time" value="{{ t.hour }}" onInput="{{ t.onHourInput }}" style="border:1px solid rgba(0,0,0,.16);border-radius:999px;padding:5px 8px;font:400 9px/1 'JetBrains Mono',monospace;color:#4a4a4a;background:#fff">
 </sc-if>
 </div>
+<sc-if value="{{ t.clash }}">
+<div style="font:500 10px/1.4 'JetBrains Mono',monospace;color:#b00020;margin-top:4px">{{ t.clash }}</div>
+</sc-if>
 </div>
 </sc-for>
+<sc-if value="{{ noTickets }}">
+<div style="padding:11px 0;font:400 11.5px/1.4 'Space Grotesk',sans-serif;color:#8a8a8a">Nothing marked yet — say YES to events in the Paris Playbook and they land here automatically.</div>
+</sc-if>
 </div>
 
 <div style="border:1px solid rgba(0,0,0,.08);border-radius:18px;background:#fff;padding:14px 16px">
 <div style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a;letter-spacing:.1em">05 · FRIENDS · COLDEST FIRST</div>
-<div style="font:600 15px/1.3 'Space Grotesk',sans-serif;margin:8px 0 4px">Who are you calling, and which night?</div>
-<sc-for list="{{ friendRows }}" as="fr" hint-placeholder-count="3">
+<div style="font:600 15px/1.3 'Space Grotesk',sans-serif;margin:8px 0 4px">Who are you calling, which night, and at what time?</div>
+<sc-for list="{{ friendRows }}" as="fr" hint-placeholder-count="5">
 <div style="padding:11px 0;border-bottom:1px solid rgba(0,0,0,.06)">
-<div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px"><span style="font:600 13px/1.2 'Space Grotesk',sans-serif">{{ fr.name }}</span><span style="font:400 10px/1 'JetBrains Mono',monospace;color:#61708c;white-space:nowrap">{{ fr.meta }}</span></div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px"><span style="font:600 13px/1.2 'Space Grotesk',sans-serif;flex:1">{{ fr.name }}</span><span style="font:400 10px/1 'JetBrains Mono',monospace;color:#61708c;white-space:nowrap">{{ fr.meta }}</span><div onClick="{{ fr.onDelete }}" style="{{ DEL_BTN }}">×</div></div>
 <div style="display:flex;align-items:center;gap:5px;margin-top:8px;flex-wrap:wrap">
 <div onClick="{{ fr.onToggle }}" style="{{ fr.toggleStyle }}">{{ fr.toggleLabel }}</div>
 <sc-if value="{{ fr.chosen }}">
@@ -422,10 +442,17 @@
 <sc-for list="{{ fr.days }}" as="d" hint-placeholder-count="7">
 <div onClick="{{ d.onPick }}" style="{{ d.style }}">{{ d.label }}</div>
 </sc-for>
+<input type="time" value="{{ fr.hour }}" onInput="{{ fr.onHourInput }}" style="border:1px solid rgba(0,0,0,.16);border-radius:999px;padding:5px 8px;font:400 9px/1 'JetBrains Mono',monospace;color:#4a4a4a;background:#fff">
 </sc-if>
 </div>
+<sc-if value="{{ fr.clash }}">
+<div style="font:500 10px/1.4 'JetBrains Mono',monospace;color:#b00020;margin-top:4px">{{ fr.clash }}</div>
+</sc-if>
 </div>
 </sc-for>
+<sc-if value="{{ noFriendsYet }}">
+<div style="padding:11px 0;font:400 11.5px/1.4 'Space Grotesk',sans-serif;color:#8a8a8a">No one on the cold list yet — add names in The Week tab.</div>
+</sc-if>
 </div>
 
 <div style="border:1px solid rgba(0,0,0,.08);border-radius:18px;background:#fff;padding:14px 16px">
@@ -447,7 +474,7 @@
 <div style="font:600 15px/1.3 'Space Grotesk',sans-serif;margin:8px 0 4px">Pick from the fixed list, then choose the day and time.</div>
 <sc-for list="{{ extraRows }}" as="x" hint-placeholder-count="4">
 <div style="padding:11px 0;border-bottom:1px solid rgba(0,0,0,.06)">
-<div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px"><span style="font:600 13px/1.2 'Space Grotesk',sans-serif">{{ x.label }}</span><span style="font:400 10px/1 'JetBrains Mono',monospace;color:#61708c;white-space:nowrap">{{ x.meta }}</span></div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px"><span style="font:600 13px/1.2 'Space Grotesk',sans-serif;flex:1">{{ x.label }}</span><span style="font:400 10px/1 'JetBrains Mono',monospace;color:#61708c;white-space:nowrap">{{ x.meta }}</span><div onClick="{{ x.onDelete }}" style="{{ DEL_BTN }}">×</div></div>
 <div style="display:flex;align-items:center;gap:5px;margin-top:8px;flex-wrap:wrap">
 <div onClick="{{ x.onToggle }}" style="{{ x.toggleStyle }}">{{ x.toggleLabel }}</div>
 <sc-if value="{{ x.chosen }}">
@@ -483,6 +510,7 @@
 <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px">
 <span style="font:600 13px/1.3 'Space Grotesk',sans-serif;flex:1">{{ j.title }}</span>
 <span style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#61708c;white-space:nowrap">{{ j.meta }}</span>
+<div onClick="{{ j.onDelete }}" style="{{ DEL_BTN }}">×</div>
 </div>
 <sc-if value="{{ j.notes }}">
 <div style="font:400 10.5px/1.45 'Space Grotesk',sans-serif;color:#8a8a8a;margin-top:4px">{{ j.notes }}</div>
@@ -659,7 +687,7 @@
 <div style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:#8a8a8a;padding-bottom:8px;border-bottom:1px solid rgba(0,0,0,.16)">THE FIXED LIST · THINGS WE ALWAYS ENJOY</div>
 <div style="margin-top:4px">
 <sc-for list="{{ fixedListRows }}" as="a" hint-placeholder-count="8">
-<div style="display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="font:400 10px/1 'JetBrains Mono',monospace;color:#b5b5b5;width:20px">{{ a.num }}</span><div style="flex:1"><div style="font:500 13px/1.2 'Space Grotesk',sans-serif">{{ a.label }}</div><div style="font:400 10px/1.3 'Space Grotesk',sans-serif;color:#8a8a8a;margin-top:2px">{{ a.meta }}</div></div><span style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">{{ a.indoorLabel }}</span></div>
+<div style="display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="font:400 10px/1 'JetBrains Mono',monospace;color:#b5b5b5;width:20px">{{ a.num }}</span><div style="flex:1"><div style="font:500 13px/1.2 'Space Grotesk',sans-serif">{{ a.label }}</div><div style="font:400 10px/1.3 'Space Grotesk',sans-serif;color:#8a8a8a;margin-top:2px">{{ a.meta }}</div></div><span style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">{{ a.indoorLabel }}</span><div onClick="{{ a.onDelete }}" style="{{ DEL_BTN }}">×</div></div>
 </sc-for>
 <div style="display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px dashed rgba(0,0,0,.25);color:#a5a5a5">
 <input value="{{ newFixedLabel }}" onInput="{{ onFixedLabelInput }}" placeholder="Add something you love…" style="flex:1;border:none;outline:none;background:transparent;font:400 13px/1.2 'Space Grotesk',sans-serif;color:#1a1a1a">
@@ -687,9 +715,17 @@
 <div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid rgba(0,0,0,.05)">
 <span style="font:600 15px/1 'JetBrains Mono',monospace;color:#16203a;width:26px">{{ f.num }}</span>
 <div style="flex:1">
-<div style="font:600 14px/1.2 'Space Grotesk',sans-serif">{{ f.title }}</div>
+<div style="display:flex;align-items:baseline;gap:8px"><div style="font:600 14px/1.2 'Space Grotesk',sans-serif;flex:1">{{ f.title }}</div><div onClick="{{ f.onDelete }}" style="{{ DEL_BTN }}">×</div></div>
 <div style="font:400 10.5px/1.4 'Space Grotesk',sans-serif;color:#6b6b6b;margin-top:3px">{{ f.desc }}</div>
 <div style="{{ f.ticketStyle }}">{{ f.ticketLine }}</div>
+<div style="display:flex;gap:12px;margin-top:5px;flex-wrap:wrap">
+<sc-if value="{{ f.officialUrl }}">
+<a href="{{ f.officialUrl }}" target="_blank" rel="noopener" style="font:500 9.5px/1 'JetBrains Mono',monospace;color:#3f5273;text-decoration:underline">OFFICIAL INFO ↗</a>
+</sc-if>
+<sc-if value="{{ f.ticketsUrl }}">
+<a href="{{ f.ticketsUrl }}" target="_blank" rel="noopener" style="font:500 9.5px/1 'JetBrains Mono',monospace;color:#16203a;text-decoration:underline">BUY TICKETS ↗</a>
+</sc-if>
+</div>
 <sc-if value="{{ f.pending }}">
 <div style="display:flex;align-items:center;gap:7px;margin-top:8px">
 <span style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">INTERESTED?</span>
@@ -717,9 +753,17 @@
 <div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid rgba(0,0,0,.05)">
 <span style="font:600 15px/1 'JetBrains Mono',monospace;color:#16203a;width:26px">{{ f.num }}</span>
 <div style="flex:1">
-<div style="font:600 14px/1.2 'Space Grotesk',sans-serif">{{ f.title }}</div>
+<div style="display:flex;align-items:baseline;gap:8px"><div style="font:600 14px/1.2 'Space Grotesk',sans-serif;flex:1">{{ f.title }}</div><div onClick="{{ f.onDelete }}" style="{{ DEL_BTN }}">×</div></div>
 <div style="font:400 10.5px/1.4 'Space Grotesk',sans-serif;color:#6b6b6b;margin-top:3px">{{ f.desc }}</div>
 <div style="{{ f.ticketStyle }}">{{ f.ticketLine }}</div>
+<div style="display:flex;gap:12px;margin-top:5px;flex-wrap:wrap">
+<sc-if value="{{ f.officialUrl }}">
+<a href="{{ f.officialUrl }}" target="_blank" rel="noopener" style="font:500 9.5px/1 'JetBrains Mono',monospace;color:#3f5273;text-decoration:underline">OFFICIAL INFO ↗</a>
+</sc-if>
+<sc-if value="{{ f.ticketsUrl }}">
+<a href="{{ f.ticketsUrl }}" target="_blank" rel="noopener" style="font:500 9.5px/1 'JetBrains Mono',monospace;color:#16203a;text-decoration:underline">BUY TICKETS ↗</a>
+</sc-if>
+</div>
 <sc-if value="{{ f.pending }}">
 <div style="display:flex;align-items:center;gap:7px;margin-top:8px">
 <span style="font:400 9.5px/1 'JetBrains Mono',monospace;color:#8a8a8a">INTERESTED?</span>
@@ -846,19 +890,7 @@ const TAB_ON = "cursor:pointer;margin:8px 4px 8px 0;padding:10px 20px;border-rad
 const TAB_OFF = "cursor:pointer;margin:8px 4px 8px 0;padding:10px 20px;border-radius:999px;font:400 11px/1 'JetBrains Mono',monospace;letter-spacing:.1em;color:#8a8a8a";
 
 const DAYS = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
-const TICKET_OPTS = [
-  { id: 'rolex', name: 'Rolex Paris Masters', when: '31 OCT – 8 NOV', desc: 'ATP Masters 1000 at Paris La Défense Arena. Early rounds are the cheap seats and the best tennis per euro.' },
-  { id: 'rock', name: 'Rock en Seine', when: '26 – 30 AUG', desc: 'Five days in the Parc de Saint-Cloud. Day tickets go before the weekend.' },
-  { id: 'gpe', name: "Grand Palais d'été", when: 'SAT 15 AUG, 20:00', desc: 'Dance, concerts and DJ sets in the nave under the glass roof. Discount from three events.' },
-  { id: 'cez', name: 'Cézanne et nous', when: 'FROM 23 SEP', desc: "Grand Palais and Musée d'Orsay retrospective, to 17 January. Weekday evening slots are the quiet ones." }
-];
-const FRIEND_OPTS = [
-  { name: 'Abraham', meta: 'MONTHLY · 88 DAYS · +58 LATE' },
-  { name: 'Homero', meta: 'MONTHLY · 71 DAYS · +41 LATE' },
-  { name: 'Wero', meta: 'MONTHLY · 63 DAYS · +33 LATE' },
-  { name: 'Santi', meta: '2 WEEKS · 47 DAYS · +33 LATE' },
-  { name: 'Bety & Moi', meta: 'MONTHLY · 58 DAYS · +28 LATE' }
-];
+const DEL_BTN = "cursor:pointer;flex:none;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:600 12px/1 'JetBrains Mono',monospace;color:#b00020;border:1px solid rgba(176,0,32,.35);background:#fff";
 const MINI_ON = "cursor:pointer;padding:5px 8px;border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;background:linear-gradient(180deg,#3f5273,#16203a);color:#fff";
 const MINI_OFF = "cursor:pointer;padding:5px 8px;border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:400;border:1px solid rgba(0,0,0,.14);color:#6b6b6b;background:#fff";
 const PARIS_INTERESTS = ['Padel', 'Tennis', 'Street art', 'Museums', 'Fashion', 'Important Paris events that everyone wants to see', 'Concerts — pop and piano', 'Monet', 'World wars', 'Music', 'Carbon or sustainability forums, expos, or meetings'];
@@ -1246,6 +1278,16 @@ class Component extends DCLogic {
       const c = (this.state.carbonBacklog || []).find(x => String(x.id) === String(id));
       (info.days || []).forEach(d => push(d, info.hour, c ? c.label : 'Carbon Plus action'));
     });
+    Object.keys(p.ticketBuys).forEach(id => {
+      const info = p.ticketBuys[id];
+      const f = (this.state.parisFinds || []).find(x => String(x.id) === String(id));
+      (info.days || []).forEach(d => push(d, info.hour, 'Book · ' + (f ? f.title : 'tickets')));
+    });
+    Object.keys(p.friends).forEach(id => {
+      const info = p.friends[id];
+      const fr = (this.state.friendsList || []).find(x => String(x.id) === String(id));
+      (info.days || []).forEach(d => push(d, info.hour, 'Call ' + (fr ? fr.name : 'friend')));
+    });
     return out;
   }
 
@@ -1329,6 +1371,67 @@ class Component extends DCLogic {
     }
   }
 
+  // Row deletion, used by every list module in Plan and Paris Playbook.
+  deleteRow(table, id, stateKey, extra) {
+    this.setState(st => ({ [stateKey]: st[stateKey].filter(r => r.id !== id) }));
+    if (extra) this.setState(extra);
+    sb.from(table).delete().eq('id', id).then(r => {
+      if (r && r.error) console.error('delete failed', table, id, r.error);
+    });
+  }
+
+  deleteCarbon(id) {
+    this.setState(s => { const p = { ...s.plan }, m = { ...p.carbon }; delete m[id]; p.carbon = m; return { plan: p }; });
+    this.deleteRow('carbon_actions', id, 'carbonBacklog');
+  }
+
+  deleteJulien(id) {
+    this.setState(s => { const p = { ...s.plan }, m = { ...p.julien }; delete m[id]; p.julien = m; return { plan: p }; });
+    this.deleteRow('julien_list', id, 'julienList');
+  }
+
+  deleteFriend(id) {
+    this.setState(s => { const p = { ...s.plan }, m = { ...p.friends }; delete m[id]; p.friends = m; return { plan: p }; });
+    this.deleteRow('friends', id, 'friendsList');
+  }
+
+  deleteParisActivity(id) {
+    this.setState(s => { const p = { ...s.plan }, m = { ...p.extras }; delete m[id]; p.extras = m; return { plan: p }; });
+    this.deleteRow('paris_activities', id, 'parisFixed');
+  }
+
+  deleteFind(id) {
+    this.setState(s => { const p = { ...s.plan }, m = { ...p.ticketBuys }; delete m[id]; p.ticketBuys = m; return { plan: p }; });
+    this.deleteRow('paris_new_finds', id, 'parisFinds');
+  }
+
+  setKeyedField(key, id, patch) {
+    this.setState(s => {
+      if (!s.plan[key][id]) return null;
+      const p = { ...s.plan }, m = { ...p[key] };
+      m[id] = { ...m[id], ...patch };
+      p[key] = m;
+      return { plan: p };
+    });
+  }
+
+  toggleKeyed(key, id, init) {
+    this.setState(s => {
+      const p = { ...s.plan }, m = { ...p[key] };
+      const adding = !m[id];
+      if (m[id]) delete m[id]; else m[id] = init;
+      p[key] = m;
+      if (adding) this._pendingPlanXp = (this._pendingPlanXp || 0) + 15;
+      return { plan: p, xp: adding ? s.xp + 15 : s.xp - 15 };
+    });
+  }
+
+  toggleKeyedDay(key, id, day) {
+    const cur = (this.state.plan[key][id] || {}).days || [];
+    const days = cur.indexOf(day) > -1 ? cur.filter(d => d !== day) : cur.concat([day]).sort((a, b) => a - b);
+    this.setKeyedField(key, id, { days });
+  }
+
   // Live preview of the week being planned. Only items with everything chosen
   // (day + hour, plus duration where it applies) appear; unset ones stay hidden.
   previewRows() {
@@ -1376,6 +1479,18 @@ class Component extends DCLogic {
       const c = (s.carbonBacklog || []).find(x => String(x.id) === String(id));
       if (!c) return;
       (info.days || []).forEach(d => place(d, info.hour, 30, c.label.toUpperCase(), 'task'));
+    });
+    Object.keys(p.ticketBuys).forEach(id => {
+      const info = p.ticketBuys[id];
+      const f = (s.parisFinds || []).find(x => String(x.id) === String(id));
+      if (!f) return;
+      (info.days || []).forEach(d => place(d, info.hour, 30, 'BOOK \u00b7 ' + f.title.toUpperCase(), 'task'));
+    });
+    Object.keys(p.friends).forEach(id => {
+      const info = p.friends[id];
+      const fr = (s.friendsList || []).find(x => String(x.id) === String(id));
+      if (!fr) return;
+      (info.days || []).forEach(d => place(d, info.hour, 45, 'CALL ' + fr.name.toUpperCase(), 'care'));
     });
     this._previewPlaced = placed;
     return rows;
@@ -1437,6 +1552,23 @@ class Component extends DCLogic {
       const info = p.extras[id];
       const act = (s.parisFixed || []).find(a => String(a.id) === String(id));
       if (act) await place(info.day, info.hour, info.duration || 120, act.label);
+    }
+    // Ticket-booking reminders for everything marked interested in the Playbook.
+    for (const id of Object.keys(p.ticketBuys)) {
+      const info = p.ticketBuys[id];
+      if (!info || !info.days || !info.days.length) continue;
+      const f = (s.parisFinds || []).find(x => String(x.id) === String(id));
+      if (!f) continue;
+      for (const day of info.days) await place(day, info.hour || '20:00', 30, 'Book tickets · ' + f.title);
+    }
+    // Friend calls.
+    for (const id of Object.keys(p.friends)) {
+      const info = p.friends[id];
+      if (!info || !info.days || !info.days.length) continue;
+      const fr = (s.friendsList || []).find(x => String(x.id) === String(id));
+      if (!fr) continue;
+      if (info.hour) sb.from('friends').update({ preferred_hour: info.hour }).eq('id', fr.id).then(() => {});
+      for (const day of info.days) await place(day, info.hour || '19:00', 45, 'Call ' + fr.name);
     }
   }
 
@@ -1582,16 +1714,20 @@ class Component extends DCLogic {
       rows[day].push([n === 0 ? 14 : 15, 1, label, 'task']);
     };
     const floating = [];
-    Object.keys(p.friends).forEach(name => {
-      const d = p.friends[name];
-      if (d === null || d === undefined) floating.push('CALL ' + name.toUpperCase());
-      else put(d, 'CALL ' + name.toUpperCase());
+    Object.keys(p.friends).forEach(id => {
+      const info = p.friends[id];
+      const fr = (this.state.friendsList || []).find(x => String(x.id) === String(id));
+      if (!fr) return;
+      if (info.days && info.days.length) info.days.forEach(d => put(d, 'CALL ' + fr.name.toUpperCase()));
+      else floating.push('CALL ' + fr.name.toUpperCase());
     });
-    Object.keys(p.ticketBuys).forEach(name => {
-      const d = p.ticketBuys[name];
-      const short = name.split(' ').slice(0, 2).join(' ').toUpperCase();
-      if (d === null || d === undefined) floating.push('BOOK · ' + short);
-      else put(d, 'BOOK · ' + short);
+    Object.keys(p.ticketBuys).forEach(id => {
+      const info = p.ticketBuys[id];
+      const f = (this.state.parisFinds || []).find(x => String(x.id) === String(id));
+      if (!f) return;
+      const short = f.title.split(' ').slice(0, 2).join(' ').toUpperCase();
+      if (info.days && info.days.length) info.days.forEach(d => put(d, 'BOOK · ' + short));
+      else floating.push('BOOK · ' + short);
     });
     Object.keys(p.carbon).forEach(id => {
       const info = p.carbon[id];
@@ -1838,8 +1974,11 @@ class Component extends DCLogic {
         pending: f.status !== 'interested',
         interested: f.status === 'interested',
         yesStyle: BTN_OFF, noStyle: BTN_OFF,
+        officialUrl: f.official_url || '',
+        ticketsUrl: f.tickets_url || '',
         onYes: () => this.markFindInterested(f.id),
-        onNo: () => this.removeFind(f.id)
+        onNo: () => this.removeFind(f.id),
+        onDelete: () => this.deleteFind(f.id)
       };
     };
 
@@ -1866,6 +2005,7 @@ class Component extends DCLogic {
       previewNote: (this._previewPlaced || 0) === 0
         ? 'NOTHING PLACED YET \u00b7 PICK A DAY AND A TIME'
         : (this._previewPlaced + (this._previewPlaced === 1 ? ' ITEM PLACED' : ' ITEMS PLACED') + ' \u00b7 NOT SAVED UNTIL YOU LOCK'),
+      DEL_BTN,
       hasAllDay, allDayRow,
       editionLabel, weekTitle, barsStartLabel,
       monthsData,
@@ -1942,6 +2082,7 @@ class Component extends DCLogic {
           toggleStyle: on ? CHIP_ON : CHIP_OFF,
           toggleLabel: on ? 'PLANNED ✓' : 'PLAN IT',
           onToggle: () => this.toggleCarbon(it.id),
+          onDelete: () => this.deleteCarbon(it.id),
           hour,
           onHourInput: e => this.setCarbonField(it.id, { hour: e.target.value }),
           days: DAYS.map((d, i) => ({ label: d, style: on && days.indexOf(i) > -1 ? MINI_ON : MINI_OFF, onPick: () => this.toggleCarbonDay(it.id, i) })),
@@ -1969,22 +2110,44 @@ class Component extends DCLogic {
       onPsyHourInput: e => this.setState(st => ({ plan: { ...st.plan, psyHour: e.target.value } })),
       psyClash: (p.psy === null || p.psy === 'no') ? '' : this.clashNote('Psychologist', [{ key: p.psy + '@' + (p.psyHour || '18:00') }]),
       paoNote: p.pao === null ? 'The weekend is free — Saturday evening holds three hours without cutting anything.' : (p.pao > 4 ? 'Three hours held on ' + DAYS[p.pao] + ' evening. Reminder fires that morning at 08:00.' : DAYS[p.pao] + ' evening it is — gym moves off that night automatically.'),
-      ticketRows: TICKET_OPTS.map(t => {
-        const on = p.ticketBuys[t.name] !== undefined;
+      ticketRows: interestedAll.map(f => {
+        const info = p.ticketBuys[f.id];
+        const on = !!info;
+        const days = on ? (info.days || []) : [];
+        const hour = on ? (info.hour || '20:00') : '20:00';
+        const row = parisRow(f, 0);
         return {
-          name: t.name, when: t.when, desc: t.desc, chosen: on,
+          name: f.title, when: f.window_label || '', desc: f.description || '',
+          ticketLine: row.ticketLine, ticketStyle: row.ticketStyle,
+          officialUrl: f.official_url || '', ticketsUrl: f.tickets_url || '',
+          chosen: on,
           toggleStyle: on ? CHIP_ON : CHIP_OFF, toggleLabel: on ? 'BOOKING ✓' : 'BOOK IT',
-          onToggle: () => this.toggleItem('ticketBuys', t.name),
-          days: DAYS.map((d, i) => ({ label: d, style: p.ticketBuys[t.name] === i ? MINI_ON : MINI_OFF, onPick: () => this.setDay('ticketBuys', t.name, i) }))
+          onToggle: () => this.toggleKeyed('ticketBuys', f.id, { days: [], hour: '20:00' }),
+          hour,
+          onHourInput: e => this.setKeyedField('ticketBuys', f.id, { hour: e.target.value }),
+          days: DAYS.map((d, i) => ({ label: d, style: on && days.indexOf(i) > -1 ? MINI_ON : MINI_OFF, onPick: () => this.toggleKeyedDay('ticketBuys', f.id, i) })),
+          clash: on ? this.clashNote('Book · ' + f.title, days.map(d => ({ key: d + '@' + hour }))) : '',
+          onDelete: () => this.deleteFind(f.id)
         };
       }),
-      friendRows: FRIEND_OPTS.map(fr => {
-        const on = p.friends[fr.name] !== undefined;
+      noTickets: interestedAll.length === 0,
+      ticketCountLabel: interestedAll.length + ' INTERESTED · ' + Object.keys(p.ticketBuys).length + ' BOOKING',
+      friendRows: friendRows2.map(fr => {
+        const info = p.friends[fr.id];
+        const on = !!info;
+        const days = on ? (info.days || []) : [];
+        const hour = on ? (info.hour || '19:00') : '19:00';
         return {
-          name: fr.name, meta: fr.meta, chosen: on,
+          name: fr.name,
+          meta: fr.cadenceLabel + ' · ' + fr.daysLabel + ' SINCE',
+          chosen: on,
           toggleStyle: on ? CHIP_ON : CHIP_OFF, toggleLabel: on ? 'CALLING ✓' : 'CALL',
-          onToggle: () => this.toggleItem('friends', fr.name),
-          days: DAYS.map((d, i) => ({ label: d, style: p.friends[fr.name] === i ? MINI_ON : MINI_OFF, onPick: () => this.setDay('friends', fr.name, i) }))
+          onToggle: () => this.toggleKeyed('friends', fr.id, { days: [], hour: '19:00' }),
+          hour,
+          onHourInput: e => this.setKeyedField('friends', fr.id, { hour: e.target.value }),
+          days: DAYS.map((d, i) => ({ label: d, style: on && days.indexOf(i) > -1 ? MINI_ON : MINI_OFF, onPick: () => this.toggleKeyedDay('friends', fr.id, i) })),
+          clash: on ? this.clashNote('Call ' + fr.name, days.map(d => ({ key: d + '@' + hour }))) : '',
+          onDelete: () => this.deleteFriend(fr.id)
         };
       }),
       psyDays: [{ label: 'NOT THIS WEEK', style: p.psy === 'no' ? DAY_ON : DAY_OFF, onPick: () => this.pick('psy', 'no') }]
@@ -1997,6 +2160,7 @@ class Component extends DCLogic {
           chosen: on,
           toggleStyle: on ? CHIP_ON : CHIP_OFF, toggleLabel: on ? 'ADDED ✓' : 'ADD',
           onToggle: () => this.toggleExtra(act.id),
+          onDelete: () => this.deleteParisActivity(act.id),
           hour: on ? (info.hour || '19:00') : '19:00',
           onHourInput: e => this.setExtraHour(act.id, e.target.value),
           days: DAYS.map((d, i) => ({ label: d, style: on && info.day === i ? MINI_ON : MINI_OFF, onPick: () => this.setExtraDay(act.id, i) })),
@@ -2025,6 +2189,7 @@ class Component extends DCLogic {
           toggleStyle: on ? CHIP_ON : CHIP_OFF,
           toggleLabel: on ? 'SCHEDULING ✓' : 'SCHEDULE',
           onToggle: () => this.toggleJulien(it.id),
+          onDelete: () => this.deleteJulien(it.id),
           hour: on ? (info.hour || '19:00') : '19:00',
           onHourInput: e => this.setJulienField(it.id, { hour: e.target.value }),
           days: DAYS.map((d, i) => ({ label: d, style: on && days.indexOf(i) > -1 ? MINI_ON : MINI_OFF, onPick: () => this.toggleJulienDay(it.id, i) })),
@@ -2063,7 +2228,10 @@ class Component extends DCLogic {
         : answeredCount >= 6 ? 'Everything essential is answered. Lock it — the calendar rebuilds and anything picked from Julien\'s List gets placed on next week.' : (8 - answeredCount) + ' questions left. Answer six and you can lock it.',
       finishPlan: () => {
         if (this.state.planDone || answeredCount < 6) return;
-        this.setState(st => ({ planDone: true, planBurst: true, xp: st.xp + 250 }));
+        this.setState(st => ({ planDone: true, planBurst: true }));
+        const planXp = 250 + (this._pendingPlanXp || 0);
+        this._pendingPlanXp = 0;
+        this.bumpXp(planXp, 'plan_locked', 'Next-week plan locked in');
         this.scheduleJulienItems();
         this.scheduleCarbonItems();
         this.scheduleFixedPlanItems();
@@ -2075,7 +2243,8 @@ class Component extends DCLogic {
         num: String(i + 1).padStart(2, '0'),
         label: a.label,
         meta: [a.location, a.notes].filter(Boolean).join(' · '),
-        indoorLabel: a.indoor ? 'INDOOR' : ''
+        indoorLabel: a.indoor ? 'INDOOR' : '',
+        onDelete: () => this.deleteParisActivity(a.id)
       })),
       newFixedLabel: s.newFixedLabel, newFixedLocation: s.newFixedLocation,
       onFixedLabelInput: e => this.set('newFixedLabel', e.target.value),
@@ -2112,7 +2281,8 @@ class Component extends DCLogic {
         : pendingCount > 0 ? pendingCount + ' still unanswered. Answer them all and the count is honest.' : 'Everything answered. Bank it.',
       award: () => {
         if (potential <= 0 || this.state.awarded) return;
-        this.setState({ awarded: true, burst: true, haul: potential, xp: this.state.xp + potential });
+        this.setState({ awarded: true, burst: true, haul: potential });
+        this.bumpXp(potential, 'sunday_review', 'Sunday review banked');
         setTimeout(() => this.setState({ burst: false }), 2200);
       }
     };
