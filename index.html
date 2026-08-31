@@ -960,8 +960,18 @@ const CONSISTENCY_WEEKS = 12;
 const REVIEW_WIN = 40;
 const REVIEW_LOSS = 70;
 const BOOK_PREFIX = 'Book tickets \u00b7 ';
+const EMPTY_PLAN = { carbon: {}, padel: null, padelHour: '19:00', pao: null, paoHour: '20:00', ticketBuys: {}, friends: {}, psy: null, psyHour: '18:00', extras: {}, julien: {} };
 // The week the Sunday review asks about. It rolls over at 9am on Sunday, so the
 // week you are still living stays reviewable until that morning.
+// The week the Next Week Plan wizard is working on. Same as displayMonday()
+// except on Sunday before 8am, when last week's plan is still the live one —
+// that is what makes a locked week stay locked until Sunday morning.
+function planMonday() {
+  const now = new Date();
+  if (now.getDay() === 0 && now.getHours() < 8) return mondayOf(now);
+  return displayMonday();
+}
+
 function reviewMonday() {
   const now = new Date();
   const m = mondayOf(now);
@@ -1058,7 +1068,7 @@ class Component extends DCLogic {
     tab: 'week', xp: 0, answers: {}, reviewOpen: false, awarded: false, burst: false, haul: 0,
     series: DEFAULT_SERIES, pendingW: DEFAULT_SERIES[DEFAULT_SERIES.length - 1], logged: false,
     reward: null,
-    plan: { carbon: {}, padel: null, padelHour: '19:00', pao: null, paoHour: '20:00', ticketBuys: {}, friends: {}, psy: null, psyHour: '18:00', extras: {}, julien: {} },
+    plan: EMPTY_PLAN,
     planDone: false, planBurst: false,
 
     routine: DEFAULT_ROUTINE, tasks: [], friendsList: [], ritual: {}, xpEvents: [],
@@ -1069,7 +1079,7 @@ class Component extends DCLogic {
     newFixedLabel: '', newFixedLocation: '',
     julienList: [], carbonBacklog: [], newCarbonText: '',
     gymLogs: [], weightWeeks: [], julienAll: [],
-    completedActions: [], bookedActivities: [], bookingWhen: {},
+    completedActions: [], bookedActivities: [], bookingWhen: {}, planLoaded: false,
     newBookedTitle: '', newBookedDate: isoDate(new Date()), newBookedTime: '20:00',
     newJulienText: '', newJulienDate: isoDate(displayMonday()), newJulienHour: '19:00'
   };
@@ -1125,7 +1135,7 @@ class Component extends DCLogic {
     const weekOf = isoDate(monday);
     const since26 = isoDate(new Date(monday.getTime() - 26 * 7 * 86400000));
 
-    const [weightRes, routineRes, taskRes, friendRes, ritualRes, xpRes, agendaRes, parisFixedRes, parisFindsRes, parisReqRes, allTasksRes, julienRes, gymRes, weightWeeksRes, doneRes, bookedRes] = await Promise.all([
+    const [weightRes, routineRes, taskRes, friendRes, ritualRes, xpRes, agendaRes, parisFixedRes, parisFindsRes, parisReqRes, allTasksRes, julienRes, gymRes, weightWeeksRes, doneRes, bookedRes, planRes] = await Promise.all([
       sb.from('weight_logs').select('*').order('week_of', { ascending: true }).limit(10),
       sb.from('routine_days').select('*').order('day_of_week', { ascending: true }),
       sb.from('carbon_actions').select('*').order('created_at', { ascending: true }),
@@ -1141,7 +1151,8 @@ class Component extends DCLogic {
       sb.from('gym_session_logs').select('session_date, completed').gte('session_date', since26),
       sb.from('weight_logs').select('week_of'),
       sb.from('completed_actions').select('*').order('completed_at', { ascending: false }),
-      sb.from('booked_activities').select('*').order('event_at', { ascending: true })
+      sb.from('booked_activities').select('*').order('event_at', { ascending: true }),
+      sb.from('week_plans').select('*').eq('week_of', isoDate(planMonday())).maybeSingle()
     ]);
 
     let routine = (routineRes.data && routineRes.data.length) ? routineRes.data : null;
@@ -1179,11 +1190,45 @@ class Component extends DCLogic {
       gymLogs: gymRes.data || [],
       weightWeeks: (weightWeeksRes.data || []).map(r => r.week_of),
       completedActions: doneRes.data || [],
+      plan: (planRes && planRes.data && planRes.data.plan) ? { ...EMPTY_PLAN, ...planRes.data.plan } : EMPTY_PLAN,
+      planDone: !!(planRes && planRes.data && planRes.data.locked),
+      planLoaded: true,
       bookedActivities: bookedRes.data || [],
       loaded: true
     });
 
     this.awardConsistency();
+  }
+
+  // Every wizard click writes the plan back, debounced, so a refresh never
+  // loses what you picked. Keyed on the week being planned.
+  // Locking rebuilds the week from scratch: anything a previous lock put there
+  // is removed first, so the calendar is exactly the plan on screen and never
+  // an accumulation of earlier attempts. Hand-added events are never touched.
+  async lockWeek() {
+    const weekTag = isoDate(planMonday());
+    const del = await sb.from('agenda_events').delete().eq('locked_week', weekTag);
+    if (del && del.error) console.error('could not clear the previous lock', del.error);
+    this.setState(st => ({ agendaEvents: st.agendaEvents.filter(e => e.locked_week !== weekTag) }));
+    await this.scheduleJulienItems();
+    await this.scheduleCarbonItems();
+    await this.scheduleFixedPlanItems();
+    this.savePlan();
+  }
+
+  savePlan() {
+    if (!this.state.planLoaded) return;
+    clearTimeout(this._planSaveTimer);
+    this._planSaveTimer = setTimeout(() => {
+      sb.from('week_plans').upsert({
+        week_of: isoDate(planMonday()),
+        plan: this.state.plan,
+        locked: this.state.planDone,
+        updated_at: new Date().toISOString()
+      }, { onConflict: 'week_of' }).then(r => {
+        if (r && r.error) console.error('could not save the plan', r.error);
+      });
+    }, 400);
   }
 
   // --- Sunday review -----------------------------------------------------------
@@ -1450,6 +1495,7 @@ class Component extends DCLogic {
       p.carbon = m;
       return { plan: p, xp: s.xp + (adding ? 15 : -15) };
     });
+    this.savePlan();
   }
 
   setCarbonField(id, patch) {
@@ -1460,6 +1506,7 @@ class Component extends DCLogic {
       p.carbon = m;
       return { plan: p };
     });
+    this.savePlan();
   }
 
   toggleCarbonDay(id, day) {
@@ -1545,6 +1592,7 @@ class Component extends DCLogic {
       p.extras = m;
       return { plan: p, xp: s.xp + (adding ? 15 : -15) };
     });
+    this.savePlan();
   }
 
   setExtraDay(id, day) {
@@ -1555,6 +1603,7 @@ class Component extends DCLogic {
       p.extras = m;
       return { plan: p };
     });
+    this.savePlan();
   }
 
   setExtraHour(id, hour) {
@@ -1569,6 +1618,7 @@ class Component extends DCLogic {
       p.extras = m;
       return { plan: p };
     });
+    this.savePlan();
   }
 
   // Every day+hour slot claimed anywhere in the plan, so each module can warn
@@ -1648,6 +1698,7 @@ class Component extends DCLogic {
       p.julien = m;
       return { plan: p, xp: s.xp + (adding ? 15 : -15) };
     });
+    this.savePlan();
   }
 
   setJulienField(id, patch) {
@@ -1658,6 +1709,7 @@ class Component extends DCLogic {
       p.julien = m;
       return { plan: p };
     });
+    this.savePlan();
   }
 
   toggleJulienDay(id, day) {
@@ -1669,7 +1721,8 @@ class Component extends DCLogic {
   async scheduleJulienItems() {
     const s = this.state;
     const picks = s.plan.julien || {};
-    const targetMonday = displayMonday();
+    const targetMonday = planMonday();
+    const weekTag = isoDate(targetMonday);
     for (const id of Object.keys(picks)) {
       const info = picks[id];
       if (!info || !info.days || !info.days.length) continue;
@@ -1680,6 +1733,7 @@ class Component extends DCLogic {
         const d = new Date(targetMonday.getTime() + day * 86400000);
         const parts = (info.hour || '19:00').split(':');
         const start = new Date(d.getFullYear(), d.getMonth(), d.getDate(), parseInt(parts[0], 10) || 19, parseInt(parts[1], 10) || 0);
+        if ((this.state.agendaEvents || []).some(e => e.title === item.title && new Date(e.starts_at).getTime() === start.getTime())) continue;
         const end = new Date(start.getTime() + (info.duration || 60) * 60000);
         const r = await sb.from('agenda_events').insert({
           title: item.title,
@@ -1687,7 +1741,8 @@ class Component extends DCLogic {
           starts_at: start.toISOString(),
           ends_at: end.toISOString(),
           all_day: false,
-          notes: item.notes || null
+          notes: item.notes || null,
+          locked_week: weekTag
         }).select();
         if (r.data && r.data[0]) created.push(r.data[0]);
       }
@@ -1712,26 +1767,31 @@ class Component extends DCLogic {
 
   deleteCarbon(id) {
     this.setState(s => { const p = { ...s.plan }, m = { ...p.carbon }; delete m[id]; p.carbon = m; return { plan: p }; });
+    this.savePlan();
     this.deleteRow('carbon_actions', id, 'carbonBacklog');
   }
 
   deleteJulien(id) {
     this.setState(s => { const p = { ...s.plan }, m = { ...p.julien }; delete m[id]; p.julien = m; return { plan: p }; });
+    this.savePlan();
     this.deleteRow('julien_list', id, 'julienList');
   }
 
   deleteFriend(id) {
     this.setState(s => { const p = { ...s.plan }, m = { ...p.friends }; delete m[id]; p.friends = m; return { plan: p }; });
+    this.savePlan();
     this.deleteRow('friends', id, 'friendsList');
   }
 
   deleteParisActivity(id) {
     this.setState(s => { const p = { ...s.plan }, m = { ...p.extras }; delete m[id]; p.extras = m; return { plan: p }; });
+    this.savePlan();
     this.deleteRow('paris_activities', id, 'parisFixed');
   }
 
   deleteFind(id) {
     this.setState(s => { const p = { ...s.plan }, m = { ...p.ticketBuys }; delete m[id]; p.ticketBuys = m; return { plan: p }; });
+    this.savePlan();
     this.deleteRow('paris_new_finds', id, 'parisFinds');
   }
 
@@ -1743,6 +1803,7 @@ class Component extends DCLogic {
       p[key] = m;
       return { plan: p };
     });
+    this.savePlan();
   }
 
   toggleKeyed(key, id, init) {
@@ -1753,6 +1814,7 @@ class Component extends DCLogic {
       p[key] = m;
       return { plan: p, xp: s.xp + (adding ? 15 : -15) };
     });
+    this.savePlan();
   }
 
   toggleKeyedDay(key, id, day) {
@@ -1858,17 +1920,21 @@ class Component extends DCLogic {
   // held in browser memory, so they never reached Supabase or Google Calendar.
   async scheduleFixedPlanItems() {
     const s = this.state, p = s.plan;
-    const targetMonday = displayMonday();
+    const targetMonday = planMonday();
+    const weekTag = isoDate(targetMonday);
     const place = async (day, hour, minutes, title) => {
       if (day === null || day === undefined || day === 'no' || !hour) return;
       const d = new Date(targetMonday.getTime() + day * 86400000);
       const parts = hour.split(':');
       const start = new Date(d.getFullYear(), d.getMonth(), d.getDate(), parseInt(parts[0], 10) || 19, parseInt(parts[1], 10) || 0);
       const iso = start.toISOString();
-      if ((this.state.agendaEvents || []).some(e => e.title === title && e.starts_at === iso)) return;
+      // Compare instants, never strings: Postgres returns '+00:00' where
+      // toISOString() returns 'Z', so string equality silently never matched
+      // and every re-lock duplicated the whole week.
+      if ((this.state.agendaEvents || []).some(e => e.title === title && new Date(e.starts_at).getTime() === start.getTime())) return;
       const end = new Date(start.getTime() + minutes * 60000);
       const r = await sb.from('agenda_events').insert({
-        title, kind: 'plan', starts_at: iso, ends_at: end.toISOString(), all_day: false
+        title, kind: 'plan', starts_at: iso, ends_at: end.toISOString(), all_day: false, locked_week: weekTag
       }).select();
       if (r.data && r.data[0]) {
         this.setState(st => (st.agendaEvents.some(e => e.id === r.data[0].id) ? null : { agendaEvents: st.agendaEvents.concat(r.data) }));
@@ -1906,7 +1972,7 @@ class Component extends DCLogic {
   async scheduleCarbonItems() {
     const s = this.state;
     const picks = s.plan.carbon || {};
-    const targetMonday = displayMonday();
+    const targetMonday = planMonday();
     const weekOf = isoDate(targetMonday);
     for (const id of Object.keys(picks)) {
       const info = picks[id];
@@ -1918,13 +1984,15 @@ class Component extends DCLogic {
         const d = new Date(targetMonday.getTime() + day * 86400000);
         const parts = (info.hour || '21:00').split(':');
         const start = new Date(d.getFullYear(), d.getMonth(), d.getDate(), parseInt(parts[0], 10) || 21, parseInt(parts[1], 10) || 0);
+        if ((this.state.agendaEvents || []).some(e => e.title === item.label && new Date(e.starts_at).getTime() === start.getTime())) continue;
         const end = new Date(start.getTime() + 30 * 60000);
         const r = await sb.from('agenda_events').insert({
           title: item.label,
           kind: 'carbon',
           starts_at: start.toISOString(),
           ends_at: end.toISOString(),
-          all_day: false
+          all_day: false,
+          locked_week: weekOf
         }).select();
         if (r.data && r.data[0]) created.push(r.data[0]);
       }
@@ -1995,6 +2063,7 @@ class Component extends DCLogic {
       p[key] = m;
       return { plan: p, xp: s.xp + (adding ? 15 : -15) };
     });
+    this.savePlan();
   }
 
   toggleItem(key, name) {
@@ -2005,6 +2074,7 @@ class Component extends DCLogic {
       p[key] = m;
       return { plan: p, xp: s.xp + (adding ? 15 : -15) };
     });
+    this.savePlan();
   }
 
   pick(key, value) {
@@ -2018,6 +2088,7 @@ class Component extends DCLogic {
       }
       return { plan: p, xp: s.xp + (adding ? 15 : -15) };
     });
+    this.savePlan();
   }
 
   planRows() {
@@ -2374,7 +2445,7 @@ class Component extends DCLogic {
           style: 'grid-column:' + (i + 2) + ';display:flex;align-items:baseline;gap:5px;padding-bottom:6px;border-bottom:1px solid rgba(0,0,0,.16);font-family:\'JetBrains Mono\',monospace'
         };
       }),
-      calBlocks: [].concat.apply([], (s.planDone ? this.planRows() : this.weekBlocks()).map((day, i) => day.map(b => mk(i, b[0], b[1], b[2], b[3])))),
+      calBlocks: [].concat.apply([], this.weekBlocks().map((day, i) => day.map(b => mk(i, b[0], b[1], b[2], b[3])))),
       previewBlocks: [].concat.apply([], this.previewRows().map((day, i) => day.map(b => mk(i, b[0], b[1], b[2], b[3])))),
       showPreview: !s.planDone,
       previewNote: (this._previewPlaced || 0) === 0
@@ -2601,9 +2672,9 @@ class Component extends DCLogic {
       finishStyle: (rv.banked && answeredCount >= 6 && !s.planDone)
         ? "cursor:pointer;padding:12px 20px;font:600 11px/1 'JetBrains Mono',monospace;letter-spacing:.1em;border:1px solid #16203a;background:linear-gradient(100deg,#3f5273,#16203a);color:#fff;border-radius:999px;box-shadow:0 6px 16px rgba(22,32,58,.22)"
         : "padding:12px 20px;font:600 11px/1 'JetBrains Mono',monospace;letter-spacing:.1em;border:1px solid rgba(22,32,58,.2);background:#e9edf4;color:#9fadc2;border-radius:999px",
-      finishLabel: s.planDone ? 'WEEK LOCKED' : rv.banked ? 'LOCK THE ANSWERS · +250 XP' : '\ud83d\udd12 LOCKED · COUNT LAST WEEK FIRST',
+      finishLabel: s.planDone ? '\u2713 WEEK LOCKED' : rv.banked ? 'LOCK THE ANSWERS · +250 XP' : '\ud83d\udd12 LOCKED · COUNT LAST WEEK FIRST',
       finishNote: s.planDone
-        ? 'Locked — The Week now shows ' + weekTitleShort + ' with everything you just decided. On Sunday I will ask what actually happened, from this list.'
+        ? 'Locked for ' + weekTitleShort + '. The Week now shows exactly this, and it syncs to Google Calendar on Monday. It reopens next Sunday at 8am — until then your picks stay saved here.'
         : !rv.banked
           ? 'Count last week first. Open COUNT MY XP in the header, answer every question for ' + rv.label + ' and bank it — this unlocks then.'
           : answeredCount >= 6 ? 'Everything essential is answered. Lock it — the calendar rebuilds and anything picked from Julien\'s List gets placed on next week.' : (8 - answeredCount) + ' questions left. Answer six and you can lock it.',
@@ -2613,9 +2684,7 @@ class Component extends DCLogic {
         const picks = this.planPickCount();
         this.setState(st => ({ xp: st.xp - picks * 15 }));
         this.bumpXp(250 + picks * 15, 'plan_locked', picks + ' items planned for the week ahead');
-        this.scheduleJulienItems();
-        this.scheduleCarbonItems();
-        this.scheduleFixedPlanItems();
+        this.lockWeek();
         setTimeout(() => this.setState({ tab: 'week' }), 1600);
         setTimeout(() => this.setState({ planBurst: false }), 2400);
       },
